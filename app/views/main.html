@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-lg-9">
+        <div class="jumbotron">
+            <div class="col-lg-3" ng-repeat="i in diagram.entities" style="position: absolute">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{i.name}}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-unstyled">
+                            <li ng-repeat="f in i.fields">{{f.toString()}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">Сушности</div>
+            <div class="panel-body">
+                <button ng-click="addEntity()" class="btn">+</button>
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="i in diagram.entities" ng-dblclick="editEntity(i)">
+                        {{i.name}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Связи</div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="i in diagram.associations">{{i.toString()}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

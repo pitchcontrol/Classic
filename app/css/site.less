@@ -1,0 +1,186 @@
+@import "reset.css";
+
+/*----- �������� ����� -----*/
+@base-color: rgb(70, 149, 145);
+@error-color: spin(@base-color, 180);
+@info-color: spin(@base-color, -120);
+@warning-color: spin(@base-color, 60);
+@success-color: spin(@base-color, -60);
+
+@primary: #e5e1d8;
+@second: #aea6a8;
+@shade: #d3e499;
+@dark: #5a503e;
+@dark-light: #8e9440;
+
+/*----- ����� ��������� -----*/
+@alert-primary-bg: lighten(@base-color, 35%);
+@alert-primary-border: darken(spin(@alert-primary-bg, -10), 5%);
+@alert-primary-text: darken(@alert-primary-bg, 80%);
+
+@alert-error-bg: lighten(@error-color, 35%);
+@alert-error-border: darken(spin(@alert-error-bg, -10), 5%);
+@alert-error-text: darken(@alert-error-bg, 50%);
+
+@alert-info-bg: lighten(@info-color, 35%);
+@alert-info-border: darken(spin(@alert-info-bg, -10), 5%);
+@alert-info-text: darken(@alert-info-bg, 50%);
+
+@alert-warning-bg: lighten(@warning-color, 35%);
+@alert-warning-border: darken(spin(@alert-warning-bg, -10), 5%);
+@alert-warning-text: darken(@alert-warning-bg, 50%);
+
+@alert-success-bg: lighten(@success-color, 25%);
+@alert-success-border: darken(spin(@alert-success-bg, -10), 5%);
+@alert-success-text: darken(@alert-success-bg, 60%);
+
+/*----- ������� ��������� -----*/
+.primary {
+  background-color: @alert-primary-bg;
+  border-color: @alert-primary-border;
+  color: @alert-primary-text;
+}
+
+.error {
+  background-color: @alert-error-bg;
+  border-color: @alert-error-border;
+  color: @alert-error-text;
+}
+
+.info {
+  background-color: @alert-info-bg;
+  border-color: @alert-info-border;
+  color: @alert-info-text;
+}
+
+.warning {
+  background-color: @alert-warning-bg;
+  border-color: @alert-warning-border;
+  color: @alert-warning-text;
+}
+
+.success {
+  background-color: @alert-success-bg;
+  border-color: @alert-success-border;
+  color: @alert-success-text;
+}
+
+/*----- �����-------------------*/
+/*  SECTIONS  */
+.section {
+  clear: both;
+  padding: 0;
+  margin: 0;
+}
+
+/*  COLUMN SETUP  */
+.col {
+  display: block;
+  float: left;
+  margin: 1% 0 1% 1.6%;
+}
+
+.col:first-child {
+  margin-left: 0;
+}
+
+/*  GROUPING  */
+.group:before,
+.group:after {
+  content: "";
+  display: table;
+}
+
+.group:after {
+  clear: both;
+}
+
+.group {
+  zoom: 1; /* For IE 6/7 */
+}
+
+/*  GRID OF TWELVE  */
+.span_12_of_12 {
+  width: 100%;
+}
+
+.span_11_of_12 {
+  width: 91.53%;
+}
+
+.span_10_of_12 {
+  width: 83.06%;
+}
+
+.span_9_of_12 {
+  width: 74.6%;
+}
+
+.span_8_of_12 {
+  width: 66.13%;
+}
+
+.span_7_of_12 {
+  width: 57.66%;
+}
+
+.span_6_of_12 {
+  width: 49.2%;
+}
+
+.span_5_of_12 {
+  width: 40.73%;
+}
+
+.span_4_of_12 {
+  width: 32.26%;
+}
+
+.span_3_of_12 {
+  width: 23.8%;
+}
+
+.span_2_of_12 {
+  width: 15.33%;
+}
+
+.span_1_of_12 {
+  width: 6.866%;
+}
+
+/*��������*/
+.quick-gradient (@origin: left, @alpha: 0.2) {
+  background-image: -webkit-linear-gradient(@origin, rgba(0, 0, 0, 0.0), rgba(0, 0, 0,@alpha));
+  background-image: -moz-linear-gradient(@origin, rgba(0, 0, 0, 0.0), rgba(0, 0, 0,@alpha));
+  background-image: -o-linear-gradient(@origin, rgba(0, 0, 0, 0.0), rgba(0, 0, 0,@alpha));
+  background-image: -ms-linear-gradient(@origin, rgba(0, 0, 0, 0.0), rgba(0, 0, 0,@alpha));
+  background-image: linear-gradient(@origin, rgba(0, 0, 0, 0.0), rgba(0, 0, 0,@alpha));
+}
+
+/*  GO FULL WIDTH BELOW 480 PIXELS */
+@media only screen and (max-width: 480px) {
+  .col {
+    margin: 1% 0 1% 0;
+  }
+
+  .span_1_of_12, .span_2_of_12, .span_3_of_12, .span_4_of_12, .span_5_of_12, .span_6_of_12, .span_7_of_12, .span_8_of_12, .span_9_of_12, .span_10_of_12, .span_11_of_12, .span_12_of_12 {
+    width: 100%;
+  }
+}
+
+aside {
+  border-left: solid @dark-light 6px;
+  height: 100%;
+  padding: .5%;
+}
+
+body {
+  background-color: @primary;
+}
+
+.canvas {
+  background-color: white;
+  height: 100%;
+  padding: .5%;
+  min-height: 900px;
+}
