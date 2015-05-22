@@ -8,7 +8,7 @@
             $routeProvider.when('/', {
                 templateUrl: 'views/main.html',
                 controller: 'mainCtrl',
-                title: '�������'
+                title: 'Главная'
             })
                 .otherwise({
                     redirectTo: '/'

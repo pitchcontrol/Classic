@@ -6,10 +6,12 @@ describe('Тест entityModalCtrl', function () {
     beforeEach(function () {
         myEntity1 = {
             name: "myEntity1",
-            fields: []
+            fields: [],
+            outerAssociation: []
         };
         myEntity2 = {
             name: "myEntity2",
+            outerAssociation: [],
             fields: [{
                 entity: myEntity2,
                 type: "Association",
@@ -28,6 +30,7 @@ describe('Тест entityModalCtrl', function () {
             scope = $rootScope.$new();
             diagramService = $injector.get('diagramService');
             modalInstance = jasmine.createSpyObj('modalInstance', ['open', 'close', 'dismiss']);
+            item = item || diagramService.addEntity();
             controller = $controller('entityModalCtrl', {
                 $scope: scope,
                 entities: entities,
@@ -47,11 +50,12 @@ describe('Тест entityModalCtrl', function () {
     });
     it("Новая сущность с новым названием", function () {
         scope.ok();
-        expect(scope.model.name).toBe('Entity0');
+        var name1 = scope.model.name;
         //Окрываем диалог создания снова
         CreateInstance(null);
         scope.ok();
-        expect(scope.model.name).toBe('Entity1');
+        var name2 = scope.model.name;
+        expect(name1 != name2).toBeTruthy();
     });
     it("Редактируем сущность", function () {
         //beforeEach уже создал одну сущность
@@ -94,16 +98,17 @@ describe('Тест entityModalCtrl', function () {
     });
 
     it("Добавляем поле", function () {
-        scope.addField();
+        scope.model.addField();
         expect(scope.model.fields.length).toBe(1);
     });
     it("ДОбавляем поле с разными именами", function () {
-        scope.addField();
-        scope.addField();
+        scope.model.addField();
+        scope.model.addField();
         scope.ok();
         expect(scope.model.fields.length).toBe(2);
-        expect(scope.model.fields[0].name).toBe('field0');
-        expect(scope.model.fields[1].name).toBe('field1');
+        expect(scope.model.fields[0].name).toContain('field');
+        expect(scope.model.fields[1].name).toContain('field');
+        expect(scope.model.fields[0].name != scope.model.fields[1].name).toBeTruthy();
     });
     it("Удалить поле", function () {
         var f = scope.model.addField();
@@ -129,16 +134,18 @@ describe('Тест entityModalCtrl', function () {
     });
     it("Создаем поля и пробуем отредактировать с повторяющимся именем", function () {
         //Добавляем поля
-        scope.model.addField();
+        var f1 = scope.model.addField();
+        var f1Name = f1.name;
         var f = scope.model.addField();
+        var f2Name = f.name;
         //Выставляем повторяющееся поле
-        scope.model.fields[1].name = 'field0';
+        scope.model.fields[1].name = f1Name;
         scope.ok();
         //Должна быть ошибка
-        expect(scope.model.error).toBe('field0, уже есть');
+        expect(scope.model.error).toBe(f1Name + ', уже есть');
         //Поля не поменяются
-        expect(scope.model.fields[1].name).toBe('field1');
-        expect(scope.model.fields[0].name).toBe('field0');
+        expect(scope.model.fields[1].name).toBe(f2Name);
+        expect(scope.model.fields[0].name).toBe(f1Name);
     });
     it("Переключаемся между полями", function () {
         var f1 = scope.model.addField();

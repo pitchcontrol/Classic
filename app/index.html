@@ -5,8 +5,12 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title ng-bind="title"></title>
-    <link href="./../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="./../app/css/site.css" rel="stylesheet"/>
+    <!-- bower:css -->
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
+    <!-- endbower -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="css/site.css">
+    <!-- endinject -->
 </head>
 <body>
 <nav class="navbar navbar-default " role="navigation">
@@ -22,12 +26,37 @@
     </div>
 </nav>
 
-<div class="container-fluid body-content">
+<div class="container body-content">
     <div ng-view></div>
     <footer></footer>
 </div>
-<script src="./../dist/bower.min.js"></script>
-<script src="./../dist/build.min.js"></script>
-<!--<script src="dest/build.js"></script>-->
+<!-- bower:js -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+<script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/angular-route/angular-route.js"></script>
+<script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="../bower_components/angular-mocks/angular-mocks.js"></script>
+<script src="../bower_components/underscore/underscore.js"></script>
+<script src="../bower_components/ngDraggable/ngDraggable.js"></script>
+<script src="../bower_components/svg.js/dist/svg.js"></script>
+<!-- endbower -->
+<!-- inject:js -->
+<script src="app.js"></script>
+<script src="directives/entityDraggable.js"></script>
+<script src="directives/fieldDraggable.js"></script>
+<script src="directives/ngCanvas.js"></script>
+<script src="controllers/associationModalCtrl.js"></script>
+<script src="controllers/confirmModalCtrl.js"></script>
+<script src="controllers/entityModalCtrl.js"></script>
+<script src="controllers/mainCtrl.js"></script>
+<script src="services/diagramService.js"></script>
+<script src="services/integerCounter.js"></script>
+<script src="Primitives/ArrayPrototype.js"></script>
+<script src="Primitives/DiagramItem.js"></script>
+<script src="Primitives/Entity.js"></script>
+<script src="Primitives/Field.js"></script>
+<script src="Primitives/Relation.js"></script>
+<!-- endinject -->
 </body>
 </html>

@@ -1,28 +1,38 @@
 <div class="row">
-    <div class="col-lg-9">
-        <div class="jumbotron">
-            <div class="col-lg-3" ng-repeat="i in diagram.entities" style="position: absolute">
+    <div class="col-lg-10">
+        <div class="col-lg-12" id="canvas" ng-canvas >
+            <div class="col-lg-3 col-md-3" ng-repeat="i in diagram.entities" entity-draggable
+                 ng-dblclick="editEntity(i)"
+                 entity="i">
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">{{i.name}}</h3>
                     </div>
                     <div class="panel-body">
                         <ul class="list-unstyled">
-                            <li ng-repeat="f in i.fields">{{f.toString()}}</li>
+                            <li ng-repeat="f in i.fields" field-draggable field="f">{{f.toString()}}</li>
                         </ul>
                     </div>
                 </div>
             </div>
+
+            <svg>
+                <polyline ng-repeat="i in diagram.associations" points="{{i.relation.toString()}}" fill="none"
+                          stroke-width="1" stroke="rgb(0,0,0)"/>
+            </svg>
         </div>
     </div>
-    <div class="col-lg-3">
+    <div class="col-lg-2">
         <div class="panel panel-default">
             <div class="panel-heading">Сушности</div>
             <div class="panel-body">
                 <button ng-click="addEntity()" class="btn">+</button>
                 <ul class="list-group">
                     <li class="list-group-item" ng-repeat="i in diagram.entities" ng-dblclick="editEntity(i)">
-                        {{i.name}}
+                        <span>{{i.name}}</span>
+                        <button class="btn btn-mini pull-right" ng-click="removeEntity(i)"><i class="icon-trash"></i>
+                        </button>
                     </li>
                 </ul>
             </div>

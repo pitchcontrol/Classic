@@ -1,13 +1,17 @@
 describe('Тест Entity', function () {
-    var entity, coll = {entities: []};
+    var entity, coll = {entities: []}, counter, dS;
     beforeEach(function () {
         module('app');
     });
     beforeEach(function () {
-        entity = new Entity(coll);
+        inject(function (diagramService, integerCounter) {
+            counter = integerCounter;
+            dS = diagramService;
+            entity = diagramService.addEntity();
+        });
     });
     it("Инициализация", function () {
-        expect(entity.name).toBe('entity');
+        expect(entity.name).toBe('Entity0');
         expect(entity.error).toBeUndefined();
     });
     it("Пытаемся продублировать имя", function () {
@@ -27,9 +31,20 @@ describe('Тест Entity', function () {
 
     });
     it("Проверяем что создается уникальый номер", function () {
+        counter.clear();
         var field = entity.addField();
         expect(field.name).toBe('field0');
         field = entity.addField();
         expect(field.name).toBe('field1');
+    });
+    it("Удаляем сущность, вызывая destroy. Должны удалится связи", function () {
+        var entity2 = dS.addEntity();
+        var field = entity.addField();
+        field.type = 'Association';
+        field.association = entity2;
+        //Должна появится связь
+        expect(dS.associations.length).toBe(1);
+        entity.destroy();
+        expect(dS.associations.length).toBe(0);
     });
 });

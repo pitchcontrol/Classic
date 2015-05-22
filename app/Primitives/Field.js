@@ -67,6 +67,8 @@ function Field(entity) {
             _reference = value;
             //Если тут будет null то бахаем связь
             if (!value) {
+                if (this.associationObj)
+                    this.associationObj.start.outerAssociation.remove(this.associationObj);
                 entity.diagramService.associations.remove(this.associationObj);
                 this.associationObj = null;
             }
@@ -74,7 +76,17 @@ function Field(entity) {
                 //Сюда передается ссылка на сущность, нужно создать связь
                 //Если ссылка таже самая ни чего не создаем, если другая то нужно удалить ссылку
                 if (this.associationObj) {
+                    this.associationObj.start.outerAssociation.remove(this.associationObj);
                     entity.diagramService.associations.remove(this.associationObj);
+                }
+                var r = new Relation();
+                if (value.geometry) {
+                    //Нужно сразу задать окончание связи
+                    r.setStart(value.geometry.bottom.x, value.geometry.bottom.y);
+                }
+                if (this.geometry) {
+                    //И начало
+                    r.setEnd(this.geometry.right.x, this.geometry.right.y);
                 }
                 var ass = {
                     start: value,
@@ -82,11 +94,14 @@ function Field(entity) {
                     many: false,
                     toString: function () {
                         return this.end.entity.name + '_' + this.end.name + (this.many ? '(*)' : '') + '_' + this.start.name;
-                    }
+                    },
+                    relation: r
                 };
+                //ДОбавляем у внешней сущности в колекцию
+                value.outerAssociation.push(ass);
                 this.associationObj = ass;
                 entity.diagramService.associations.push(ass);
-
+                //Подвязываем события
             }
             setAssociation.bind(this)();
         }

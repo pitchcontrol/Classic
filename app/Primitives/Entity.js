@@ -6,12 +6,12 @@ function Entity(diagramService) {
     var self = this;
     //Колекция сущностей
     this.diagramService = diagramService;
+    //Колекция где хранятся связи в которых данная сущность будет началом
+    this.outerAssociation = [];
     var _name = "entity";
     this.fields = [];
     //Текущее выбранное поле
     this.currentField = null;
-    //Счетчик для номера поля по умолчанию
-    var _count = 0;
     Object.defineProperty(this, 'name', {
         get: function () {
             return _name;
@@ -26,22 +26,26 @@ function Entity(diagramService) {
     });
     this.addField = function () {
         var fl = new Field(this);
-        fl.name = "field" + _count;
+        fl.id = self._integerCounter.getId();
+        fl.name = "field" + fl.id;
         this.fields.push(fl);
-        _count++;
         return fl;
     };
     this.removeField = function () {
         var index;
         if (this.currentField) {
             if (this.currentField.association) {
-                index = diagramService.associations.indexOf(this.currentField.association);
-                diagramService.associations.splice(index, 1);
-            }
-            index = this.fields.indexOf(this.currentField);
-            this.fields.splice(index, 1);
+                diagramService.associations.remove(this.currentField.associationObj);
+            };
+            this.fields.remove(this.currentField);
             this.currentField = null;
 
         }
+    };
+    //Будет вызыватся при удалении сущности
+    this.destroy = function(){
+        this.fields.forEach(function(item){
+           item.association = null;
+        });
     };
 }

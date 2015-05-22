@@ -49,19 +49,6 @@
             if ($scope.model.error) {
                 return;
             }
-            //if (!validate($scope.model, !item))
-            //    return;
-            //$scope.model.error = null;
-            ////Добавляем в колекцию новую сущность
-            //if (!item)
-            //    diagramService.entities.push($scope.model);
-            ////или меняем которую редактируем
-            //else {
-            //    //Нужно удалить старую модель и подменить копией
-            //    //delete diagramService.entities[originalModel.name];
-            //    //diagramService.entities[$scope.model.name] = $scope.model;
-            //    //diagramService.entities.delete(originalModel);
-            //}
             $modalInstance.close();
         };
 
@@ -69,22 +56,22 @@
             $scope.model.error = null;
             $modalInstance.dismiss('cancel');
         };
-        //Добавляем поле
-        $scope.addField = function () {
-            //$scope.model.fields.push(new Field($scope.model));
-            $scope.model.addField();
-        };
-        $scope.removeField = function (index) {
-            diagramService.removeAssociation($scope.model.fields[index]);
-            $scope.model.fields.splice(index, 1);
-        };
-        //если item не объявлен то сущность новая
-        if (!item)
-            $scope.model = diagramService.addEntity();
-        else {
-            $scope.model = item;
-        }
-
+        ////Добавляем поле
+        //$scope.addField = function () {
+        //    //$scope.model.fields.push(new Field($scope.model));
+        //    $scope.model.addField();
+        //};
+        //$scope.removeField = function (index) {
+        //    diagramService.removeAssociation($scope.model.fields[index]);
+        //    $scope.model.fields.splice(index, 1);
+        //};
+        ////если item не объявлен то сущность новая
+        ////if (!item)
+        ////    $scope.model = diagramService.addEntity();
+        ////else {
+        ////    $scope.model = item;
+        ////}
+        $scope.model = item;
     };
     angular.module('app').controller('entityModalCtrl', ['$scope', '$modalInstance', '$modal', 'diagramService', 'item', entityModalCtrl]);
 })

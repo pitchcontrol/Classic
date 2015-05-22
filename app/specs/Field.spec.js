@@ -1,5 +1,5 @@
 describe('Тест Field', function () {
-    var field, entity;
+    var field, entity, entity2;
     beforeEach(function () {
         module('app');
     });
@@ -10,6 +10,7 @@ describe('Тест Field', function () {
             diagramService: {associations: []}
         };
         field = new Field(entity);
+        entity2 = {name: 'myEntity2', outerAssociation: []};
     });
     it("Инициализация", function () {
         expect(field.name).toBe('new');
@@ -55,29 +56,40 @@ describe('Тест Field', function () {
     });
     it("Выставляем связь", function () {
         field.type = "Association";
-        field.association = {name: 'myEntity2'};
+        field.association = entity2;
         //Должен появится обьект связь
         expect(field.associationObj.start).toBeDefined();
         expect(field.associationObj.end).toBeDefined();
         expect(field.associationObj.toString()).toBe('myEntity1_new_myEntity2');
+        //Должна появится внешняя ассоциация
+        expect(entity2.outerAssociation.length).toBe(1);
+        expect(entity2.outerAssociation[0] == field.associationObj).toBeTruthy();
     });
     it("Меняем тип поля должна уничтожится связь", function () {
         field.type = "Association";
-        field.association = {name: 'myEntity2'};
+        field.association = entity2;
         //Должен появится обьект связь
         expect(field.entity.diagramService.associations.length).toBe(1);
+        //Должна появится внешняя ассоциация
+        expect(entity2.outerAssociation.length).toBe(1);
         field.type = "string";
         //Должна разрущится связь
         expect(field.association).toBeFalsy();
         expect(field.entity.diagramService.associations.length).toBe(0);
+        //Уничтожается внешняя связь
+        expect(entity2.outerAssociation.length).toBe(0);
     });
     it("Меняем ссылку в колекции ассоциаций не должно добавится", function () {
         field.type = "Association";
-        field.association = {name: 'myEntity2'};
+        field.association = entity2;
         //Должен появится обьект связь
         expect(field.entity.diagramService.associations.length).toBe(1);
+        //Должна появится внешняя ассоциация
+        expect(entity2.outerAssociation.length).toBe(1);
         //Меняем ссылку
-        field.association = {name: 'myEntity3'};
+        field.association = {name: 'myEntity3', outerAssociation: []};
         expect(field.entity.diagramService.associations.length).toBe(1);
+        //Уничтожается внешняя связь
+        expect(entity2.outerAssociation.length).toBe(0);
     });
 });
