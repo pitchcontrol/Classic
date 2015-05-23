@@ -24,10 +24,17 @@ function Entity(diagramService) {
             }
         }
     });
-    this.addField = function () {
+    this.addField = function (field) {
         var fl = new Field(this);
         fl.id = self._integerCounter.getId();
-        fl.name = "field" + fl.id;
+
+        if (field) {
+            fl.prototype = Object.create(field);
+            fl.name = field.name;
+        } else {
+            fl.name = "field" + fl.id;
+        }
+
         this.fields.push(fl);
         return fl;
     };
@@ -36,16 +43,17 @@ function Entity(diagramService) {
         if (this.currentField) {
             if (this.currentField.association) {
                 diagramService.associations.remove(this.currentField.associationObj);
-            };
+            }
+            ;
             this.fields.remove(this.currentField);
             this.currentField = null;
 
         }
     };
     //Будет вызыватся при удалении сущности
-    this.destroy = function(){
-        this.fields.forEach(function(item){
-           item.association = null;
+    this.destroy = function () {
+        this.fields.forEach(function (item) {
+            item.association = null;
         });
     };
 }

@@ -21,6 +21,7 @@
     "angular-mocks": "~1.3.15",
     "underscore": "~1.8.3",
     "ngDraggable": "~0.1.8",
-    "svg.js": "~1.0.1"
+    "svg.js": "~1.0.1",
+    "karma-read-json": "~1.1.0"
   }
 }

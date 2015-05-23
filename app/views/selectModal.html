@@ -1,0 +1,28 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="modal-body">{{message}}
+    <select ng-model="selectedItem" class="form-control" ng-options="i as i.name for i in items"></select>
+    <br>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th ng-repeat="(k,v) in selectedItem.fields[0]" ng-bind="k">/th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="f in selectedItem.fields">
+                    <td ng-repeat="(k,v) in f" ng-bind="v"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()" ng-disabled="!selectedItem">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

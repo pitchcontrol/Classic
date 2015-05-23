@@ -30,6 +30,17 @@ describe('Тест Entity', function () {
         expect(field.entity).toBe(entity);
 
     });
+    it("Создаем поле, на основе другого", function () {
+        var f = {
+            isRequired: true,
+            name:"templateField",
+            type:"string"
+        };
+        var field = entity.addField(f);
+        expect(field.name).toBe(f.name);
+        expect(field.isRequired).toBe(f.isRequired);
+        expect(field.type).toBe(f.type);
+    });
     it("Проверяем что создается уникальый номер", function () {
         counter.clear();
         var field = entity.addField();

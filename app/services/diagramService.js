@@ -4,11 +4,25 @@
         //Колекция сущностей
         this.entities = [];
         this.associations = [];
-        this.addEntity = function () {
+        this.addEntity = function (entity) {
             var item = new Entity(this);
             item._integerCounter = integerCounter;
             item.id = integerCounter.getId();
-            item.name = 'Entity' + item.id;
+            if (entity == undefined) {
+                item.name = 'Entity' + item.id;
+            }
+            else {
+                //Добавляем сущность из шаблона, нужно проверить уникальность
+                if (_.findWhere(this.entities, {name: entity.name}) != undefined) {
+                    item.name = entity.name + item.id;
+                } else {
+                    item.name = entity.name;
+                }
+                entity.fields.forEach(function (i) {
+                    var f = item.addField();
+
+                });
+            }
             this.entities.push(item);
             return item;
         };

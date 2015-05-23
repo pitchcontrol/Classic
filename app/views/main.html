@@ -28,6 +28,7 @@
             <div class="panel-heading">Сушности</div>
             <div class="panel-body">
                 <button ng-click="addEntity()" class="btn">+</button>
+                <button ng-click="addTemplateEssence()" class="btn">Шаблон</button>
                 <ul class="list-group">
                     <li class="list-group-item" ng-repeat="i in diagram.entities" ng-dblclick="editEntity(i)">
                         <span>{{i.name}}</span>

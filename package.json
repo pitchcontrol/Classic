@@ -1,0 +1,36 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-inject": "^1.2.0",
+    "gulp-uglifyjs": "^0.6.1",
+    "gulp-util": "^3.0.4",
+    "main-bower-files": "^2.7.0",
+    "wiredep": "^2.2.2",
+    "gulp-uglify": "^1.2.0",
+    "gulp-bower-files": "^0.2.7",
+    "less": "^2.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pitchcontrol/Classic.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pitchcontrol/Classic/issues"
+  },
+  "homepage": "https://github.com/pitchcontrol/Classic"
+}

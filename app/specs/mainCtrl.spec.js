@@ -52,4 +52,16 @@ describe('Тест mainCtrl', function () {
         scope.$digest();
         expect(ds.entities.length).toBe(0);
     });
+    it("Открываем диалог выбора сущности по шаблону - отмена", function () {
+        modal.open.and.returnValue({result: q.reject({})});
+        scope.addTemplateEssence();
+        scope.$digest();
+        expect(ds.entities.length).toBe(0);
+    });
+    it("Открываем диалог выбора сущности по шаблону - ок", function () {
+        modal.open.and.returnValue({result: q.when()});
+        scope.addTemplateEssence();
+        scope.$digest();
+        expect(ds.entities.length).toBe(1);
+    });
 });

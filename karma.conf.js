@@ -17,7 +17,9 @@ module.exports = function (config) {
         files: [
             'dist/bower.min.js',
             'app/**/*.js',
-            'app/specs/*.spec.js'
+            'app/specs/*.spec.js',
+            'bower_components/karma-read-json/karma-read-json.js',
+            {pattern: 'test/*.json', include: false}
         ],
 
 
