@@ -1,20 +1,23 @@
 <div class="row">
     <div class="col-lg-10">
-        <div class="col-lg-12" id="canvas" ng-canvas >
+        <div class="col-lg-12" id="canvas" ng-canvas>
             <div class="col-lg-3 col-md-3" ng-repeat="i in diagram.entities" entity-draggable
                  ng-dblclick="editEntity(i)"
                  entity="i">
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">{{i.name}}</h3>
-                    </div>
-                    <div class="panel-body">
-                        <ul class="list-unstyled">
-                            <li ng-repeat="f in i.fields" field-draggable field="f">{{f.toString()}}</li>
-                        </ul>
-                    </div>
-                </div>
+                <ul class="rectangle-list">
+                    <li>{{i.name}}</li>
+                    <li ng-repeat="f in i.fields" field-draggable field="f">{{f.toString()}}</li>
+                </ul>
+                <!--<div class="panel panel-default">-->
+                <!--<div class="panel-heading">-->
+                <!--<h3 class="panel-title">{{i.name}}</h3>-->
+                <!--</div>-->
+                <!--<div class="panel-body">-->
+                <!--<ul class="list-unstyled">-->
+                <!--<li ng-repeat="f in i.fields" field-draggable field="f">{{f.toString()}}</li>-->
+                <!--</ul>-->
+                <!--</div>-->
+                <!--</div>-->
             </div>
 
             <svg>
@@ -24,27 +27,32 @@
         </div>
     </div>
     <div class="col-lg-2">
-        <div class="panel panel-default">
-            <div class="panel-heading">Сушности</div>
-            <div class="panel-body">
-                <button ng-click="addEntity()" class="btn">+</button>
-                <button ng-click="addTemplateEssence()" class="btn">Шаблон</button>
-                <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="i in diagram.entities" ng-dblclick="editEntity(i)">
-                        <span>{{i.name}}</span>
-                        <button class="btn btn-mini pull-right" ng-click="removeEntity(i)"><i class="icon-trash"></i>
-                        </button>
-                    </li>
-                </ul>
-            </div>
+        <!--<div class="panel panel-default">-->
+        <div>
+            <button ng-click="addEntity()" type="button" data-toggle="tooltip" data-placement="top"
+                    title="Добавить сущность"><span class="glyphicon glyphicon-plus"></span></button>
+            <button ng-click="addTemplateEssence()" type="button" data-toggle="tooltip"
+                    data-placement="top" title="Добавить сущность из шаблона"><span
+                    class="glyphicon glyphicon-list-alt"></span></button>
+            <ul class="rectangle-list">
+                <li>Сушности</li>
+                <li class="" ng-repeat="i in diagram.entities" ng-dblclick="editEntity(i)">
+                    {{i.name}}
+
+                    <em class="glyphicon glyphicon-trash" ng-click="removeEntity(i)" data-toggle="tooltip"
+                        data-placement="top" title="Удалить сущность"></em>
+                </li>
+            </ul>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">Связи</div>
-            <div class="panel-body">
-                <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="i in diagram.associations">{{i.toString()}}</li>
-                </ul>
-            </div>
+        <ul class="rectangle-list">
+            <li class="panel-heading">Связи</li>
+            <li ng-repeat="i in diagram.associations">{{i.toString()}}</li>
+        </ul>
+        <div>
+            <button class="btn btn-success" ng-click="generate()" ng-disabled="!diagram.entities.length>0">
+                Генерировать
+            </button>
         </div>
     </div>
+</div>
 </div>

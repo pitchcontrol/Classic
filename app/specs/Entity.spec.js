@@ -33,8 +33,8 @@ describe('Тест Entity', function () {
     it("Создаем поле, на основе другого", function () {
         var f = {
             isRequired: true,
-            name:"templateField",
-            type:"string"
+            name: "templateField",
+            type: "bool"
         };
         var field = entity.addField(f);
         expect(field.name).toBe(f.name);
@@ -57,5 +57,14 @@ describe('Тест Entity', function () {
         expect(dS.associations.length).toBe(1);
         entity.destroy();
         expect(dS.associations.length).toBe(0);
+    });
+    it("Получаем JSON", function () {
+        var entity2 = dS.addEntity();
+        var field = entity.addField();
+        field.type = 'Association';
+        field.association = entity2;
+        var json = entity.getJSON();
+        expect(json.name).toBe(entity.name);
+        expect(json.fields.length).toBe(entity.fields.length);
     });
 });

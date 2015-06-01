@@ -19,7 +19,7 @@
                     item.name = entity.name;
                 }
                 entity.fields.forEach(function (i) {
-                    var f = item.addField();
+                    var f = item.addField(i);
 
                 });
             }
@@ -31,6 +31,12 @@
             this.entities.remove(entity);
         };
         this.geometry = {offsetX: 0, offsetY: 0};
+        //Получает упрошенный обьект для сериализации
+        this.getJSON = function () {
+            return this.entities.map(function (item) {
+                return item.getJSON();
+            });
+        };
     };
     angular.module('app').service('diagramService', ['integerCounter', diagramService]);
 })

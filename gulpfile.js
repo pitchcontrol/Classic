@@ -10,26 +10,25 @@ var mainBowerFiles = require('main-bower-files');
 var gutil = require('gulp-util');
 //Пакет объденяет контактинацию и минификацию
 var uglify = require('gulp-uglifyjs');
+var jasmine = require('gulp-jasmine');
 
 var src = ['./app/css/site.css', './app/app.js', './app/directives/*.js', './app/controllers/*.js', './app/services/*.js', './app/Primitives/*.js'];
 
-//Собираем bower
-//gulp.task("bower", function () {
-//    var lessRegEx = (/.*\.js$/i);
-//    return gulp.src(mainBowerFiles({filter: lessRegEx}))
-//        .pipe(uglify('bower.min.js', {
-//            outSourceMap: true
-//        }))
-//        .pipe(gulp.dest('dist/'));
-//});
-////Собираем файлы
-//gulp.task('default', function () {
-//    gulp.src(src)
-//        .pipe(uglify('build.min.js', {
-//            outSourceMap: true
-//        })).on('error', gutil.log)
-//        .pipe(gulp.dest('./dist'));
-//});
+
+gulp.task('jasmine', function () {
+    return gulp.src('server/spec/**/*.spec.js')
+        .pipe(jasmine());
+});
+
+
+var templateCache = require('gulp-angular-templatecache');
+
+gulp.task('template', function () {
+    gulp.src('./app/views/*.html')
+        .pipe(templateCache())
+        .pipe(gulp.dest('public'));
+});
+
 
 //Собираем bower
 gulp.task('bower', function () {

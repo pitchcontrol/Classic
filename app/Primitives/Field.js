@@ -109,4 +109,15 @@ function Field(entity) {
     this.toString = function () {
         return this.name + ': ' + this.type;
     };
+    this.getJSON = function () {
+        var json = {
+            type: this.type, name: this.name, isRequired: this.isRequired
+        };
+        if (this.associationObj) {
+            json.associationObj = {
+                start: {name: this.associationObj.start.name}
+            };
+        }
+        return json;
+    };
 }

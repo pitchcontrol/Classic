@@ -1,0 +1,7 @@
+namespace <%= answers[0] %>
+{
+    public <%= item.type %> <%= item.name %>
+    {
+    <% item.fields.forEach(function(element, index, array){ %> <%- element.raw() %> <% }) %>
+    }
+}

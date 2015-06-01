@@ -86,7 +86,7 @@ describe('Тест entityDraggable', function () {
     it("Перемещаем обьект, меняются свойства у сущности", function () {
         var elem = compiler()[0];
         moveElement(elem);
-        expect(elem.style.top).toBe(scope.entities[0].geometry.y + 20+ 'px');
+        expect(elem.style.top).toBe(scope.entities[0].geometry.y + 10+ 'px');
         expect(elem.style.left).toBe(scope.entities[0].geometry.x + 'px');
 
     });
@@ -106,7 +106,7 @@ describe('Тест entityDraggable', function () {
         var y = scope.entities[0].geometry.bottom.y;
         moveElement(elem);
         expect(scope.entities[0].geometry.bottom.x).toBe(x + 20);
-        expect(scope.entities[0].geometry.bottom.y).toBe(y + 20);
+        expect(scope.entities[0].geometry.bottom.y).toBe(y + 30);
     });
     it("Перемещаем обьект меняются положение связей", function () {
         var elem = compiler()[0];

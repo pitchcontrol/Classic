@@ -65,6 +65,15 @@ describe('Тест Field', function () {
         expect(entity2.outerAssociation.length).toBe(1);
         expect(entity2.outerAssociation[0] == field.associationObj).toBeTruthy();
     });
+    it("ВЫставляем связь проверяем JSON", function () {
+        field.type = "Association";
+        field.association = entity2;
+        var json = field.getJSON();
+        expect(json.name).toBe(field.name);
+        expect(json.type).toBe(field.type);
+        expect(json.isRequired).toBe(field.isRequired);
+        expect(json.associationObj.start.name).toBe(field.associationObj.start.name);
+    });
     it("Меняем тип поля должна уничтожится связь", function () {
         field.type = "Association";
         field.association = entity2;

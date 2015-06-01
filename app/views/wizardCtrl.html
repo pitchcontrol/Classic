@@ -1,0 +1,28 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="modal-body">{{message}}
+    <div class="row">
+        <div class="col-lg-12" ng-switch on="model.type">
+            <div class="form-group" ng-switch-when="string">
+                <label>{{model.question}}</label>
+                <input type="type" class="form-control" ng-model="model.answer">
+            </div>
+            <div class="checkbox" ng-switch-when="bool">
+                <label>
+                    <input type="checkbox" ng-model="model.answer">{{model.question}}
+                </label>
+            </div>
+            <div class="form-group" ng-switch-when="enum">
+                <label>{{model.question}}</label>
+                <select class="form-control" ng-model="model.answer" ng-options="item as item for item in model.choices"></select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="next()" ng-disabled="model.answer==undefined && model.type!='bool'">
+        Далее
+    </button>
+    <button class="btn btn-warning" ng-click="cancel()">Отмена</button>
+</div>

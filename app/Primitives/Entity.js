@@ -31,6 +31,7 @@ function Entity(diagramService) {
         if (field) {
             fl.prototype = Object.create(field);
             fl.name = field.name;
+            fl.type = field.type;
         } else {
             fl.name = "field" + fl.id;
         }
@@ -55,5 +56,12 @@ function Entity(diagramService) {
         this.fields.forEach(function (item) {
             item.association = null;
         });
+    };
+    this.getJSON = function () {
+        var json = {name: this.name};
+        json.fields = this.fields.map(function (item) {
+            return item.getJSON();
+        });
+        return json;
     };
 }

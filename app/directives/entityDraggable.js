@@ -60,7 +60,7 @@
                 //console.log(x,y);
                 var geo = scope.entity.geometry;
                 geo.x = x; //- diagramService.geometry.offsetX;
-                geo.y = y - 20; //- diagramService.geometry.offsetY;
+                geo.y = y-10; //- diagramService.geometry.offsetY;
                 geo.bottom.y = geo.y + scope.entity.geometry.height;
                 geo.bottom.x = geo.x + scope.entity.geometry.width / 2;
                 Refresh(geo.bottom.x, geo.bottom.y);

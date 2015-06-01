@@ -1,7 +1,7 @@
 (function () {
     "use strict"
-    var selectModalCtrl = function ($scope, $modalInstance, templateService, data) {
-        templateService.getEntityTemplateList().then(function (responce) {
+    var selectModalCtrl = function ($scope, $modalInstance, data, promise) {
+        promise().then(function (responce) {
             $scope.items = responce.data;
         });
         $scope.message = data.message;
@@ -14,5 +14,5 @@
             $modalInstance.dismiss('cancel');
         };
     };
-    angular.module('app').controller('selectModalCtrl', ['$scope', '$modalInstance', 'templateService', 'data', selectModalCtrl]);
+    angular.module('app').controller('selectModalCtrl', ['$scope', '$modalInstance', 'data', 'promise', selectModalCtrl]);
 })();

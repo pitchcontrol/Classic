@@ -6,7 +6,7 @@
         $scope.addEntity = function () {
             var entity = diagramService.addEntity();
             var modalInstance = $modal.open({
-                templateUrl: '../app/views/entityModal.html',
+                templateUrl: 'views/entityModal.html',
                 controller: 'entityModalCtrl',
                 resolve: {
                     item: function () {
@@ -20,7 +20,7 @@
         };
         $scope.editEntity = function (entity) {
             $modal.open({
-                templateUrl: '../app/views/entityModal.html',
+                templateUrl: 'views/entityModal.html',
                 controller: 'entityModalCtrl',
                 resolve: {
                     item: function () {
@@ -31,7 +31,7 @@
         };
         $scope.removeEntity = function (entity) {
             var modalInstance = $modal.open({
-                templateUrl: '../app/views/confirmModal.html',
+                templateUrl: 'views/confirmModal.html',
                 controller: 'confirmModalCtrl',
                 resolve: {
                     data: function () {
@@ -46,7 +46,7 @@
         //Добавить сущность на основе шаблона
         $scope.addTemplateEssence = function () {
             var modalInstance = $modal.open({
-                templateUrl: '../app/views/selectModal.html',
+                templateUrl: 'views/selectModal.html',
                 controller: 'selectModalCtrl',
                 resolve: {
                     data: function () {
@@ -54,11 +54,63 @@
                             title: 'Выбор',
                             message: 'Выберите шаблон'
                         };
+                    },
+                    promise: function () {
+                        return templateService.getEntityTemplateList;
                     }
                 }
             });
             modalInstance.result.then(function (entity) {
                 diagramService.addEntity(entity);
+            });
+        };
+        //Генерировать
+        $scope.generate = function () {
+            var modalInstance = $modal.open({
+                templateUrl: 'views/selectModal.html',
+                controller: 'selectModalCtrl',
+                resolve: {
+                    data: function () {
+                        return {
+                            title: 'Выбор',
+                            message: 'Выберите шаблон для генерации'
+                        };
+                    },
+                    promise: function () {
+                        return templateService.getGenerateTemplateList;
+                    }
+                }
+            });
+            var id;
+            //Переходим к вопросам
+            modalInstance.result.then(function (template) {
+                $modal.open({
+                    templateUrl: 'views/wizardCtrl.html',
+                    controller: 'wizardCtrl',
+                    resolve: {
+                        data: function () {
+                            return {
+                                title: 'Вопросы',
+                                message: 'Пожалуйста ответьте на вопросы'
+                            };
+                        },
+                        promise: function () {
+                            id = template.id;
+                            return templateService.getQuestionList(id);
+                        }
+                    }
+                }).result.then(function (result) {
+                        templateService.generate({
+                            id: id,
+                            answers: result.map(function (it) {
+                                return it.answer;
+                            }),
+                            entities: diagramService.getJSON()
+                        }).then(function (file) {
+                            var blob = new Blob([file.data], {type: 'application/zip'});
+                            saveAs(blob, 'code.zip');
+                        });
+                    });
             });
         };
     };

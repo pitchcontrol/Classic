@@ -8,13 +8,13 @@ describe('Тест selectModalCtrl', function () {
         inject(function ($controller, $rootScope, $q) {
             modal = jasmine.createSpyObj('modal', ['dismiss', 'close']);
             items = [];
-            templateService = jasmine.createSpyObj('templateService', ['getEntityTemplateList']);
-            templateService.getEntityTemplateList.and.returnValue($q.when(items));
+            modalService = jasmine.createSpyObj('templateService', ['getEntityTemplateList']);
+            modalService.getEntityTemplateList.and.returnValue($q.when(items));
             scope = $rootScope.$new();
             controller = $controller('selectModalCtrl', {
                 $scope: scope,
                 $modalInstance: modal,
-                templateService: templateService,
+                promise: modalService.getEntityTemplateList,
                 data: {}
             });
         });

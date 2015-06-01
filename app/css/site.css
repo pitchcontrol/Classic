@@ -12,3 +12,45 @@
     width: 100%;
     min-height: 1500px;
 }
+
+.rectangle-list {
+    margin-top: .5em;
+    list-style: none;
+    padding: 0;
+    border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.rectangle-list li {
+    overflow: hidden;
+    padding: 6px 10px;
+    font-size: 0.75em;
+    position: relative;
+    overflow: hidden;
+}
+
+.rectangle-list li:first-child {
+    font-weight: bold;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+    box-shadow: 0 5px 10px -5px rgba(0, 0, 0, .2);
+}
+
+.rectangle-list li:first-child:before {
+    content: "";
+    margin-right: 10px;
+}
+
+.rectangle-list span {
+
+    width: 75%;
+    color: #7C7D7F;
+}
+
+.rectangle-list em {
+    position: absolute;
+    right: 0.5em;
+    top: 0.6em;
+    color: #9c836e;
+    font-weight: bold;
+    background-color: white;
+}
