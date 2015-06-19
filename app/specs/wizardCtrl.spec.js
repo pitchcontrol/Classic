@@ -30,6 +30,15 @@ describe('Тест wizardCtrl', function () {
         scope.next();
         expect(scope.model).toEqual(questions[1]);
     });
+    it("Нажимаем назад в начале - перход невозможен", function () {
+        scope.prev();
+        expect(scope.model).toEqual(questions[0]);
+    });
+    it("Нажимаем назад в не начале - перход возможен", function () {
+        scope.next();
+        scope.prev();
+        expect(scope.model).toEqual(questions[0]);
+    });
     it("Нажимаем далее - на последнем пункте, выход ок", function () {
         scope.next();
         scope.next();

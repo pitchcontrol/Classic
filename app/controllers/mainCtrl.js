@@ -112,6 +112,12 @@
                         });
                     });
             });
+            //Вход
+            var modalInstance = $modal.open({
+                templateUrl: 'views/loginModal.html',
+                controller: 'loginModalCtrl',
+                resolve: {}
+            });
         };
     };
     angular.module('app').controller('mainCtrl', ['$scope', '$modal', 'diagramService', 'templateService', mainCtrl]);

@@ -21,6 +21,7 @@
     </div>
 </div>
 <div class="modal-footer">
+    <button class="btn btn-info" ng-click="prev()" ng-disabled="!hasPrev()">Назад</button>
     <button class="btn btn-primary" ng-click="next()" ng-disabled="model.answer==undefined && model.type!='bool'">
         Далее
     </button>

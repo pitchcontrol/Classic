@@ -35,7 +35,7 @@ function getType(field, answers) {
 
 module.exports.render = function (data, path) {
     var renderFiles = [];
-    var text = fs.readFileSync(path || './templates/csharp/Класс.ejs', 'utf8');
+    var text = fs.readFileSync(path || __dirname + '/Класс.ejs', 'utf8');
     //Перебор сущностей
     data.entities.forEach(function (entity) {
         //Если стоит выделить интерфейс - то нужно добавить наследлвание от него
@@ -48,7 +48,6 @@ module.exports.render = function (data, path) {
         //Формируем поля
         cpItem.fields.forEach(function (field, index, array) {
             //console.log(cpItem.name, data.answers[1]);
-
             field.raw = function () {
                 //Получим тип
                 var type = getType(field, data.answers);

@@ -15,7 +15,16 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'dist/bower.min.js',
+            //'dist/bower.min.js',
+            // bower:js
+            'bower_components/jquery/dist/jquery.js',
+            'bower_components/angular/angular.js',
+            'bower_components/angular-route/angular-route.js',
+            'bower_components/bootstrap/dist/js/bootstrap.js',
+            'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+            'bower_components/underscore/underscore.js',
+            'bower_components/angular-mocks/angular-mocks.js',
+            // endbower
             'app/**/*.js',
             'app/specs/*.spec.js',
             'bower_components/karma-read-json/karma-read-json.js',

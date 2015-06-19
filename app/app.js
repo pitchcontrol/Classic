@@ -9,9 +9,8 @@
                 templateUrl: 'views/main.html',
                 controller: 'mainCtrl',
                 title: 'Главная'
-            })
-                .otherwise({
-                    redirectTo: '/'
-                });
+            }).otherwise({
+                redirectTo: '/'
+            });
         }]);
 })();

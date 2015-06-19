@@ -17,7 +17,7 @@ var src = ['./app/css/site.css', './app/app.js', './app/directives/*.js', './app
 
 gulp.task('jasmine', function () {
     return gulp.src('server/spec/**/*.spec.js')
-        .pipe(jasmine());
+        .pipe(jasmine({includeStackTrace: true}));
 });
 
 
@@ -36,12 +36,31 @@ gulp.task('bower', function () {
         .pipe(wiredep({directory: "./bower_components"}))
         .pipe(gulp.dest('./app'));
     //Специально для кармы готовим файл
-    var lessRegEx = (/.*\.js$/i);
-    gulp.src(mainBowerFiles({filter: lessRegEx}))
-        .pipe(uglify('bower.min.js', {
-            outSourceMap: true
+    //var lessRegEx = (/.*\.js$/i);
+    //gulp.src(mainBowerFiles({filter: lessRegEx}))
+    //    .pipe(uglify('bower.min.js', {
+    //        outSourceMap: true
+    //    }))
+    //    .pipe(gulp.dest('dist/'));
+    //Внедряе пакеты в конф файл
+    gulp.src('./karma.conf.js')
+        .pipe(wiredep({
+            directory: "./bower_components",
+            devDependencies: true,
+            fileTypes: {
+                js: {
+                    block: /(([ \t]*)\/\/\s*bower:*(\S*))(\n|\r|.)*?(\/\/\s*endbower)/gi,
+                    detect: {
+                        js: /['\']([^'\']+\.js)['\'],?/gi
+                    },
+                    replace: {
+                        js: '"{{filePath}}",'
+                    }
+                }
+            }
         }))
-        .pipe(gulp.dest('dist/'));
+        .pipe(gulp.dest('./'));
+
 });
 //Слушаем изменения файла bower.json
 gulp.task('bowerWatch', function () {
