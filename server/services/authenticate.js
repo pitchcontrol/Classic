@@ -16,7 +16,6 @@ module.exports.login = function (req, res, next) {
     if (login == '' || password == '') {
         return res.status(401).send('Не указан логин или пароль');
     }
-
     user.findOne({where: {login: login}}).then((user) => {
         if (!user) {
             winston.warn('Логин не найден: ' + login);

@@ -41,4 +41,16 @@ describe('Тест обьекта связь', function () {
         relation.setStart(60, 60);
         expect(relation.toString()).toBe('40,100 50,100 50,100 60,100 60,60');
     });
+    it("Меняем конец причем родитель выше и левее", function () {
+        relation.setStart(60, 60);
+        relation.setEnd(40, 60);
+        relation.setEnd(100, 100);
+        expect(relation.toString()).toBe('100,100 120,100 120,80 60,80 60,60');
+    });
+    it("Меняем конец родитель ниже и левее", function () {
+        relation.setStart(20, 120);
+        relation.setEnd(40, 60);
+        relation.setEnd(140, 20);
+        expect(relation.toString()).toBe('140,20 160,20 160,140 20,140 20,120');
+    });
 });

@@ -1,6 +1,7 @@
 (function () {
     "use strict";
     var diagramService = function (integerCounter) {
+        var self = this;
         //Колекция сущностей
         this.entities = [];
         this.associations = [];
@@ -31,6 +32,15 @@
             this.entities.remove(entity);
         };
         this.geometry = {offsetX: 0, offsetY: 0};
+        //Получает относительные координаты обьекта
+        this.geometry.getRelative = function (obj) {
+            var x = obj.x - self.geometry.offsetX;
+            var y = obj.y - self.geometry.offsetY;
+            return {
+                x: x,
+                y: y
+            }
+        };
         //Получает упрошенный обьект для сериализации
         this.getJSON = function () {
             return this.entities.map(function (item) {

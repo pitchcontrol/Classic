@@ -38,6 +38,11 @@ describe('Тест authService', function () {
         expect(as.user).toEqual({login: "vasya", token: "12334567"});
         expect(ok).toBeTruthy();
     });
+    it("Выход", function () {
+        as.user = {login: '1234'};
+        as.logoff();
+        expect(as.user).toBeUndefined();
+    });
     //закрываем все «ожидания» и запросы.
     afterEach(function () {
         httpBackend.verifyNoOutstandingExpectation();

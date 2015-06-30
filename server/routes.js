@@ -1,4 +1,5 @@
 "use strict";
+var winston = require('winston')
 module.exports.setup = function (app) {
     //Список шаблонов генератора
     app.get('/template/list', require('./routes/template').list);
@@ -12,6 +13,7 @@ module.exports.setup = function (app) {
     app.post('/login', require('./services/authenticate').login);
 
     app.get('*', function (req, res, next) {
+        winston.warn(req.url+ ', Not found');
         res.status(404).send('Not found');
     });
 };

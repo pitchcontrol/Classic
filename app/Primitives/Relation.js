@@ -9,40 +9,71 @@ function Relation() {
     var xi = 0, yi = 1;
     //Куда заходит связь справа
     this.setEnd = function (x, y) {
+
         //Первая точка
         ln[0][xi] = x;
         ln[0][yi] = y;
-        //Сдучай когда родитель выше
-        if (ln[4][yi] < ln[0][yi] + int) {
-            ln[2][yi] = ln[3][yi] = y;
-        } else {
+        redaraw();
+    };
+    function redaraw() {
+        var h = ln[0][yi] + ln[4][yi];
+        var center = ( ln[4][xi] - ln[0][xi] ) / 2;
+        //Сдучай когда родитель выше и правее
+        if ((ln[4][yi] < ln[0][yi] + int) && (ln[4][xi] > ln[0][xi])) {
+            ln[2][yi] = ln[3][yi] = ln[0][yi];
+        } else
+        //родитель выше и левее
+        if ((ln[4][yi] < ln[0][yi] + int) && (ln[4][xi] < ln[0][xi])) {
+            ln[2][yi] = ln[4][yi] + int;
+            ln[2][xi] = ln[0][yi] + int;
+            ln[3][yi] = ln[4][yi] + int;
+            //излом будет не на центре
+            center = int;
+        } else
+        //родитель ниже и левее
+        if (ln[4][xi] < ln[0][xi] && ln[4][yi] > ln[0][yi]) {
+            ln[1][xi] = ln[0][xi] + int;
+            ln[1][yi] = ln[0][yi];
+
+            ln[3][xi] = ln[4][xi];
+            ln[3][yi] = ln[4][yi] + int;
+
+            ln[2][xi] = ln[1][xi];
+            ln[2][yi] = ln[3][yi];
+
+            //излом будет не на центре
+            center = int;
+        }
+        else {
             ln[2][yi] = ln[3][yi] = ln[4][yi] + int;
         }
 
-        var center = ( ln[4][xi] - ln[0][xi] ) / 2;
+        //Предпоследняя точка
+        ln[3][xi] = ln[4][xi];
         ln[1][xi] = center + ln[0][xi];
-        ln[1][yi] = y;
-
+        ln[1][yi] = ln[0][yi];
         ln[2][xi] = center + ln[0][xi];
-    };
+    }
+
     //Откуда выходит связь снизу
     this.setStart = function (x, y) {
         //Последня точка
         ln[4][xi] = x;
         ln[4][yi] = y;
-        //Предпоследняя точка
-        ln[3][xi] = x;
-        //Сдучай когда родитель выше
-        if (ln[4][yi] < ln[0][yi] + int) {
-            ln[2][yi] = ln[3][yi] = ln[0][yi];
-        } else {
-            ln[2][yi] = ln[3][yi] = ln[4][yi] + int;
-        }
-
-        var center = ( ln[4][xi] - ln[0][xi] ) / 2;
-        ln[2][xi] = center + ln[0][xi];
-
-        ln[1][xi] = center + ln[0][xi];
+        redaraw();
+        ////Предпоследняя точка
+        //ln[3][xi] = x;
+        ////Сдучай когда родитель выше
+        //if (ln[4][yi] < ln[0][yi] + int) {
+        //    ln[2][yi] = ln[3][yi] = ln[0][yi];
+        //} else {
+        //    ln[2][yi] = ln[3][yi] = ln[4][yi] + int;
+        //}
+        //
+        //var center = ( ln[4][xi] - ln[0][xi] ) / 2;
+        //ln[2][xi] = center + ln[0][xi];
+        //
+        //ln[1][xi] = center + ln[0][xi];
     };
     this.toString = function () {
         //return ln[0][xi] + ',' + ln[0][yi] + ' ' + ln[1][xi] + ',' + ln[1][yi] + ' ' + ln[2][xi] + ',' + ln[2][yi] + ' ' + ln[3][xi] + ',' + ln[3][yi] + ' ' + ln[4][xi] + ',' + ln[4][yi];

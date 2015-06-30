@@ -12,7 +12,7 @@ var gutil = require('gulp-util');
 var uglify = require('gulp-uglifyjs');
 var jasmine = require('gulp-jasmine');
 
-var src = ['./app/css/site.css', './app/app.js', './app/directives/*.js', './app/controllers/*.js', './app/services/*.js', './app/Primitives/*.js'];
+var src = ['./app/css/site.css', './app/app.js', './app/directives/*.js', './app/controllers/*.js', './app/services/*.js', './app/Primitives/*.js','./app/factories/*.js'];
 
 
 gulp.task('jasmine', function () {
@@ -35,13 +35,6 @@ gulp.task('bower', function () {
     gulp.src('./app/index.html')
         .pipe(wiredep({directory: "./bower_components"}))
         .pipe(gulp.dest('./app'));
-    //Специально для кармы готовим файл
-    //var lessRegEx = (/.*\.js$/i);
-    //gulp.src(mainBowerFiles({filter: lessRegEx}))
-    //    .pipe(uglify('bower.min.js', {
-    //        outSourceMap: true
-    //    }))
-    //    .pipe(gulp.dest('dist/'));
     //Внедряе пакеты в конф файл
     gulp.src('./karma.conf.js')
         .pipe(wiredep({

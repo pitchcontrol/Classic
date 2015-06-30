@@ -10,8 +10,8 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 //Отдаем статические файлы
-app.use(express.static(path.resolve(__dirname, '../app/')));
-app.use('/bower_components', express.static(path.resolve(__dirname, '../bower_components/')));
+app.use(express.static(path.resolve(__dirname, '../../app/')));
+app.use('/bower_components', express.static(path.resolve(__dirname, '../../bower_components/')));
 
 
 module .exports.app = app;

@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title ng-bind="title"></title>
     <!-- bower:css -->
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
     <!-- endbower -->
     <!-- inject:css -->
     <link rel="stylesheet" href="css/site.css">
     <!-- endinject -->
 </head>
 <body>
-<nav class="navbar navbar-default " role="navigation">
+<nav class="navbar navbar-default " role="navigation" ng-controller="navigationCtrl">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -22,6 +23,12 @@
             </button>
         </div>
         <a class="navbar-brand" href="#">Brand</a>
+
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a ng-bind="model.loginTitle" ng-click="login()"></a></li>
+            </ul>
+        </div>
     </div>
 </nav>
 
@@ -36,6 +43,7 @@
 <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="../bower_components/underscore/underscore.js"></script>
+<script src="../bower_components/angular-bootstrap-contextmenu/contextMenu.js"></script>
 <!-- endbower -->
 <!-- inject:js -->
 <script src="app.js"></script>
@@ -45,10 +53,13 @@
 <script src="controllers/associationModalCtrl.js"></script>
 <script src="controllers/confirmModalCtrl.js"></script>
 <script src="controllers/entityModalCtrl.js"></script>
+<script src="controllers/loginModalCtrl.js"></script>
 <script src="controllers/mainCtrl.js"></script>
+<script src="controllers/navigationCtrl.js"></script>
 <script src="controllers/selectModalCtrl.js"></script>
 <script src="controllers/wizardCtrl.js"></script>
 <script src="services/FileSaver.js"></script>
+<script src="services/authService.js"></script>
 <script src="services/diagramService.js"></script>
 <script src="services/integerCounter.js"></script>
 <script src="services/templateService.js"></script>
@@ -57,6 +68,7 @@
 <script src="Primitives/Entity.js"></script>
 <script src="Primitives/Field.js"></script>
 <script src="Primitives/Relation.js"></script>
+<script src="factories/geometryBlock.js"></script>
 <!-- endinject -->
 </body>
 </html>

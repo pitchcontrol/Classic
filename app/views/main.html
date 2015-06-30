@@ -1,23 +1,13 @@
 <div class="row">
     <div class="col-lg-10">
-        <div class="col-lg-12" id="canvas" ng-canvas>
-            <div class="col-lg-3 col-md-3" ng-repeat="i in diagram.entities" entity-draggable
+        <div class="col-lg-12" id="canvas" ng-canvas context-menu="menuOptions">
+            <div class="col-lg-3 col-md-3 block" ng-repeat="i in diagram.entities" entity-draggable
                  ng-dblclick="editEntity(i)"
                  entity="i">
                 <ul class="rectangle-list">
                     <li>{{i.name}}</li>
                     <li ng-repeat="f in i.fields" field-draggable field="f">{{f.toString()}}</li>
                 </ul>
-                <!--<div class="panel panel-default">-->
-                <!--<div class="panel-heading">-->
-                <!--<h3 class="panel-title">{{i.name}}</h3>-->
-                <!--</div>-->
-                <!--<div class="panel-body">-->
-                <!--<ul class="list-unstyled">-->
-                <!--<li ng-repeat="f in i.fields" field-draggable field="f">{{f.toString()}}</li>-->
-                <!--</ul>-->
-                <!--</div>-->
-                <!--</div>-->
             </div>
 
             <svg>

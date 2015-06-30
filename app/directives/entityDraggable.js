@@ -3,44 +3,47 @@
  */
 (function () {
     "use strict";
-    var entityDraggable = function ($document, diagramService, $rootScope) {
+    var entityDraggable = function ($document, diagramService, $rootScope, geometryBlock) {
         function makeDraggable(scope, element, attr) {
             var startX = 0;
             var startY = 0;
-
-            // Start with a random pos
-            var x = Math.floor((Math.random() * 400) + 40);
-            var y = Math.floor((Math.random() * 400) + 40);
-
+            var x = 0;
+            var y = 0;
+            if (!diagramService.mouse) {
+                // Start with a random pos
+                x = Math.floor((Math.random() * 400));
+                y = Math.floor((Math.random() * 400));
+            } else {
+                var rel = diagramService.geometry.getRelative(diagramService.mouse);
+                x = rel.x;
+                y = rel.y;
+            }
             element.css({
-                cursor: 'pointer',
                 position: 'absolute',
                 top: y + 'px',
-                left: x + 'px'
+                left: x + 'px',
+                cursor: 'move'
             });
             // var rx = (x - diagramService.geometry.offsetX);
             // var ry = (y - diagramService.geometry.offsetY);
-            scope.entity.geometry = {
-                x: x,
-                y: y - 20,
-                width: element.prop('offsetWidth'),
-                height: element.prop('offsetHeight'),
-                bottom: {x: (x + element.prop('offsetWidth') / 2), y: y - 20 + element.prop('offsetHeight')}
-            };
-
-            element.on('mousedown', function (event) {
-                event.preventDefault();
-                startX = event.pageX - x;
-                startY = event.pageY - y;
-                $document.on('mousemove', mousemove);
-                $document.on('mouseup', mouseup);
-            });
+            //scope.entity.geometry = {
+            //    x: x,
+            //    y: y - 20,
+            //    width: element.prop('offsetWidth'),
+            //    height: element.prop('offsetHeight'),
+            //    bottom: {x: (x + element.prop('offsetWidth') / 2), y: y - 20 + element.prop('offsetHeight')}
+            //};
+            scope.entity.geometry = new geometryBlock(x, y, element.prop('offsetWidth'), element.prop('offsetHeight'));
 
             function mousemove(event) {
                 //console.log(event.pageX,event.pageY)
                 y = event.pageY - startY;
                 x = event.pageX - startX;
+                redreaw(x, y);
 
+            }
+
+            function redreaw(x, y) {
                 if (x > diagramService.geometry.canvas.width - scope.entity.geometry.width) {
                     x = diagramService.geometry.canvas.width - scope.entity.geometry.width;
                 }
@@ -57,25 +60,42 @@
                     top: y + 'px',
                     left: x + 'px'
                 });
-                //console.log(x,y);
                 var geo = scope.entity.geometry;
-                geo.x = x; //- diagramService.geometry.offsetX;
-                geo.y = y-10; //- diagramService.geometry.offsetY;
-                geo.bottom.y = geo.y + scope.entity.geometry.height;
-                geo.bottom.x = geo.x + scope.entity.geometry.width / 2;
-                Refresh(geo.bottom.x, geo.bottom.y);
+                geo.x = x;
+                geo.y = y;
+
                 //Кидаем событе изменения положения
                 $rootScope.$broadcast(scope.entity.id);
                 //Кидаем изменения положения полей
                 scope.entity.fields.forEach(function (item) {
                     $rootScope.$broadcast(item.id);
                 });
+                Refresh(geo.bottom.x, geo.bottom.y);
             }
+
 
             function mouseup() {
                 $document.unbind('mousemove', mousemove);
                 $document.unbind('mouseup', mouseup);
+                //Нужно определить наезжание блоков
+
+                diagramService.entities.forEach(function (ent) {
+                    var res = ent.geometry.intersection(scope.entity.geometry);
+                    if (res != null && ent != scope.entity) {
+                        x = scope.entity.geometry.x = scope.entity.geometry.x + res.x;
+                        y = scope.entity.geometry.y = scope.entity.geometry.y + res.y;
+                        redreaw(x, y);
+                    }
+                });
             }
+
+            element.on('mousedown', function (event) {
+                event.preventDefault();
+                startX = event.pageX - x;
+                startY = event.pageY - y;
+                $document.bind('mousemove', mousemove);
+                $document.bind('mouseup', mouseup);
+            });
 
             //Пробегаем по связям в сущности и меняем положение концов
             function Refresh(x, y) {
@@ -100,5 +120,5 @@
             }
         };
     };
-    angular.module('app').directive('entityDraggable', ['$document', 'diagramService', '$rootScope', entityDraggable]);
+    angular.module('app').directive('entityDraggable', ['$document', 'diagramService', '$rootScope', 'geometryBlock', entityDraggable]);
 })();

@@ -19,7 +19,8 @@
     "bootstrap": "~3.3.4",
     "angular-bootstrap": "~0.13.0",
     "underscore": "~1.8.3",
-    "angular": "~1.4.1"
+    "angular": "~1.4.1",
+    "angular-bootstrap-contextmenu": "~0.9.3"
   },
   "devDependencies": {
     "karma-read-json": "~1.1.0",
@@ -28,5 +29,13 @@
   "resolutions": {
     "angular-route": "~1.4.1",
     "angular-bootstrap": "~0.13.0"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "dist/css/bootstrap.css",
+        "dist/js/bootstrap.js"
+      ]
+    }
   }
 }

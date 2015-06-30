@@ -3,7 +3,7 @@
  */
 (function () {
     "use strict";
-    angular.module('app', ['ngRoute', 'ui.bootstrap'])
+    angular.module('app', ['ngRoute', 'ui.bootstrap','ui.bootstrap.contextMenu'])
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/', {
                 templateUrl: 'views/main.html',

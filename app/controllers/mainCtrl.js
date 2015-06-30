@@ -3,6 +3,8 @@
     var mainCtrl = function ($scope, $modal, diagramService, templateService) {
         //Сущности
         $scope.diagram = diagramService;
+
+
         $scope.addEntity = function () {
             var entity = diagramService.addEntity();
             var modalInstance = $modal.open({
@@ -112,13 +114,12 @@
                         });
                     });
             });
-            //Вход
-            var modalInstance = $modal.open({
-                templateUrl: 'views/loginModal.html',
-                controller: 'loginModalCtrl',
-                resolve: {}
-            });
         };
+        //Контекстное меню
+        $scope.menuOptions = [['Добавить сущность', function () {
+            $scope.addEntity();
+        }]];
+
     };
     angular.module('app').controller('mainCtrl', ['$scope', '$modal', 'diagramService', 'templateService', mainCtrl]);
 })();
