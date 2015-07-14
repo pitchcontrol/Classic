@@ -3,7 +3,7 @@
     var mainCtrl = function ($scope, $modal, diagramService, templateService) {
         //Сущности
         $scope.diagram = diagramService;
-
+        $scope.user =
 
         $scope.addEntity = function () {
             var entity = diagramService.addEntity();
@@ -115,6 +115,7 @@
                     });
             });
         };
+
         //Контекстное меню
         $scope.menuOptions = [['Добавить сущность', function () {
             $scope.addEntity();

@@ -67,4 +67,11 @@ describe('Тест Entity', function () {
         expect(json.name).toBe(entity.name);
         expect(json.fields.length).toBe(entity.fields.length);
     });
+    it("Получаем JSON для сохранения", function () {
+        entity.geometry = {x: 0, y: 0};
+        var json = entity.getJSON(true);
+        //Должна сохрнится геометрия
+        expect(json.geometry.x).toBeDefined();
+        expect(json.geometry.y).toBeDefined();
+    });
 });

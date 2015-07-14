@@ -26,16 +26,23 @@ function Entity(diagramService) {
     });
     this.addField = function (field) {
         var fl = new Field(this);
-        fl.id = self._integerCounter.getId();
+
 
         if (field) {
             fl.prototype = Object.create(field);
             fl.name = field.name;
             fl.type = field.type;
+            //Если тут ассоциация то надо найти сущность и выставить
+            if (fl.type == 'Association') {
+                fl.association = diagramService.findEntity(field.associationObj.start.name);
+            }
+            //Если мы грузим то id будет задан
+            if (!field.id)
+                fl.id = self._integerCounter.getId();
         } else {
+            fl.id = self._integerCounter.getId();
             fl.name = "field" + fl.id;
         }
-
         this.fields.push(fl);
         return fl;
     };
@@ -48,7 +55,6 @@ function Entity(diagramService) {
             ;
             this.fields.remove(this.currentField);
             this.currentField = null;
-
         }
     };
     //Будет вызыватся при удалении сущности
@@ -57,11 +63,15 @@ function Entity(diagramService) {
             item.association = null;
         });
     };
-    this.getJSON = function () {
+    //save - означает полную информацию, геометрия и пр
+    this.getJSON = function (save) {
         var json = {name: this.name};
         json.fields = this.fields.map(function (item) {
             return item.getJSON();
         });
+        if (save) {
+            json.geometry = _.pick(this.geometry, 'x', 'y');
+        }
         return json;
     };
 }

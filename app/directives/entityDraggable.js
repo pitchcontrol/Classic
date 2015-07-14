@@ -9,14 +9,22 @@
             var startY = 0;
             var x = 0;
             var y = 0;
-            if (!diagramService.mouse) {
+            //Тут может быть: нажали кнопку на панели тогда рандом, нажали пкм, тогда из свойсв диаграмы
+            //и загрузили тогда из свойств диаграмы только x,y
+            if (!diagramService.mouse && !scope.entity.geometry) {
                 // Start with a random pos
                 x = Math.floor((Math.random() * 400));
                 y = Math.floor((Math.random() * 400));
             } else {
-                var rel = diagramService.geometry.getRelative(diagramService.mouse);
-                x = rel.x;
-                y = rel.y;
+                if (scope.entity.geometry) {
+                    x = scope.entity.geometry.x;
+                    y = scope.entity.geometry.y;
+                }
+                else {
+                    var rel = diagramService.geometry.getRelative(diagramService.mouse);
+                    x = rel.x;
+                    y = rel.y;
+                }
             }
             element.css({
                 position: 'absolute',

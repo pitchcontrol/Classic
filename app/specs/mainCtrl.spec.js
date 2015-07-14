@@ -1,5 +1,5 @@
 describe('Тест mainCtrl', function () {
-    var controller, scope, modal, ds, q;
+    var controller, scope, modal, ds, q, ts;
     beforeEach(function () {
         module('app');
     });
@@ -8,11 +8,13 @@ describe('Тест mainCtrl', function () {
         inject(function ($controller, $rootScope, diagramService, $q) {
             ds = diagramService;
             q = $q;
+            ts = jasmine.createSpyObj('templateService', ['saveProject']);
             scope = $rootScope.$new();
             modal = jasmine.createSpyObj('modal', ['open']);
             controller = $controller('mainCtrl', {
                 $scope: scope,
-                $modal: modal
+                $modal: modal,
+                templateService: ts
             });
         });
     });
@@ -64,4 +66,5 @@ describe('Тест mainCtrl', function () {
         scope.$digest();
         expect(ds.entities.length).toBe(1);
     });
+
 });

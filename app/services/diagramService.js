@@ -5,6 +5,10 @@
         //Колекция сущностей
         this.entities = [];
         this.associations = [];
+        //Найти сущность по имени
+        this.findEntity = function (name) {
+            return _.findWhere(this.entities, {name: name});
+        };
         this.addEntity = function (entity) {
             var item = new Entity(this);
             item._integerCounter = integerCounter;
@@ -14,14 +18,9 @@
             }
             else {
                 //Добавляем сущность из шаблона, нужно проверить уникальность
-                if (_.findWhere(this.entities, {name: entity.name}) != undefined) {
-                    item.name = entity.name + item.id;
-                } else {
-                    item.name = entity.name;
-                }
+                item.name = _.findWhere(this.entities, {name: entity.name}) != undefined ? entity.name + item.id : entity.name;
                 entity.fields.forEach(function (i) {
                     var f = item.addField(i);
-
                 });
             }
             this.entities.push(item);
@@ -42,9 +41,36 @@
             }
         };
         //Получает упрошенный обьект для сериализации
-        this.getJSON = function () {
-            return this.entities.map(function (item) {
-                return item.getJSON();
+        //save - означает полную информацию, геометрия и пр
+        this.getJSON = function (save) {
+            var entities = this.entities.map(function (item) {
+                return item.getJSON(save);
+            });
+            if (save) {
+                var obj = {};
+                //Сущности
+                obj.entities = entities;
+                //Состояни счетчика
+                //obj.currentCounter = integerCounter.getCurrent();
+                //Имя проекта
+                obj.projectName = this.projectName;
+                return obj;
+            }
+            return entities;
+        };
+        this.loadProject = function (obj) {
+            this.projectName = obj.name;
+            this.projectId = obj.id;
+            //Очищаем
+            this.entities.forEach(function (item) {
+                item.destroy();
+            });
+            this.entities = [];
+            integerCounter.clear();
+            //integerCounter.setCurrent(obj.currentCounter);
+            //Будем перебирать сущности добавлять стандартными способами
+            obj.diagram.entities.forEach(function (obj) {
+                self.addEntity(obj);
             });
         };
     };

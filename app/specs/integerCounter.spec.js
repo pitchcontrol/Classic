@@ -15,4 +15,15 @@ describe('Тест integerCounter', function () {
         expect(counter.getId()).toBe(1);
         expect(counter.getId()).toBe(2);
     });
+    it("Получаем текущее значении", function () {
+        counter.clear();
+        counter.getId();
+        expect(counter.getId()).toBe(1);
+        expect(counter.getCurrent()).toBe(2);
+    });
+    it("Устанавливаем текущее значении", function () {
+        counter.setCurrent(10);
+        expect(counter.getId()).toBe(10);
+        expect(counter.getCurrent()).toBe(11);
+    });
 });

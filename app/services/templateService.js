@@ -17,7 +17,22 @@
         //Получить код
         this.generate = function (obj) {
             return $http({url: '/template/execute', method: 'POST', data: obj, responseType: 'arraybuffer'});
-        }
+        };
+        //Сохранить проект
+        this.saveProject = function (obj) {
+            return $http({url: '/project/save', method: 'POST', data: obj});
+        };
+        this.updateProject = function (obj) {
+            return $http({url: '/project/update', method: 'POST', data: obj});
+        };
+        //Получить проекты для пользователя
+        this.getProjects = function () {
+            return $http({url: '/project/list', method: 'GET'});
+        };
+        //Загрузит проект
+        this.loadProject = function (id) {
+            return $http({url: '/project/load/' + id, method: 'GET'});
+        };
     };
     angular.module('app').service('templateService', ['$http', templateService]);
 })();

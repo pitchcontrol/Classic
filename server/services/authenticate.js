@@ -28,12 +28,13 @@ module.exports.login = function (req, res, next) {
                 winston.warn("Attempt failed to login with " + login);
                 return res.status(401).send("Не верный пароль");
             }
-            let token = jwt.sign({login: login}, config.salt, {expiresInMinutes: 60});
+            let token = jwt.sign({login: login, id: user.id}, config.salt, {expiresInMinutes: 60});
             winston.info('Пользователь вошел: ' + login);
             return res.json({token: token, login: login});
         });
 
     }).catch(function (error) {
         winston.error(error);
+        return res.status(500);
     });
 };

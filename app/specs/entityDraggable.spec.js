@@ -50,6 +50,13 @@ describe('Тест entityDraggable', function () {
         expect(scope.entities[0].geometry.bottom.x).toBeDefined();
         expect(scope.entities[0].geometry.bottom.y).toBeDefined();
     });
+    it("Загружаем сущность, должны установится координаты", function () {
+        ds.entities[0].geometry = {x: 100, y: 150};
+        var elem = compiler()[0];
+        var pos = getPosition(elem);
+        expect(pos.x).toBe(100);
+        expect(pos.y).toBe(150);
+    });
     function moveElement(elem, x, y) {
         var mousedown = new MouseEvent("mousedown", {bubbles: true, cancelable: true});
 
@@ -71,7 +78,7 @@ describe('Тест entityDraggable', function () {
     function getPosition(elem) {
         var top = +elem.style.top.replace(/px/, '');
         var left = +elem.style.left.replace(/px/, '');
-        return {x: top, y: left};
+        return {y: top, x: left};
     }
 
     it("Перемещаем обьект", function () {

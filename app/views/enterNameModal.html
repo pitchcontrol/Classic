@@ -1,0 +1,22 @@
+<div class="modal-header">
+    <h3 class="modal-title">Введите название проекта</h3>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">Название проекта</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="name" placeholder="Название" ng-model="model.name">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()" ng-disable="!model.name">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
