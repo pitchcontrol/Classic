@@ -1,0 +1,12 @@
+"use strict";
+var Sequelize  = require('sequelize');
+var sq = require('./init.js').sequelize;
+var myEntity = require('./myEntity').myEntity;
+
+let myEntity2 = sq.define('myEntity2', {
+    name: Sequelize.STRING
+});
+
+myEntity2.hasOne(myEntity, {foreignKey: {name: 'myEntity2_id'}});
+
+module.exports.myEntity2 = myEntity2;

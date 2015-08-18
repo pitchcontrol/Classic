@@ -51,6 +51,8 @@ module.exports.update = function (req, res, next) {
                     if (sp) {
                         return res.json({error: 'Уже есть такой проект'});
                     } else {
+                        prj.name = req.body.projectName;
+                        prj.diagram = lodash.omit(req.body, 'projectName');
                         prj.save().then(function () {
                             winston.info('Успешно обновлен проект: ' + prj.id);
                             return res.json({id: prj.id});
@@ -61,6 +63,8 @@ module.exports.update = function (req, res, next) {
                     }
                 });
             } else {
+                prj.name = req.body.projectName;
+                prj.diagram = lodash.omit(req.body, 'projectName');
                 prj.save().then(function () {
                     winston.info('Успешно обновлен проект: ' + prj.id);
                     return res.json({id: prj.id});
@@ -92,5 +96,22 @@ module.exports.load = function (req, res, next) {
     project.findOne({where: {user_id: user.id, id: id}}).then((prj)=> {
         winston.info('Получен проект ид: ' + id);
         return res.json(prj);
+    });
+};
+module.exports.delete = function (req, res, next) {
+    var user = req.user;
+    var id = req.params.id;
+    project.findOne({where: {user_id: user.id, id: id}}).then((prj)=> {
+        if (prj != null) {
+            winston.info('Получен проект для удаления ид: ' + id);
+            prj.destroy().then(()=> {
+                winston.info('Проект удален: ' + id);
+                return res.json({});
+            });
+        }
+        else {
+            winston.error('Попытка удалить проект: ' + id + ', проект не найден');
+            return res.json({error: 'Проект не найден'});
+        }
     });
 };

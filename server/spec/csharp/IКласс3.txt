@@ -1,0 +1,8 @@
+namespace My.namespace.super
+{
+    public interface ImyEntity3
+    {
+        string name { get; set; }
+        ICollection<ImyEntity> myEntities { get; set; }
+    }
+}

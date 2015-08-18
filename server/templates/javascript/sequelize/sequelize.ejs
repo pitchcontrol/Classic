@@ -1,0 +1,9 @@
+"use strict";
+var Sequelize  = require('sequelize');
+var sq = require('./init.js').sequelize;
+<% external.forEach(function(element, index, array){ %> <%- element %> <% }) %>
+let <%= item.name %> = sq.define('<%= item.name %>', {
+<% fields.forEach(function(element, index, array){ %> <%- element %> <% }) %>
+});
+<% relations.forEach(function(element, index, array){ %> <%- element %> <% }) %>
+module.exports.<%= item.name %> = <%= item.name %>;

@@ -1,5 +1,5 @@
 describe('Тест mainCtrl', function () {
-    var controller, scope, modal, ds, q, ts;
+    var controller, scope, modal, ds, q, ts, modalService;
     beforeEach(function () {
         module('app');
     });
@@ -8,13 +8,15 @@ describe('Тест mainCtrl', function () {
         inject(function ($controller, $rootScope, diagramService, $q) {
             ds = diagramService;
             q = $q;
-            ts = jasmine.createSpyObj('templateService', ['saveProject']);
+            ts = jasmine.createSpyObj('templateService', ['saveProject', 'getQuestionList', 'generate']);
             scope = $rootScope.$new();
             modal = jasmine.createSpyObj('modal', ['open']);
+            modalService = jasmine.createSpyObj('modalService', ['select', 'wizard', 'confirm']);
             controller = $controller('mainCtrl', {
                 $scope: scope,
                 $modal: modal,
-                templateService: ts
+                templateService: ts,
+                modalService: modalService
             });
         });
     });
@@ -66,5 +68,35 @@ describe('Тест mainCtrl', function () {
         scope.$digest();
         expect(ds.entities.length).toBe(1);
     });
-
+    it("Нажимаем генерировать, шаблон выбран. Но пользователь не ответил на вопросы", function () {
+        var template = {name: 'fake'};
+        modalService.select.and.returnValue(q.when(template));
+        modalService.wizard.and.returnValue(q.reject());
+        scope.generate();
+        scope.$digest();
+        expect(scope.lastTemplate).toEqual(template);
+    });
+    it("Нажимае генерировать на основе старых ответов", function () {
+        scope.lastTemplate = {name: "Класс"};
+        scope.lastAnswers = [];
+        ts.generate.and.returnValue(q.reject());
+        scope.generateDefault();
+        scope.$digest();
+        //Сразу вызывается метод генерации
+        expect(ts.generate).toHaveBeenCalled();
+    });
+    it("Удалить представление, отказ", function () {
+        modalService.confirm.and.returnValue(q.reject());
+        ds.views =jasmine.createSpyObj('obj', ['remove']);
+        scope.removeView({});
+        scope.$digest();
+        expect(ds.views.remove).not.toHaveBeenCalled();
+    });
+    it("Удалить представление, ок", function () {
+        modalService.confirm.and.returnValue(q.when());
+        ds.views =jasmine.createSpyObj('obj', ['remove']);
+        scope.removeView({});
+        scope.$digest();
+        expect(ds.views.remove).toHaveBeenCalled();
+    });
 });

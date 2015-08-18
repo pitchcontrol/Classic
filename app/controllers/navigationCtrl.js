@@ -1,7 +1,7 @@
 (function () {
     "use strict";
     //Определяет логику работы менюшки
-    var navigationCtrl = function ($scope, $modal, authService, templateService, diagramService) {
+    var navigationCtrl = function ($scope, $modal, authService, templateService, diagramService, modalService) {
         $scope.model =
         {
             loginTitle: 'Вход',
@@ -11,6 +11,9 @@
             if (authService.user) {
                 authService.logoff();
                 $scope.model.loginTitle = 'Вход';
+                diagramService.clear();
+                $scope.model.isAunt = false;
+                delete $scope.model.saveTitle;
                 return;
             }
             //Вход
@@ -25,6 +28,13 @@
                     getProjects();
                 });
         };
+        //регистрация
+        $scope.signUp = function () {
+            modalService.signUp().then(function () {
+                $scope.model.loginTitle = 'Выход(' + authService.user.login + ')';
+                $scope.model.isAunt = true;
+            });
+        };
         //Сохрнанить проект
         $scope.saveProject = function () {
             //Открываем дилог выбора имени
@@ -35,9 +45,7 @@
             modalInstance.result.then(function () {
                 var result;
                 if (diagramService.projectId != undefined) {
-                    var res = diagramService.getJSON(true);
-                    res.id = diagramService.projectId;
-                    result = templateService.updateProject(res);
+                    result = templateService.updateProject(diagramService.getJSON(true));
                 }
                 else {
                     //Отправляем на сервер
@@ -47,18 +55,7 @@
                     diagramService.projectId = res.id;
                     $scope.model.saveTitle = 'Сохранить(' + diagramService.projectName + ')';
                 }, function (res) {
-                    $modal.open({
-                        templateUrl: 'views/infoModal.html',
-                        controller: 'infoModalCtrl',
-                        resolve: {
-                            data: function () {
-                                return {
-                                    title: 'Внимание',
-                                    message: res.error || 'Ошибка сохранения'
-                                };
-                            }
-                        }
-                    });
+                    modalService.info('Внимание', res.error || 'Ошибка сохранения');
                 });
             });
         };
@@ -76,6 +73,25 @@
                 }
             );
         };
+        //Удалить проект
+        $scope.deleteProject = function () {
+            modalService.select('Удалить проект', 'Выберете проет для удаления', templateService.getProjects).then(function (prj) {
+                //Проект выбран
+                modalService.confirm('Удалить проект', 'Вы уверенны что хотите удалить проект? ' + prj.name).then(function () {
+                    templateService.deleteProject(prj.id).then(function () {
+                        //После удаления обновим список проектов
+                        getProjects();
+                    }, function (res) {
+                        modalService.info('Внимание', res.error || 'Ошибка сохранения');
+                    });
+                });
+            });
+        };
+        //Очистить проект
+        $scope.clearProject = function () {
+            diagramService.clear();
+            $scope.model.saveTitle = 'Сохранить';
+        };
     };
-    angular.module('app').controller('navigationCtrl', ['$scope', '$modal', 'authService', 'templateService', 'diagramService', navigationCtrl]);
+    angular.module('app').controller('navigationCtrl', ['$scope', '$modal', 'authService', 'templateService', 'diagramService', 'modalService', navigationCtrl]);
 })();

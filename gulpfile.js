@@ -12,11 +12,19 @@ var gutil = require('gulp-util');
 var uglify = require('gulp-uglifyjs');
 var jasmine = require('gulp-jasmine');
 
-var src = ['./app/css/site.css', './app/app.js', './app/directives/*.js', './app/controllers/*.js', './app/services/*.js', './app/Primitives/*.js','./app/factories/*.js'];
+var src = ['./app/css/site.css',
+    './app/app.js',
+    './app/directives/*.js',
+    './app/controllers/*.js',
+    './app/services/*.js',
+    './app/Primitives/*.js',
+    './app/filters/*.js',
+    './app/factories/*.js'];
 
 
 gulp.task('jasmine', function () {
     return gulp.src('server/spec/**/*.spec.js')
+    //return gulp.src('server/spec/csharp/*.spec.js')
         .pipe(jasmine({includeStackTrace: true}));
 });
 

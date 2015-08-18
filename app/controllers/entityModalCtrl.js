@@ -2,6 +2,7 @@
     "use strict";
     var entityModalCtrl = function ($scope, $modalInstance, $modal, diagramService, item) {
         $scope.entities = diagramService.entities;
+        $scope.enums = diagramService.enums;
         var copyModel;
         var validate = function (model, create) {
             //При редактироваении create = false, Проверять не надо работаем с сылкой
@@ -32,8 +33,8 @@
                 if (_.where(fl, {name: i.name}).length > 1) {
                     model.error = i.name + ', уже есть.';
                     if (!create) {
-                        console.log(copyModel.fields[0].name + ', ' + copyModel.fields[1].name);
-                        console.log("i.name =" + i.name + ", fields[index].name=" + copyModel.fields[index].name + ", index=" + index);
+                        //console.log(copyModel.fields[0].name + ', ' + copyModel.fields[1].name);
+                        //console.log("i.name =" + i.name + ", fields[index].name=" + copyModel.fields[index].name + ", index=" + index);
                         i.name = copyModel.fields[index].name;
                     }
                     return false;

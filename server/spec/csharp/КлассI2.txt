@@ -1,0 +1,8 @@
+namespace My.namespace.super
+{
+    public class myEntity2: ImyEntity2
+    {
+        public string name { get; set; }
+        public ImyEntity myEntities { get; set; }
+    }
+}

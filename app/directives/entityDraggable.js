@@ -32,15 +32,6 @@
                 left: x + 'px',
                 cursor: 'move'
             });
-            // var rx = (x - diagramService.geometry.offsetX);
-            // var ry = (y - diagramService.geometry.offsetY);
-            //scope.entity.geometry = {
-            //    x: x,
-            //    y: y - 20,
-            //    width: element.prop('offsetWidth'),
-            //    height: element.prop('offsetHeight'),
-            //    bottom: {x: (x + element.prop('offsetWidth') / 2), y: y - 20 + element.prop('offsetHeight')}
-            //};
             scope.entity.geometry = new geometryBlock(x, y, element.prop('offsetWidth'), element.prop('offsetHeight'));
 
             function mousemove(event) {

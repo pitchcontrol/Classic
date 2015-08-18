@@ -33,6 +33,9 @@
         this.loadProject = function (id) {
             return $http({url: '/project/load/' + id, method: 'GET'});
         };
+        this.deleteProject = function(id){
+            return $http({url: '/project/delete/' + id, method: 'GET'});
+        };
     };
     angular.module('app').service('templateService', ['$http', templateService]);
 })();

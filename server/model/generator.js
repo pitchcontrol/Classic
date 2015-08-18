@@ -11,12 +11,13 @@ let generator = sq.define('generator', {
     name: Sequelize.STRING,
     description: Sequelize.STRING,
     module: Sequelize.STRING,
-    language: Sequelize.ENUM('csharp', 'java')
+    language: Sequelize.ENUM('csharp', 'java','javascript')
 });
-let question = sq.define('question', {
+let question = sq.define('questions', {
     id: {type: Sequelize.INTEGER, primaryKey: true},
-    Question: Sequelize.STRING,
-    type: Sequelize.ENUM('string', 'bool', 'enum')
+    question: Sequelize.STRING,
+    type: Sequelize.ENUM('string', 'bool', 'enum'),
+    order: Sequelize.INTEGER
 });
 let choice = sq.define('choice', {
     id: {type: Sequelize.INTEGER, primaryKey: true},
@@ -33,6 +34,7 @@ module.exports.Choice = choice;
 module.exports.questionsForGenerator = function (id) {
     return question.findAll({
         where: {generator_id: id},
-        include: [{model: choice, attributes: ['choice']}]
+        include: [{model: choice, attributes: ['choice']}],
+        order: '"order" ASC'
     });
 };

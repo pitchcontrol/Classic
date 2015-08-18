@@ -1,0 +1,28 @@
+[
+  {
+    "id": "0",
+    "name": "Формировани классов",
+    "description": "Формирует структуру классов",
+    "language": "csharp",
+    "module": "./templates/csharp/Класс.js",
+    "questions": [
+      {
+        "question": "Пространство имен",
+        "type": "string"
+      },
+      {
+        "question": "Нужно ли выделять интерфейсы",
+        "type": "bool"
+      },
+      {
+        "question": "Как представлять колекций",
+        "type": "enum",
+        "choices": [
+          "List",
+          "ICollection",
+          "IEnumerable"
+        ]
+      }
+    ]
+  }
+]

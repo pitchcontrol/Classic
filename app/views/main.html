@@ -1,17 +1,37 @@
 <div class="row">
+    <div class="col-lg-5">
+        <select class="form-control" ng-options="i as i.name for i in diagram.views.collection" ng-model="currentView">
+        </select>
+    </div>
+    <div class="col-lg-5">
+        <button class="picture-btn" ng-click="addView()" data-toggle="tooltip"
+                data-placement="top" title="Добавить"><span class="glyphicon glyphicon-plus"></span></button>
+        <button class="picture-btn" ng-click="editView(currentView)" ng-disabled="!removeEnable()" data-toggle="tooltip"
+                data-placement="top" title="Редактировать"><span class="glyphicon glyphicon-edit"></span></button>
+        <button class="picture-btn" ng-click="removeView(currentView)" ng-disabled="!removeEnable()"
+                data-toggle="tooltip"
+                data-placement="top" title="Удалить"><span class="glyphicon glyphicon-minus"></span></button>
+    </div>
+
+</div>
+<br>
+<div class="row">
     <div class="col-lg-10">
-        <div class="col-lg-12" id="canvas" ng-canvas context-menu="menuOptions">
-            <div class="col-lg-3 col-md-3 block" ng-repeat="i in diagram.entities" entity-draggable
+        <div class="col-lg-12 grid" id="canvas" ng-canvas context-menu="menuOptions">
+            <div class="col-lg-3 col-md-3 block" ng-repeat="i in diagram.entities|viewFilter:currentView"
+                 entity-draggable
                  ng-dblclick="editEntity(i)"
                  entity="i">
                 <ul class="rectangle-list">
                     <li>{{i.name}}</li>
-                    <li ng-repeat="f in i.fields" field-draggable field="f">{{f.toString()}}</li>
+                    <li ng-repeat="f in i.fields" field-draggable field="f">{{f.toString()}}<span
+                            ng-show="f.associationObj.many" class="multiplicity">*</span></li>
                 </ul>
             </div>
 
             <svg>
-                <polyline ng-repeat="i in diagram.associations" points="{{i.relation.toString()}}" fill="none"
+                <polyline ng-repeat="i in diagram.associations|associationFilter:currentView"
+                          points="{{i.relation.toString()}}" fill="none"
                           stroke-width="1" stroke="rgb(0,0,0)"/>
             </svg>
         </div>
@@ -19,13 +39,13 @@
     <div class="col-lg-2">
         <!--<div class="panel panel-default">-->
         <div>
-            <button ng-click="addEntity()" type="button" data-toggle="tooltip" data-placement="top"
+            <button ng-click="addEntity()" type="button" data-toggle="tooltip" data-placement="top" class="picture-btn"
                     title="Добавить сущность"><span class="glyphicon glyphicon-plus"></span></button>
-            <button ng-click="addTemplateEssence()" type="button" data-toggle="tooltip"
+            <button ng-click="addTemplateEssence()" type="button" data-toggle="tooltip" class="picture-btn"
                     data-placement="top" title="Добавить сущность из шаблона"><span
-                    class="glyphicon glyphicon-list-alt"></span></button>
+                    class="glyphicon glyphicon-save"></span></button>
             <ul class="rectangle-list">
-                <li>Сушности</li>
+                <li><img class="picture-light" src="./image/business139.svg"> Сушности</li>
                 <li class="" ng-repeat="i in diagram.entities" ng-dblclick="editEntity(i)">
                     {{i.name}}
 
@@ -35,17 +55,37 @@
             </ul>
         </div>
         <ul class="rectangle-list">
-            <li class="panel-heading">Связи</li>
+            <li class="panel-heading"><img class="picture-light" src="./image/links15.svg"> Связи</li>
             <li ng-repeat="i in diagram.associations">{{i.toString()}}</li>
         </ul>
+        <ul class="rectangle-list">
+            <li class="panel-heading"><img class="picture-light" src="./image/numbered8.svg"> Перечисления</li>
+            <li ng-repeat="i in diagram.enums.collection">{{i.name}}<em class="glyphicon glyphicon-edit"
+                                                                        ng-click="editEnum(i)" data-toggle="tooltip"
+                                                                        data-placement="top"
+                                                                        title="Редактировать"></em></li>
+        </ul>
         <div>
-            <button class="btn btn-success" ng-click="generate()" ng-disabled="!diagram.entities.length>0">
+            <button class="btn btn-success" style="width: 100%" ng-click="generate()"
+                    ng-disabled="!diagram.entities.length>0">
+                <span class="glyphicon glyphicon-cog"></span>
                 Генерировать
             </button>
-            <button class="btn btn-success" ng-click="saveProject()" ng-disabled="">
-                Сохранить
+        </div>
+        <ul class="rectangle-list">
+            <li class="panel-heading">Последний генератор</li>
+            <li>{{lastTemplate.name}}</li>
+        </ul>
+        <div>
+            <button class="btn btn-success" style="width: 100%" ng-click="generateDefault()"
+                    ng-disabled="!lastTemplate&&!lastAnswers">
+                <img class="picture-light" src="./image/settings73.svg">
+                Из ответов
             </button>
         </div>
+        <ul class="rectangle-list">
+            <li class="panel-heading">Последний ответы</li>
+            <li ng-repeat="ans in lastAnswers">{{ans.question+': '+ans.answer}}</li>
+        </ul>
     </div>
-</div>
 </div>

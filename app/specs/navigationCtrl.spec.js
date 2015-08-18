@@ -1,5 +1,5 @@
 describe('Тест navigationCtrl', function () {
-    var controller, scope, modal, q, authService, ts, ds;
+    var controller, scope, modal, q, authService, ts, ds, modalService;
     beforeEach(function () {
         module('app');
     });
@@ -7,16 +7,19 @@ describe('Тест navigationCtrl', function () {
         //Получаем контроллер
         inject(function ($controller, $rootScope, $q, diagramService) {
             ds = diagramService;
+            spyOn(ds, 'clear');
             scope = $rootScope.$new();
             q = $q;
-            ts = jasmine.createSpyObj('templateService', ['saveProject', 'getProjects']);
+            ts = jasmine.createSpyObj('templateService', ['saveProject', 'getProjects', 'deleteProject']);
             modal = jasmine.createSpyObj('modal', ['open']);
-            authService = jasmine.createSpyObj('authService', ['logoff']);
+            modalService = jasmine.createSpyObj('modalService', ['info', 'select', 'confirm', 'signUp']);
+            authService = jasmine.createSpyObj('authService', ['logoff', 'signUp']);
             controller = $controller('navigationCtrl', {
                 $scope: scope,
                 $modal: modal,
                 authService: authService,
-                templateService: ts
+                templateService: ts,
+                modalService: modalService
             });
         });
     });
@@ -51,6 +54,23 @@ describe('Тест navigationCtrl', function () {
         scope.$digest();
         expect(scope.model.projects).toEqual(prjs);
     });
+    it("Регистрация отмена пользователем", function () {
+        modalService.signUp.and.returnValue(q.reject({}));
+        scope.signUp();
+        scope.$digest();
+        expect(authService.signUp).not.toHaveBeenCalled();
+    });
+    it("Регистрация ок", function () {
+        modalService.signUp.and.returnValue(q.when({name: "name", password: "pas"}));
+        scope.signUp();
+        authService.user = {
+            login: 'vasya'
+        };
+        scope.$digest();
+        expect(modalService.signUp).toHaveBeenCalled();
+        expect(scope.model.loginTitle).toBe('Выход(vasya)');
+    });
+
     it("Выход", function () {
         authService.user = {
             login: 'vasya'
@@ -58,6 +78,7 @@ describe('Тест navigationCtrl', function () {
         scope.login();
         expect(authService.logoff).toHaveBeenCalled();
         expect(scope.model.loginTitle).toBe('Вход');
+        expect(ds.clear).toHaveBeenCalled();
     });
     it("Нажимаем сохранить - отмена", function () {
         modal.open.and.returnValue({result: q.reject({})});
@@ -75,15 +96,13 @@ describe('Тест navigationCtrl', function () {
         expect(ts.saveProject).toHaveBeenCalled();
         //Вызывается инфо диалог
         //Первый вызов это запрос имени, второй инфо сообщение argsFor(1)
-        expect(modal.open.calls.argsFor(1)[0].resolve.data()).toEqual({
-            title: 'Внимание',
-            message: 'Такой проект уже есть'
-        });
-        expect(modal.open.calls.count()).toBe(2);
+        expect(modalService.info.calls.argsFor(0)[0]).toBe('Внимание');
+        expect(modalService.info.calls.argsFor(0)[1]).toBe('Такой проект уже есть');
+        expect(modal.open.calls.count()).toBe(1);
     });
     it("Нажимаем сохранить - все сохранилось", function () {
         modal.open.and.returnValue({result: q.when({})});
-        ds.projectName ='First';
+        ds.projectName = 'First';
         scope.saveProject();
         ts.saveProject.and.returnValue(q.when({id: 101}));
         scope.$digest();
@@ -92,5 +111,44 @@ describe('Тест navigationCtrl', function () {
         expect(modal.open.calls.count()).toBe(1);
         expect(ds.projectId).toBe(101);
         expect(scope.model.saveTitle).toBe('Сохранить(First)');
+    });
+    it("Удалить проект, отмена", function () {
+        //Проект выбран
+        modalService.select.and.returnValue(q.when({name: "First"}));
+        //На подтверждение отказ
+        modalService.confirm.and.returnValue(q.reject({}));
+        scope.deleteProject();
+        scope.$digest();
+        //Сохранение не вызывается
+        expect(ts.deleteProject).not.toHaveBeenCalled();
+    });
+    it("Удалить проект, ошибка удаления", function () {
+        //Проект выбран
+        modalService.select.and.returnValue(q.when({name: "First"}));
+        //На подтверждение ок
+        modalService.confirm.and.returnValue(q.when({}));
+        ts.deleteProject.and.returnValue(q.reject({error: "Ошибка"}));
+        scope.deleteProject();
+        scope.$digest();
+        //Сохранение вызывается
+        expect(ts.deleteProject).toHaveBeenCalled();
+        //Вызывается дилог ошибки
+        expect(modalService.info).toHaveBeenCalled();
+    });
+    it("Удалить проект ок", function () {
+        //Проект выбран
+        modalService.select.and.returnValue(q.when({name: "First"}));
+        //На подтверждение ок
+        modalService.confirm.and.returnValue(q.when({}));
+        ts.deleteProject.and.returnValue(q.when({}));
+        ts.getProjects.and.returnValue(q.when({}));
+        scope.deleteProject();
+        scope.$digest();
+        //Сохранение вызывается
+        expect(ts.deleteProject).toHaveBeenCalled();
+        //Вызывается дилог ошибки не вызывается
+        expect(modalService.info).not.toHaveBeenCalled();
+        //Так же должен обновится спсок проектов
+        expect(ts.getProjects).toHaveBeenCalled();
     });
 });

@@ -1,0 +1,9 @@
+namespace My.namespace.super
+{
+    public interface ImyEntity
+    {
+        string name { get; set; }
+        int Age { get; set; }
+        bool isAdmin { get; set; }
+    }
+}

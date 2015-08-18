@@ -72,7 +72,19 @@ describe('Тест Field', function () {
         expect(json.name).toBe(field.name);
         expect(json.type).toBe(field.type);
         expect(json.isRequired).toBe(field.isRequired);
+        expect(json.isPrimaryKey).toBeUndefined();
         expect(json.associationObj.start.name).toBe(field.associationObj.start.name);
+    });
+    it("Проверяем JSON С первичным ключом", function () {
+        field.isPrimaryKey = true;
+        var json = field.getJSON();
+        expect(json.isPrimaryKey).toBeTruthy();
+    });
+    it("Проверяем JSON С enum", function () {
+        field.type = 'enum';
+        field.enum = {name: "Enum1"};
+        var json = field.getJSON();
+        expect(json.enum).toBe('Enum1');
     });
     it("Меняем тип поля должна уничтожится связь", function () {
         field.type = "Association";
@@ -88,6 +100,14 @@ describe('Тест Field', function () {
         //Уничтожается внешняя связь
         expect(entity2.outerAssociation.length).toBe(0);
     });
+    it("Меняем тип поля должна уничтожится ссылка на enum", function () {
+        field.type = "enum";
+        field.enum = {};
+        expect(field.enum).toBeTruthy();
+        field.type = "string";
+        //Должна разрущится связь
+        expect(field.enum).toBeFalsy();
+    });
     it("Меняем ссылку в колекции ассоциаций не должно добавится", function () {
         field.type = "Association";
         field.association = entity2;
@@ -100,5 +120,15 @@ describe('Тест Field', function () {
         expect(field.entity.diagramService.associations.length).toBe(1);
         //Уничтожается внешняя связь
         expect(entity2.outerAssociation.length).toBe(0);
+    });
+    it("Тип enum должна быть ошибка", function () {
+        field.type = 'enum';
+        expect(entity.error).toBe('выбран тип enum но значение незаданно');
+    });
+    it("Тип enum и задаем его, ок", function () {
+        field.type = 'enum';
+        expect(entity.error).toBe('выбран тип enum но значение незаданно');
+        field.enum = {};
+        expect(entity.error).toBeFalsy();
     });
 });

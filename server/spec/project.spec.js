@@ -14,6 +14,7 @@ describe("Тестирования project", function () {
         mockery.enable({warnOnUnregistered: false, warnOnReplace: false, useCleanCache: true});
         app.post('/project/save', require('./../routes/project').save);
         app.post('/project/update', require('./../routes/project').update);
+        app.get('/project/delete/:id', require('./../routes/project').delete);
         return require('supertest')(app);
     };
     it("Проверяем а есть ли такой проект, ошибка есть", function (done) {
@@ -124,6 +125,36 @@ describe("Тестирования project", function () {
             .expect('Content-Type', /json/)
             .expect((res)=> {
                 expect(res.body).toEqual({id: 1});
+            })
+            .end((err)=>  err ? done.fail(err) : done());
+    });
+    it("Удалить проект, проект не найден", function (done) {
+        mockery.registerMock('./../model/project', {
+            Project: {
+                findOne: (query)=>  Promise.resolve(null)
+            }
+        });
+        var request = getRequest(app);
+        request.get('/project/delete/1')
+            .expect('Content-Type', /json/)
+            .expect((res)=> {
+                expect(res.body).toEqual({error: 'Проект не найден'});
+            })
+            .end((err)=>  err ? done.fail(err) : done());
+    });
+    it("Удалить проект, проект ок", function (done) {
+        mockery.registerMock('./../model/project', {
+            Project: {
+                findOne: (query)=>  Promise.resolve({
+                    destroy: (query)=>  Promise.resolve()
+                })
+            }
+        });
+        var request = getRequest(app);
+        request.get('/project/delete/1')
+            .expect('Content-Type', /json/)
+            .expect((res)=> {
+                expect(res.body).toEqual({});
             })
             .end((err)=>  err ? done.fail(err) : done());
     });

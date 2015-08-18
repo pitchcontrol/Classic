@@ -1,0 +1,72 @@
+{
+  "answers": [
+    "My.namespace.super",
+    false,
+    "ICollection"
+  ],
+  "entities": [
+    {
+      "name": "myEntity",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "Age",
+          "type": "integer"
+        },
+        {
+          "name": "isAdmin",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "myEntity2",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "myEntities",
+          "type": "Association",
+          "associationObj": {
+            "start": {
+              "name": "myEntity"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "myEntity3",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "myEntities",
+          "type": "Association",
+          "associationObj": {
+            "multiplicity": true,
+            "start": {
+              "name": "myEntity"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "enums": [
+    {
+      "name": "Enum1",
+      "values": [
+        "value1",
+        "value2"
+      ]
+    }
+  ]
+}

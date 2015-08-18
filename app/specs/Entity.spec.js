@@ -41,6 +41,29 @@ describe('Тест Entity', function () {
         expect(field.isRequired).toBe(f.isRequired);
         expect(field.type).toBe(f.type);
     });
+    it("Создаем поле на основе другова с связью, должна запланироватся установка", function () {
+        var f = {
+            isRequired: true,
+            name: "templateField",
+            type: "Association",
+            associationObj: {start: {name: 'first'}}
+        };
+        var field = entity.addField(f);
+        expect(field.type).toBe(f.type);
+        expect(dS.shedule.length).toBe(1);
+    });
+    it("Создаем поле на основе другова с enum, должна установится ссылка", function () {
+        var en = dS.enums.addItem({name: "Enum1"});
+        var f = {
+            isRequired: true,
+            name: "templateField",
+            type: "enum",
+            enum: "Enum1"
+        };
+        var field = entity.addField(f);
+        expect(field.type).toBe(f.type);
+        expect(field.enum).toBe(en);
+    });
     it("Проверяем что создается уникальый номер", function () {
         counter.clear();
         var field = entity.addField();

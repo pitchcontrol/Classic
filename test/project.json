@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Первый",
+    "id": 7,
+    "diagram": {
+      "entities": [
+        {
+          "name": "First",
+          "fields": [
+            {
+              "type": "string",
+              "name": "First",
+              "isRequired": true
+            }
+          ]
+        },
+        {
+          "name": "Second",
+          "fields": [
+            {
+              "type": "Association",
+              "name": "First",
+              "isRequired": true,
+              "associationObj": {
+                "start": {
+                  "name": "First"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "views": [
+        {
+          "name": "View1",
+          "entities": ["Second"]
+        }
+      ],
+      "enums": [
+        {
+          "name": "Enum1",
+          "values": [
+            "value1",
+            "value2"
+          ]
+        },
+        {
+          "name": "Enum2",
+          "values": [
+            "value3",
+            "value4"
+          ]
+        }
+      ]
+    },
+    "currentCounter": 4
+  }
+]

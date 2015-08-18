@@ -11,9 +11,11 @@ module.exports.setup = function (app) {
     //Выполнить
     app.post('/template/execute', require('./routes/template').execute);
     //Получить шаблоны готовых сущности
-    app.get('/entities/list',require('./routes/entities').entities);
+    app.get('/entities/list', require('./routes/entities').entities);
     //Аунтефикация
     app.post('/login', require('./services/authenticate').login);
+    //Регистрация
+    app.post('/signup', require('./services/authenticate').signup);
     //Сохранение диаграммы
     app.post('/project/save', jwt({secret: config.salt}), require('./routes/project').save);
     //Обновить проект
@@ -22,9 +24,10 @@ module.exports.setup = function (app) {
     app.get('/project/list', jwt({secret: config.salt}), require('./routes/project').list);
     //Загрузить проект
     app.get('/project/load/:id', jwt({secret: config.salt}), require('./routes/project').load);
-
+    //Удалить проекты
+    app.get('/project/delete/:id', jwt({secret: config.salt}), require('./routes/project').delete);
     app.get('*', function (req, res, next) {
-        winston.warn(req.url+ ', Not found');
+        winston.warn(req.url + ', Not found');
         res.status(404).send('Not found');
     });
 };

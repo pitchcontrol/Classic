@@ -2,7 +2,7 @@
  * Created by snekrasov on 30.04.2015.
  */
 function Entity(diagramService) {
-    "use strict"
+    "use strict";
     var self = this;
     //Колекция сущностей
     this.diagramService = diagramService;
@@ -29,12 +29,18 @@ function Entity(diagramService) {
 
 
         if (field) {
-            fl.prototype = Object.create(field);
+            fl.enum = field.enum;
             fl.name = field.name;
             fl.type = field.type;
             //Если тут ассоциация то надо найти сущность и выставить
+            //планирование
             if (fl.type == 'Association') {
-                fl.association = diagramService.findEntity(field.associationObj.start.name);
+                var fEntity = diagramService.findEntity(field.associationObj.start.name);
+                this.diagramService.shedule.push({field: fl, entity: fEntity} )
+            }
+            //Если тут enum то надо найти enum и выставить ссылку
+            if(fl.type == 'enum'){
+                fl.enum = diagramService.enums.findByName(fl.enum);
             }
             //Если мы грузим то id будет задан
             if (!field.id)
@@ -51,8 +57,7 @@ function Entity(diagramService) {
         if (this.currentField) {
             if (this.currentField.association) {
                 diagramService.associations.remove(this.currentField.associationObj);
-            }
-            ;
+            };
             this.fields.remove(this.currentField);
             this.currentField = null;
         }

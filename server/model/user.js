@@ -7,13 +7,11 @@ var sq = require('../services/db').sequelize;
 var project = require('./project').Project;
 
 let user = sq.define('users', {
-    id: {type: Serialize.INTEGER, primaryKey: true},
+    id: {type: Serialize.INTEGER, primaryKey: true, autoIncrement: true},
     login: Serialize.STRING,
     hash: Serialize.STRING
 });
 
 //Внешние ключи
 user.hasMany(project, {foreignKey: {name: 'user_id'}});
-
-
 module.exports.User = user;

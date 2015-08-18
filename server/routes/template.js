@@ -15,22 +15,17 @@ module.exports.list = function (req, res) {
     });
 };
 module.exports.questions = function (req, res) {
-    questions(req.params.id).then(function (item) {
-        if (item == null || item.length == 0) {
-            var mess = util.format('Вопросы для id:%s не найдены', req.params.id);
+    generator.findById(req.params.id).then(function (item) {
+        if (item == null) {
+            var mess = util.format('Шаблон c id:%s не найден', req.params.id);
             winston.warn(mess);
-            res.status(404).send(mess);
+            res.send(mess);
             return;
         }
-        item = item.map((e)=> {
-            if (e.toJSON)
-                e = e.toJSON();
-            e.choices = lodash.pluck(e.choices, 'choice');
-            return e;
-        });
-        res.json(item);
+        res.json(require(item.module).quetions);
     }).catch(function (error) {
         winston.error(error);
+        return res.status(500).send('Ошибка');
     });
 };
 module.exports.execute = function (req, res) {
@@ -43,9 +38,14 @@ module.exports.execute = function (req, res) {
             return;
         }
         var md = require(item.module);
-        var files = md.render(req.body);
-        zip.pack(files, res);
+        md.render(req.body, (err, files)=> {
+            if (err)
+                return res.status(500).send('Ошибка');
+            zip.pack(files, res);
+        });
+
     }).catch(function (error) {
         winston.error(error);
+        return res.status(500).send('Ошибка');
     });
 };

@@ -1,0 +1,32 @@
+{
+  "answers": [
+    "My.namespace.super",
+    false,
+    "ICollection"
+  ],
+  "entities": [
+    {
+      "name": "myEntity",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "Type",
+          "type": "enum",
+          "enum":"Enum1"
+        }
+      ]
+    }
+  ],
+  "enums": [
+    {
+      "name": "Enum1",
+      "values": [
+        "value1",
+        "value2"
+      ]
+    }
+  ]
+}

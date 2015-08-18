@@ -1,0 +1,12 @@
+"use strict";
+var Sequelize  = require('sequelize');
+var sq = require('./init.js').sequelize;
+
+let myEntity = sq.define('myEntity', {
+    id: {type: Sequelize.INTEGER, primaryKey: true},
+    name: {type: Sequelize.STRING, allowNull: false},
+    Age: Sequelize.INTEGER,
+    isAdmin: Sequelize.BOOLEAN
+});
+
+module.exports.myEntity = myEntity;

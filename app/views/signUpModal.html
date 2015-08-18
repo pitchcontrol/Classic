@@ -1,0 +1,50 @@
+<div class="modal-header">
+    <div class="row">
+        <div class="col-lg-2">
+            <img src="./image/user76.svg" class="picture-middle">
+        </div>
+        <div class="col-lg-10">
+            <h3 class="modal-title">Регистрация</h3>
+        </div>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">Имя</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="name" placeholder="Login" ng-model="model.login">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="pass" class="col-sm-2 control-label">Пароль</label>
+
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="pass" placeholder="Password"
+                               ng-model="model.password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmpass" class="col-sm-2 control-label">Пароль</label>
+
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="confirmpass" placeholder="Password"
+                               ng-model="model.confirmPassword">
+                    </div>
+                </div>
+                <div class="alert alert-danger" ng-show="model.password!=model.confirmPassword">Пароли не совпадают
+                </div>
+                <div class="alert alert-danger" ng-show="model.error">{{model.error}}</div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="picture-btn" ng-click="ok()" ng-disabled="!model.password || !model.login||!model.confirmPassword">
+        <img
+                src="./image/mark15.svg" class="picture-light"></button>
+    <button class="picture-btn" ng-click="cancel()"><img src="./image/negative1.svg" class="picture-light"></button>
+</div>

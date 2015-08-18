@@ -1,0 +1,19 @@
+[
+  {
+    "question": "Пространство имен",
+    "type": "string"
+  },
+  {
+    "question": "Нужно ли выделять интерфейсы",
+    "type": "bool"
+  },
+  {
+    "question": "Как представлять колекций",
+    "type": "enum",
+    "choices": [
+      "List",
+      "ICollection",
+      "IEnumerable"
+    ]
+  }
+]

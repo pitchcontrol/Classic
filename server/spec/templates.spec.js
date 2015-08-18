@@ -14,7 +14,7 @@ describe("Тестирования templates", function () {
                 findAll: ()=>Promise.resolve(gen),
                 findById: (id)=> {
                     if (id == 1)
-                        return Promise.resolve({module:"../templates/csharp/Класс"});
+                        return Promise.resolve({module: "../templates/csharp/Класс"});
                     return Promise.resolve(null);
                 }
             },
@@ -43,8 +43,7 @@ describe("Тестирования templates", function () {
     });
     it("Получить вопросы не правильный ид", function (done) {
         request.get('/template/questions/0')
-            .expect(404)
-            .expect('Вопросы для id:0 не найдены')
+            .expect('Шаблон c id:0 не найден')
             .end((err)=>  err ? done.fail(err) : done());
     });
     it("Получить вопросы правильный ид", function (done) {
@@ -75,7 +74,13 @@ describe("Тестирования templates", function () {
 
     it("Генерация шаблон найден", function (done) {
         request.post('/template/execute')
-            .send({id: 1,entities:[]})
+            .send({
+                id: 1, entities: [], answers: [
+                    {"answer": "My.namespace.super"},
+                    {"answer": false},
+                    {"answer": "ICollection"}
+                ]
+            })
             .expect('Content-Type', /application\/zip/)
             .parse(binaryParser)
             .end(function (err, res) {

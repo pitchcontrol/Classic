@@ -1,0 +1,8 @@
+namespace My.namespace.super
+{
+    public interface ImyEntity2
+    {
+        string name { get; set; }
+        ImyEntity myEntities { get; set; }
+    }
+}

@@ -1,0 +1,61 @@
+<div class="modal-header">
+    <div class="row">
+        <div class="col-lg-2">
+            <img src="./image/numbered8.svg" class="picture-middle">
+        </div>
+        <div class="col-lg-10">
+            <h3 class="modal-title">Перечисление</h3>
+        </div>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-horizontal" role="form" name="enumForm">
+                <div ng-class="enumForm.name.$invalid?'form-group has-error':'form-group'">
+                    <label for="name" class="col-sm-2 control-label">Имя</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="name" placeholder="Имя" ng-model="model.name"
+                               name="name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="value" class="col-sm-2 control-label">Значение</label>
+
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="value" placeholder="Значение" pattern="^[a-zA-Zа-яА-Я0-9]([a-zA-Zа-яА-Я0-9]|,|,\s)*[a-zA-Zа-яА-Я0-9]$"
+                               ng-model="model.value" name="value">
+                    </div>
+                    <div class="col-sm-2">
+                        <button class="picture-btn" ng-click="model.values.push(model.value)"
+                                ng-disabled="model.values.indexOf(model.value) != -1 || enumForm.value.$invalid || !model.value"><span
+                                class="glyphicon glyphicon-plus"></span></button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="currentValue" class="col-sm-2 control-label">Значения</label>
+
+                    <div class="col-sm-8">
+                        <select class="form-control" ng-model="model.currentValue"
+                                ng-options="item as item for item in model.values" id="currentValue"></select>
+                    </div>
+                    <div class="col-sm-2">
+                        <button class="picture-btn" ng-click="model.values.remove(model.currentValue)"
+                                ng-disabled="!model.currentValue"><span
+                                class="glyphicon glyphicon-minus"></span></button>
+                    </div>
+
+                </div>
+                <!--<div class="alert alert-danger" ng-show="enumForm.$invalid">Ошибка</div>-->
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="picture-btn" ng-click="ok()"
+            ng-disabled="!model.name || model.collection.length==0">
+        <img src="./image/mark15.svg" class="picture-light"></button>
+    <button class="picture-btn" ng-click="$modalInstance.dismiss('cancel')"><img src="./image/negative1.svg"
+                                                                                 class="picture-light"></button>
+</div>

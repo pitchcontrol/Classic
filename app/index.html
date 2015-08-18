@@ -33,9 +33,15 @@
                                                                ng-click="loadProject(p.id)"></a></li>
                     </ul>
                 </li>
-                <li ng-show="model.isAunt"><a ng-click="saveProject()" ng-bind="model.saveTitle"></a></li>
-
+                <li ng-show="model.isAunt"><a ng-click="deleteProject()">Удалить проект</a></li>
+                <li ng-show="model.isAunt"><a ng-click="saveProject()" ng-bind="model.saveTitle"></a>
+                </li>
+                <li><a ng-click="clearProject()">Очистить</a>
+                </li>
                 <li><a ng-bind="model.loginTitle" ng-click="login()"></a></li>
+                <li><a ng-click="signUp()" ng-show="!model.isAunt">Регитрация</a></li>
+
+
             </ul>
         </div>
     </div>
@@ -43,7 +49,14 @@
 
 <div class="container body-content">
     <div ng-view></div>
-    <footer></footer>
+    <footer>
+        <div>Icons made by <a href="http://www.flaticon.com/authors/heydon" title="Heydon">Heydon</a>, <a
+                href="http://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>, <a
+                href="http://www.flaticon.com/authors/bogdan-rosu" title="Bogdan Rosu">Bogdan Rosu</a>, <a
+                href="http://www.flaticon.com/authors/dirtyworks" title="Dirtyworks">Dirtyworks</a> from <a
+                href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a
+                href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
+    </footer>
 </div>
 <!-- bower:js -->
 <script src="../bower_components/jquery/dist/jquery.js"></script>
@@ -59,28 +72,36 @@
 <script src="directives/entityDraggable.js"></script>
 <script src="directives/fieldDraggable.js"></script>
 <script src="directives/ngCanvas.js"></script>
+<script src="controllers/addViewModalCtrl.js"></script>
 <script src="controllers/associationModalCtrl.js"></script>
 <script src="controllers/confirmModalCtrl.js"></script>
 <script src="controllers/enterNameModalCtrl.js"></script>
 <script src="controllers/entityModalCtrl.js"></script>
+<script src="controllers/enumModalCtrl.js"></script>
 <script src="controllers/infoModalCtrl.js"></script>
 <script src="controllers/loginModalCtrl.js"></script>
 <script src="controllers/mainCtrl.js"></script>
 <script src="controllers/navigationCtrl.js"></script>
 <script src="controllers/selectModalCtrl.js"></script>
+<script src="controllers/signUpModalCtrl.js"></script>
 <script src="controllers/wizardCtrl.js"></script>
 <script src="services/FileSaver.js"></script>
 <script src="services/authService.js"></script>
 <script src="services/diagramService.js"></script>
 <script src="services/integerCounter.js"></script>
+<script src="services/modalService.js"></script>
 <script src="services/templateService.js"></script>
 <script src="Primitives/ArrayPrototype.js"></script>
 <script src="Primitives/DiagramItem.js"></script>
 <script src="Primitives/Entity.js"></script>
 <script src="Primitives/Field.js"></script>
 <script src="Primitives/Relation.js"></script>
+<script src="filters/associationFilter.js"></script>
+<script src="filters/viewFilter.js"></script>
 <script src="factories/authInterceptor.js"></script>
 <script src="factories/geometryBlock.js"></script>
+<script src="factories/namedCollection.js"></script>
+<script src="factories/namedItem.js"></script>
 <!-- endinject -->
 </body>
 </html>

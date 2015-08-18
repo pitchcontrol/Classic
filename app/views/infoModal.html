@@ -1,8 +1,14 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
+    <div class="row">
+        <div class="col-lg-2">
+            <img src="./image/conversation16.svg" class="picture-middle">
+        </div>
+        <div class="col-lg-10">
+            <h3 class="modal-title">{{title}}</h3>
+        </div>
+    </div>
 </div>
-<div class="modal-body">{{message}}
-</div>
+<div class="modal-body">{{message}}</div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok()">OK</button>
+    <button class="picture-btn" ng-click="ok()" ><img src="./image/mark15.svg" class="picture-light"></button>
 </div>

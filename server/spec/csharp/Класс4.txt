@@ -1,0 +1,11 @@
+namespace My.namespace.super
+{
+    public class myEntity
+    {
+        /// <summary>
+        /// Имя
+        /// </summary>
+        public string name { get; set; }
+        public Enum1 Type { get; set; }
+    }
+}

@@ -1,5 +1,12 @@
 <div class="modal-header">
-    <h3 class="modal-title">Введите название проекта</h3>
+    <div class="row">
+        <div class="col-lg-2">
+            <img src="./image/text12.svg" class="picture-middle">
+        </div>
+        <div class="col-lg-10">
+            <h3 class="modal-title">Введите название проекта</h3>
+        </div>
+    </div>
 </div>
 <div class="modal-body">
     <div class="row">
@@ -17,6 +24,6 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok()" ng-disable="!model.name">OK</button>
-    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <button class="picture-btn" ng-click="ok()" ng-disable="!model.name"><img src="./image/mark15.svg" class="picture-light"></button>
+    <button class="picture-btn" ng-click="cancel()"><img src="./image/negative1.svg" class="picture-light"></button>
 </div>
