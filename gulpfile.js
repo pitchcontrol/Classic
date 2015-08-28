@@ -21,13 +21,20 @@ var src = ['./app/css/site.css',
     './app/filters/*.js',
     './app/factories/*.js'];
 
-
+//Все тесты
 gulp.task('jasmine', function () {
     return gulp.src('server/spec/**/*.spec.js')
     //return gulp.src('server/spec/csharp/*.spec.js')
         .pipe(jasmine({includeStackTrace: true}));
 });
-
+gulp.task('bootstrap-form-test', function () {
+    return gulp.src('server/spec/html/bootstrap-form.spec.js')
+        .pipe(jasmine({includeStackTrace: true}));
+});
+gulp.task('boilerplateBuilder-test', function () {
+    return gulp.src('server/spec/boilerplateBuilder.spec.js')
+        .pipe(jasmine({includeStackTrace: true}));
+});
 
 var templateCache = require('gulp-angular-templatecache');
 

@@ -138,7 +138,11 @@
             this.clear();
             this.projectName = obj.name;
             this.projectId = obj.id;
-
+            //Добавляем енумы, enum должны быть раньше всех на них будет ссылка
+            if (obj.diagram.enums)
+                obj.diagram.enums.forEach(function (item) {
+                    self.enums.addItem(item);
+                });
             //Будем перебирать сущности добавлять стандартными способами
             obj.diagram.entities.forEach(function (obj) {
                     self.addEntity(obj);
@@ -165,11 +169,7 @@
                     name: "Главная"
                 });
             }
-            //Добавляем енумы
-            if (obj.diagram.enums)
-                obj.diagram.enums.forEach(function (item) {
-                    self.enums.addItem(item);
-                });
+
             //Важный момент нельзя сразу проставлять ассоциации, потому что геометрия еше не вычесленна
             //будем строить в два этапа
             //Таймаут нужен что-бы построились блоки

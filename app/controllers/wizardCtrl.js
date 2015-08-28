@@ -23,8 +23,12 @@
             index++;
             if (index > questions.length - 1) {
                 $modalInstance.close(questions);
+            } else {
+                $scope.model = questions[index];
+                if ($scope.model.default != undefined) {
+                    $scope.model.answer = $scope.model.default;
+                }
             }
-            $scope.model = questions[index];
         };
         $scope.hasPrev = function () {
             return index != 0;

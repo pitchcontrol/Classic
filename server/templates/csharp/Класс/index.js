@@ -5,7 +5,7 @@
 var ejs = require('ejs'),
     fs = require('fs'),
     async = require('async'),
-    Builder = require('../../../services/boilerplateBuilder').builder,
+    Builder = require('../../../services/boilerplateBuilder')._builder,
     util = require('util');
 //Получит тип NET
 function getType(field, answers) {
@@ -40,7 +40,12 @@ function getType(field, answers) {
 module.exports.quetions = [
     {question: "Пространство имен", type: "string"},
     {question: "Нужно ли выделять интерфейсы", type: "bool"},
-    {question: "Как представлять колекций", type: "enum", choices: ["List", "ICollection", "IEnumerable"]}
+    {
+        question: "Как представлять колекций",
+        type: "enum",
+        choices: ["List", "ICollection", "IEnumerable"],
+        default: "ICollection"
+    }
 ];
 module.exports.render = function (data, callback) {
     var namespace = data.answers[0];

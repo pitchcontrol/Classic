@@ -1,5 +1,5 @@
 /**
- * Created by snekrasov on 18.08.2015.
+ * Created by snekrasov on 26.08.2015.
  */
 "use strict";
 let Builder = require('../../../services/boilerplateBuilder');
@@ -11,9 +11,10 @@ module.exports.quetions = [
 ];
 
 function getRaw(field, data) {
+    let builder = Builder.getHtmlBuilder();
     var tp = 'text';
-    var isRequired = field.isRequired ? ' required' : '';
-    let builder;
+    var isRequired = field.isRequired ? ' required ' : '';
+    let description = field.description || field.name;
     switch (field.type) {
         case 'integer':
         case 'long':
@@ -24,6 +25,10 @@ function getRaw(field, data) {
             break;
         case 'bool':
             tp = 'checkbox';
+            builder.writeTagLine("div", 'class="checkbox"');
+            builder.writeLine('<label>\r\n<input type="{0}" class="form-control" id="{1}_"></label>', tp, field.name);
+            builder.closeAllTagsLine();
+            return builder.result;
             break;
         case 'datetime':
             tp = 'datetime';
@@ -38,16 +43,21 @@ function getRaw(field, data) {
             builder.write("</select>");
             return builder.result;
             break;
-        case 'Association':
-
-            break;
     }
-    return format("<input id='{0}_' type='{1}'{2}>", field.name, tp, isRequired);
+    //return format("<input id='{0}_' type='{1}'{2}>", field.name, tp, isRequired);
+    //_builder.numberIndents = 1;
+    //_builder.writeTagLine("div", 'class="form-group"');
+    //_builder.writeLine('<label for="{name}_">{description}</label>', field);
+    //_builder.writeLine('<input type="{0}" class="form-control" id="{1}_" placeholder="{2}">', tp, field.name, field.name);
+    //_builder.closeAllTagsLine();
+    // return _builder.trimEnd();
+    field.rawType = tp;
+    field.rawDescription = description;
 }
 module.exports.render = function (data, callback) {
     try {
-        let builder;
-        let renderFiles = [];
+        let builder = Builder.getHtmlBuilder();
+        //let renderFiles = [];
         let fullPage = data.answers[0];
 
         data.entities.forEach((entity)=> {
@@ -56,7 +66,6 @@ module.exports.render = function (data, callback) {
             });
         });
 
-        builder = Builder.getHtmlBuilder();
         if (fullPage) {
             builder.writeLine("<!DOCTYPE html>");
             builder.writeTagLine("html");
@@ -66,15 +75,26 @@ module.exports.render = function (data, callback) {
             builder.closeLastTagLine();
             builder.writeTagLine("body");
         }
-        builder.writeLineOpenBrace("<form action='#'>");
+        builder.writeTagLine('form', 'role="form" action="#"');
         builder.getBuilder().setFilter((fl)=> fl.type != 'Association')
-            .writeLine("<label for='{name}_'></label>{rawType}")
-            .sheduleBuild();
-        builder.writeLine("<input type='submit' value='submit'>");
-        builder.closeAllBraces();
-        builder.writeLine("</form>");
-
+            //default
+            .writeTagLine("div", 'class="form-group"')
+            .writeTagWithBodyLine("label", 'for="{name}_"', '{rawDescription}')
+            .writeTagSelfCloseLine("input", 'type="{rawType}" class="form-control" id="{name}_" placeholder="{name}_"')
+            .closeAllTagsLine()
+            //checkbox
+            .setCase("type", "bool")
+            .writeTagLine("div", 'class="checkbox"')
+            .writeTagLine("label")
+            .writeTagSelfClose("input", 'type="checkbox"')
+            .writeWithoutIndentLine("Администратор")
+            .closeAllTagsLine()
+            //build
+            .sheduleBuild("fields");
+        builder.writeTagWithBodyLine("button", 'type="submit" class="btn btn-default"', "submit");
         builder.closeAllTagsLine();
+        //renderFiles.push({name: entity.name + ".html", text: builder.trimEnd()});
+
         callback(null, builder.build(data.entities, true));
     }
     catch (error) {

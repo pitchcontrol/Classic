@@ -14,6 +14,7 @@
       "List",
       "ICollection",
       "IEnumerable"
-    ]
+    ],
+    "default": "ICollection"
   }
 ]

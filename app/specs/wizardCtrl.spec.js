@@ -45,4 +45,10 @@ describe('Тест wizardCtrl', function () {
         scope.next();
         expect(modalService.close).toHaveBeenCalled();
     });
+    it("Проверяем установку умолчаний", function () {
+        scope.next();
+        scope.next();
+        //Тут должно быть умолчание
+        expect(scope.model.answer).toBe(questions[2].default);
+    });
 });

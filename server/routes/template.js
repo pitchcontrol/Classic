@@ -39,8 +39,10 @@ module.exports.execute = function (req, res) {
         }
         var md = require(item.module);
         md.render(req.body, (err, files)=> {
-            if (err)
+            if (err) {
+                winston.error("Ошибка выполнения шаблона: " + err);
                 return res.status(500).send('Ошибка');
+            }
             zip.pack(files, res);
         });
 

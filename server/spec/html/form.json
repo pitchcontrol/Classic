@@ -1,0 +1,90 @@
+{
+  "answers": [
+    false
+  ],
+  "entities": [
+    {
+      "name": "myEntity",
+      "fields": [
+        {
+          "name": "id",
+          "type": "integer",
+          "isPrimaryKey": true,
+          "description": "Идентификатор"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "isRequired": true,
+          "description": "Имя"
+        },
+        {
+          "name": "Age",
+          "type": "integer",
+          "description": "Возраст"
+        },
+        {
+          "name": "isAdmin",
+          "type": "bool",
+          "description": "Администратор"
+        }
+      ]
+    },
+    {
+      "name": "myEntity2",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "myEntities",
+          "type": "Association",
+          "associationObj": {
+            "start": {
+              "name": "myEntity"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "myEntity3",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "myEntities",
+          "type": "Association",
+          "associationObj": {
+            "multiplicity": true,
+            "start": {
+              "name": "myEntity"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "myEntity4",
+      "fields": [
+        {
+          "name": "name",
+          "type": "enum",
+          "enum": "Enum1"
+        }
+      ]
+    }
+  ],
+  "enums": [
+    {
+      "name": "Enum1",
+      "values": [
+        "value1",
+        "value2"
+      ]
+    }
+  ]
+}

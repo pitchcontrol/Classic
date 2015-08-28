@@ -11,7 +11,7 @@ let generator = sq.define('generator', {
     name: Sequelize.STRING,
     description: Sequelize.STRING,
     module: Sequelize.STRING,
-    language: Sequelize.ENUM('csharp', 'java','javascript')
+    language: Sequelize.ENUM('csharp', 'java','javascript','html')
 });
 let question = sq.define('questions', {
     id: {type: Sequelize.INTEGER, primaryKey: true},

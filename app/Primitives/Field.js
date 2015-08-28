@@ -142,7 +142,10 @@ function Field(entity) {
     };
     this.getJSON = function () {
         var json = {
-            type: this.type, name: this.name, isRequired: this.isRequired, isPrimaryKey: this.isPrimaryKey
+            type: this.type,
+            name: this.name,
+            isRequired: this.isRequired,
+            isPrimaryKey: this.isPrimaryKey
         };
         if (this.associationObj) {
             json.associationObj = {
