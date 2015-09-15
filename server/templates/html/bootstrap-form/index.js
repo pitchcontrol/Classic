@@ -5,16 +5,14 @@
 let Builder = require('../../../services/boilerplateBuilder');
 let format = require('string-format');
 let lodash = require('lodash-node');
+let tools = require('../../../services/tools');
 
 module.exports.quetions = [
     {question: "Сформировать полную HTML страницу", type: "bool", default: false}
 ];
 
 function getRaw(field, data) {
-    let builder = Builder.getHtmlBuilder();
     var tp = 'text';
-    var isRequired = field.isRequired ? ' required ' : '';
-    let description = field.description || field.name;
     switch (field.type) {
         case 'integer':
         case 'long':
@@ -25,34 +23,18 @@ function getRaw(field, data) {
             break;
         case 'bool':
             tp = 'checkbox';
-            builder.writeTagLine("div", 'class="checkbox"');
-            builder.writeLine('<label>\r\n<input type="{0}" class="form-control" id="{1}_"></label>', tp, field.name);
-            builder.closeAllTagsLine();
-            return builder.result;
             break;
         case 'datetime':
             tp = 'datetime';
             break;
         case 'enum':
-            builder = Builder.getHtmlBuilder();
-            builder.writeLineOpenBrace("<select  id='{0}_'>", field.name);
-            builder.getFieldBuilder()
-                .writeLine("<option value='{0}'>{0}</option>")
-                .build(lodash.findWhere(data.enums, {name: field.enum}).values);
-            builder.closeAllBraces();
-            builder.write("</select>");
-            return builder.result;
+            field.enumValues = lodash.findWhere(data.enums, {name: field.enum}).values;
             break;
     }
-    //return format("<input id='{0}_' type='{1}'{2}>", field.name, tp, isRequired);
-    //_builder.numberIndents = 1;
-    //_builder.writeTagLine("div", 'class="form-group"');
-    //_builder.writeLine('<label for="{name}_">{description}</label>', field);
-    //_builder.writeLine('<input type="{0}" class="form-control" id="{1}_" placeholder="{2}">', tp, field.name, field.name);
-    //_builder.closeAllTagsLine();
-    // return _builder.trimEnd();
+
     field.rawType = tp;
-    field.rawDescription = description;
+    field.label = field.description || field.name;
+    field.isRequired = field.isRequired ? ' required ' : '';
 }
 module.exports.render = function (data, callback) {
     try {
@@ -60,10 +42,8 @@ module.exports.render = function (data, callback) {
         //let renderFiles = [];
         let fullPage = data.answers[0];
 
-        data.entities.forEach((entity)=> {
-            entity.fields.forEach((f)=> {
-                getRaw(f, data);
-            });
+        tools.forEachMany(data.entities, "fields", (f)=> {
+            getRaw(f, data);
         });
 
         if (fullPage) {
@@ -76,10 +56,11 @@ module.exports.render = function (data, callback) {
             builder.writeTagLine("body");
         }
         builder.writeTagLine('form', 'role="form" action="#"');
-        builder.getBuilder().setFilter((fl)=> fl.type != 'Association')
+        let flBl = builder.getBuilder();
+        flBl.setFilter((fl)=> fl.type != 'Association')
             //default
             .writeTagLine("div", 'class="form-group"')
-            .writeTagWithBodyLine("label", 'for="{name}_"', '{rawDescription}')
+            .writeTagWithBodyLine("label", 'for="{name}_"', '{label}')
             .writeTagSelfCloseLine("input", 'type="{rawType}" class="form-control" id="{name}_" placeholder="{name}_"')
             .closeAllTagsLine()
             //checkbox
@@ -89,15 +70,24 @@ module.exports.render = function (data, callback) {
             .writeTagSelfClose("input", 'type="checkbox"')
             .writeWithoutIndentLine("Администратор")
             .closeAllTagsLine()
-            //build
-            .sheduleBuild("fields");
+            //select
+            .setCase("type", "enum")
+            .writeTagLine("div", 'class="form-group"')
+            .writeTagWithBodyLine("label", 'for="{name}_"', '{label}')
+            .writeTagLine("select", "class='form-control' id='{name}_'")
+            .getBuilder()
+            .writeTagWithBodyLine("option", "value='{0}'", "{0}")
+            .sheduleBuild("enumValues");
+        flBl.closeAllTagsLine();
+        //build
+        flBl.sheduleBuild("fields");
         builder.writeTagWithBodyLine("button", 'type="submit" class="btn btn-default"', "submit");
         builder.closeAllTagsLine();
         //renderFiles.push({name: entity.name + ".html", text: builder.trimEnd()});
-
         callback(null, builder.build(data.entities, true));
     }
-    catch (error) {
+    catch
+        (error) {
         callback(error);
     }
 };

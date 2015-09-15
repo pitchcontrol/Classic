@@ -24,6 +24,14 @@ div.modal-content {
     border-radius: 0;
 }
 
+.work-area {
+    min-width: 975px;
+}
+
+.entity {
+    width: 235px;
+}
+
 .block {
     padding: 0;
     background-color: white;

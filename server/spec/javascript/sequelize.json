@@ -63,6 +63,25 @@
           }
         }
       ]
+    },
+    {
+      "name": "myEntity4",
+      "fields": [
+        {
+          "name": "name",
+          "type": "enum",
+          "enum": "Enum1"
+        }
+      ]
+    }
+  ],
+  "enums": [
+    {
+      "name": "Enum1",
+      "values": [
+        "value1",
+        "value2"
+      ]
     }
   ]
 }

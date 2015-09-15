@@ -21,170 +21,10 @@ const scheduleBuild = 12;
 const tagSelfCloseL = 13;
 const tagSelfClose = 14;
 const writeWithoutIndentL = 15;
+const writeLineOpenBrace = 16;
+const setBraces = 17;
+const closeBraceLine = 18;
 
-//function Builder(numberIndents, indent, markEnd) {
-//    if (!!numberIndents && numberIndents.constructor === Object) {
-//        for (let o in numberIndents) {
-//            this[o] = numberIndents[o];
-//        }
-//    }
-//    else {
-//        this.numberIndents = numberIndents;
-//        this.indent = indent;
-//        this.markEnd = markEnd || '';
-//    }
-//    this.indent = this.indent || '\t';
-//    this.numberIndents = this.numberIndents || 0;
-//    this.result = '';
-//    this.tags = [];
-//}
-///**
-// * Вставить раскрывающуюся скобку
-// * @return {Builder} Объект Builder.
-// */
-//Builder.prototype.setOpenBrace = function () {
-//    for (var indent = ''; indent.length < this.numberIndents; indent += this.indent);
-//    this.result += indent + this.openBrace;
-//    this.numberIndents++;
-//    return this;
-//};
-///**
-// * Вставить закрывающуюся скобку
-// * @return {Builder} Объект Builder.
-// */
-//Builder.prototype.setCloseBrace = function () {
-//    this.numberIndents--;
-//    for (var indent = ''; indent.length < this.numberIndents; indent += this.indent);
-//    this.result += indent + this.closeBrace;
-//    return this;
-//};
-//Builder.prototype.closeAllBraces = function () {
-//    while (this.numberIndents > 0) {
-//        this.setCloseBrace();
-//    }
-//};
-///**
-// * Вставить форматированную строку
-// * @return {Builder} Объект Builder.
-// */
-//Builder.prototype.write = function () {
-//    for (var indent = ''; indent.length < this.numberIndents; indent += this.indent);
-//    this.result += indent + format.apply(this, arguments);
-//    return this;
-//};
-///**
-// * Вставить форматированную строку и перенос строки
-// * @return {Builder} Объект Builder.
-// */
-//Builder.prototype.writeLine = function () {
-//    for (var indent = ''; indent.length < this.numberIndents; indent += this.indent);
-//    this.result += indent + format.apply(this, arguments) + '\r\n';
-//    return this;
-//};
-///**
-// * Вставить форматированную строку, перенос строки
-// * и открыть скобку
-// * @return {Builder} Объект Builder.
-// */
-//Builder.prototype.writeLineOpenBrace = function () {
-//    this.writeLine.apply(this, arguments);
-//    this.setOpenBrace();
-//    return this;
-//};
-///**
-// * Вставить тэг
-// * и добавить отступ
-// * @return {Builder} Объект Builder.
-// */
-//Builder.prototype.writeTag = function () {
-//    for (var indent = ''; indent.length < this.numberIndents; indent += this.indent);
-//    let args = Array.prototype.slice.call(arguments);
-//    //Первый параметр имя тэга
-//    let tag = args.shift();
-//    this.tags.push(tag);
-//    let str = format.apply(this, args);
-//    this.result += indent + (str ? ('<' + tag + ' ' + str + '>') : ('<' + tag + '>'));
-//    this.numberIndents++;
-//    return this;
-//};
-///**
-// * Вставить тэг
-// * и добавить отступ, перенести строку
-// * @return {Builder} Объект Builder.
-// */
-//Builder.prototype.writeTagLine = function () {
-//    for (var indent = ''; indent.length < this.numberIndents; indent += this.indent);
-//    let args = Array.prototype.slice.call(arguments);
-//    //Первый параметр имя тэга
-//    let tag = args.shift();
-//    this.tags.push(tag);
-//    let str = format.apply(this, args);
-//    this.result += indent + (str ? ('<' + tag + ' ' + str + '>') : ('<' + tag + '>')) + '\r\n';
-//    this.numberIndents++;
-//    return this;
-//};
-//Builder.prototype.closeTag = function (tag) {
-//    for (let index = this.tags.length - 1; index >= 0; index--) {
-//        if (this.tags[index] == tag) {
-//            this.numberIndents--;
-//            var indent = this.indent.repeat(this.numberIndents);
-//            this.result += indent + '</' + tag + '>';
-//            this.tags.splice(index, 1);
-//            return this;
-//        }
-//    }
-//    return this;
-//};
-//Builder.prototype.closeTagLine = function (tag) {
-//    for (let index = this.tags.length - 1; index >= 0; index--) {
-//        if (this.tags[index] == tag) {
-//            this.numberIndents--;
-//            let indent = this.indent.repeat(this.numberIndents);
-//            this.result += indent + '</' + tag + '>\r\n';
-//            this.tags.splice(index, 1);
-//            return this;
-//        }
-//    }
-//    return this;
-//};
-//Builder.prototype.closeAllTagsLine = function () {
-//    for (let index = this.tags.length - 1; index >= 0; index--) {
-//        this.numberIndents--;
-//        let indent = '';
-//        //Если предыдуший был writeBody, то оступ не нужен
-//        if (this.isBody) {
-//            let indent = this.indent.repeat(this.numberIndents);
-//            this.isBody = false;
-//        }
-//        this.result += indent + '</' + this.tags[index] + '>\r\n';
-//    }
-//    this.tags = [];
-//    return this;
-//};
-///**
-// * Вставить текст
-// * без отступов и переносов
-// * @return {Builder} Объект Builder.
-// */
-//Builder.prototype.writeBody = function () {
-//    this.result += format.apply(this, arguments);
-//    this.isBody = true;
-//    return this;
-//};
-///**
-// * Получить обьект FieldBuilder
-// * @return {FieldBuilder} Объект FieldBuilder.
-// */
-//Builder.prototype.getFieldBuilder = function (markEnd) {
-//    return new FieldBuilder(this, markEnd);
-//};
-///**
-// * Получить итоговую строку без пробелов в конце
-// * @return {string} Строка.
-// */
-//Builder.prototype.trimEnd = function () {
-//    return this.result.replace(/\s+$/, '');
-//};
 /**
  * Создает экземпляр FieldBuilder
  * @constructor
@@ -193,6 +33,7 @@ const writeWithoutIndentL = 15;
 function FieldBuilder(builder, parent) {
     this.chain = [];
     this._builder = builder;
+    this._localBuilder = Object.create(builder);
     this._parentBuilder = parent;
     this.switch = [];
     this.switch.push({chain: []});
@@ -256,6 +97,14 @@ FieldBuilder.prototype.write = function (format) {
  */
 FieldBuilder.prototype.writeLine = function (format) {
     this.getCurrentCase().push({type: wl, format: format});
+    return this;
+};
+/**
+ * Вставить форматированную строку, перенос строки и открытие скобки
+ * @return {FieldBuilder} Объект FieldBuilder.
+ */
+FieldBuilder.prototype.writeLineOpenBrace = function (format) {
+    this.getCurrentCase().push({type: writeLineOpenBrace, format: format});
     return this;
 };
 /**
@@ -366,6 +215,14 @@ FieldBuilder.prototype.setCloseBrace = function () {
     return this;
 };
 /**
+ * Вставить закрывающуюся скобку и перенос строки
+ * @return {FieldBuilder} Объект FieldBuilder.
+ */
+FieldBuilder.prototype.setCloseBraceLine = function () {
+    this.getCurrentCase().push({type: closeBraceLine});
+    return this;
+};
+/**
  * Вставить закрывающуюся скобку
  * @return {FieldBuilder} Объект FieldBuilder.
  */
@@ -383,6 +240,16 @@ FieldBuilder.prototype.setFilter = function (filter) {
     return this;
 };
 /**
+ * Задать скобки
+ * @param {string} openBrace Открывающаяся скобка
+ * @param {string} closeBrace Закрывающаяся скобка
+ * @returns {FieldBuilder}
+ */
+FieldBuilder.prototype.setBraces = function (openBrace, closeBrace) {
+    this.getCurrentCase().push({type: setBraces, openBrace: openBrace, closeBrace: closeBrace});
+    return this;
+};
+/**
  * Запланировать построение
  * @param {string} collection Имя колекции, по которой будет перебор
  * @return {FieldBuilder} обьект FieldBuilder.
@@ -395,10 +262,15 @@ FieldBuilder.prototype.build = function (collection, render) {
     let indent = '';
     let str = '';
     let renderFiles = [];
+
+    if (Array.isArray(render)) {
+        renderFiles = render;
+    }
+
     let self = this;
     let iterator = this._filter ? collection.filter(this._filter) : collection;
     iterator.forEach((field, index, array)=> {
-        let last = (index < array.length - 1) ? self._builder.markEnd : '';
+        let last = (index < array.length - 1) ? self._localBuilder.markEnd : '';
         let swt = self._findSwitch(field);
         swt.chain.forEach((itm, ind, arr)=> {
             indent = self._builder.indent.repeat(self._builder.numberIndents);
@@ -417,19 +289,22 @@ FieldBuilder.prototype.build = function (collection, render) {
                         this._builder.result += indent + format(itm.format, field);
                     break;
                 case openBrace:
-                    self._builder.result += indent + self._builder.openBrace;
+                    self._builder.result += indent + self._localBuilder.openBrace;
                     self._builder.numberIndents++;
                     break;
                 case closeBrace:
+                case closeBraceLine:
                     self._builder.numberIndents--;
                     indent = self._builder.indent.repeat(self._builder.numberIndents);
-                    self._builder.result += indent + self._builder.closeBrace;
+                    self._builder.result += indent + self._localBuilder.closeBrace;
+                    if (itm.type === closeBraceLine)
+                        self._builder.result += '\r\n';
                     break;
                 case closeAllBraces:
                     while (self._builder.numberIndents > 0) {
                         self._builder.numberIndents--;
                         indent = self._builder.indent.repeat(self._builder.numberIndents);
-                        self._builder.result += indent + self._builder.closeBrace;
+                        self._builder.result += indent + self._localBuilder.closeBrace;
                     }
                     break;
                 case cl:
@@ -489,6 +364,20 @@ FieldBuilder.prototype.build = function (collection, render) {
                 case scheduleBuild:
                     itm.builder.build(field[itm.collection]);
                     break;
+                case writeLineOpenBrace:
+                    if (self._builder.braceInline) {
+                        self._builder.result += indent + format(itm.format, field) + self._localBuilder.openBrace + '\r\n';
+                    }
+                    else {
+                        self._builder.result += indent + format(itm.format, field) + '\r\n';
+                        self._builder.result += indent + self._localBuilder.openBrace;
+                    }
+                    self._builder.numberIndents++;
+                    break;
+                case setBraces:
+                    self._localBuilder.openBrace = itm.openBrace || self._localBuilder.openBrace;
+                    self._localBuilder.closeBrace = itm.closeBrace || self._localBuilder.closeBrace;
+                    break;
             }
         });
         //Отработает генерация итема
@@ -498,6 +387,15 @@ FieldBuilder.prototype.build = function (collection, render) {
         }
     });
     return render ? renderFiles : this;
+};
+/**
+ * Задать формат имени файла
+ * @param {string} format формат имени файла
+ * @return {FieldBuilder} обьект FieldBuilder.
+ */
+FieldBuilder.prototype.setFileNameFormat = function (format) {
+    this._builder.fileNameFormat = format;
+    return this;
 };
 /**
  * Получить итоговую строку без пробелов в конце
@@ -510,8 +408,14 @@ FieldBuilder.prototype.trimEnd = function () {
  * Получить дочерний построитель
  * @return {FieldBuilder} обьект FieldBuilder.
  */
-FieldBuilder.prototype.getBuilder = function () {
-    return new FieldBuilder(this._builder, this);
+FieldBuilder.prototype.getBuilder = function (setting) {
+    let obj = new FieldBuilder(this._builder, this);
+    if (!setting)
+        return obj;
+    for (var key in setting) {
+        obj._localBuilder[key] = setting[key];
+    }
+    return obj;
 };
 function Aggregator() {
     this.result = '';
@@ -525,6 +429,7 @@ module.exports.getHtmlBuilder = function () {
     agr.closeBrace = '';
     agr.indent = '    ';
     agr.fileNameFormat = "{name}.html";
+    agr.braceInline = false;
     return new FieldBuilder(agr);
 };
 module.exports.getChsarpBuilder = function () {
@@ -534,5 +439,16 @@ module.exports.getChsarpBuilder = function () {
     agr.closeBrace = '}\r\n';
     agr.indent = '    ';
     agr.fileNameFormat = "{name}.cs";
+    agr.braceInline = false;
+    return new FieldBuilder(agr);
+};
+module.exports.getJavaScriptBuilder = function () {
+    let agr = new Aggregator();
+    agr.markEnd = '';
+    agr.openBrace = '{';
+    agr.closeBrace = '}';
+    agr.indent = '    ';
+    agr.fileNameFormat = "{name}.js";
+    agr.braceInline = true;
     return new FieldBuilder(agr);
 };

@@ -16,9 +16,9 @@
 </div>
 <br>
 <div class="row">
-    <div class="col-lg-10">
-        <div class="col-lg-12 grid" id="canvas" ng-canvas context-menu="menuOptions">
-            <div class="col-lg-3 col-md-3 block" ng-repeat="i in diagram.entities|viewFilter:currentView"
+    <div class="col-lg-10 work-area">
+        <div class="grid" id="canvas" ng-canvas context-menu="menuOptions">
+            <div class="entity block" ng-repeat="i in diagram.entities|viewFilter:currentView"
                  entity-draggable
                  ng-dblclick="editEntity(i)"
                  entity="i">

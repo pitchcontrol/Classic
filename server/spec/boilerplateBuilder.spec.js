@@ -1,10 +1,10 @@
 "use strict";
 describe("Тестирования Шаблоны сущностей", function () {
-    var Builder, htmlBuilder, csharpBuilder;
+    var javaScripBuilderBuilder, htmlBuilder, csharpBuilder;
     beforeEach(function () {
-        Builder = require('./../services/boilerplateBuilder')._builder;
         htmlBuilder = require('./../services/boilerplateBuilder').getHtmlBuilder();
         csharpBuilder = require('./../services/boilerplateBuilder').getChsarpBuilder();
+        javaScripBuilderBuilder = require('./../services/boilerplateBuilder').getJavaScriptBuilder();
     });
     it("Строим простые строки", function () {
         let fields = [{name: "name1", type: "string"}, {name: "name2", type: "integer"}];
@@ -105,12 +105,21 @@ describe("Тестирования Шаблоны сущностей", function 
         exp += "}";
         expect(csharpBuilder.trimEnd()).toBe(exp);
     });
+    it("Строка и открытие скобки", function () {
+        csharpBuilder.writeLineOpenBrace("namespace")
+            .build([{}]);
+        let exp = "namespace\r\n";
+        exp += "{";
+        expect(csharpBuilder.trimEnd()).toBe(exp);
+        //При это сдвигается отступ
+        expect(csharpBuilder._builder.numberIndents).toBe(1);
+    });
     it("Работа в режиме рендиринг", function () {
         let result = csharpBuilder
             .setOpenBrace()
             .setOpenBrace()
             .closeAllBraces()
-            .build([{name:"name1"}, {name:"name2"}], true);
+            .build([{name: "name1"}, {name: "name2"}], true);
         let exp = "{\r\n";
         exp += "    {\r\n";
         exp += '    }\r\n';
@@ -119,15 +128,20 @@ describe("Тестирования Шаблоны сущностей", function 
         expect(result[0].name).toBe("name1.cs");
         expect(result[0].text).toBe(exp);
     });
-    it("Используем конструктор обьект", function () {
-        let b = new Builder({
-            openBrace: '{',
-            closeBrace: '}'
-        });
-        expect(b.openBrace).toBe('{');
-        expect(b.closeBrace).toBe('}');
+    it("Работа в режиме рендиринг на основе массива", function () {
+        let result = csharpBuilder
+            .setOpenBrace()
+            .setOpenBrace()
+            .closeAllBraces()
+            .build([{name: "name1"}, {name: "name2"}], [{name: "old.cs", text: "Text"}]);
+        let exp = "{\r\n";
+        exp += "    {\r\n";
+        exp += '    }\r\n';
+        exp += "}";
+        expect(result.length).toBe(3);
+        expect(result[1].name).toBe("name1.cs");
+        expect(result[1].text).toBe(exp);
     });
-
 
     it("Закрываем тэг", function () {
         htmlBuilder.writeTagLine("div", "myAttribute='{age}'")
@@ -211,5 +225,34 @@ describe("Тестирования Шаблоны сущностей", function 
         result += "uid: uidValue\r\n";
         result += "datetime: datetimeValue";
         expect(htmlBuilder.trimEnd()).toBe(result);
+    });
+    it("Меняем настройки дочернему билдеру", function () {
+        javaScripBuilderBuilder.writeLineOpenBrace("Привет")
+            .getBuilder()
+            .setBraces("({", "})")
+            .writeLineOpenBrace("Пока")
+            .setCloseBraceLine()
+            .sheduleBuild("fields");
+        javaScripBuilderBuilder.closeAllBraces()
+            .build([{name: "name1", fields: [{}]}]);
+        let exp = "Привет{\r\n";
+        exp += "    Пока({\r\n";
+        exp += '    })\r\n';
+        exp += "}";
+        expect(javaScripBuilderBuilder.trimEnd()).toBe(exp);
+    });
+    it("Меняем настройки дочернему билдеру", function () {
+        javaScripBuilderBuilder.writeLineOpenBrace("Привет")
+            .getBuilder({openBrace: "({", closeBrace: "})"})
+            .writeLineOpenBrace("Пока")
+            .setCloseBraceLine()
+            .sheduleBuild("fields");
+        javaScripBuilderBuilder.closeAllBraces()
+            .build([{name: "name1", fields: [{}]}]);
+        let exp = "Привет{\r\n";
+        exp += "    Пока({\r\n";
+        exp += '    })\r\n';
+        exp += "}";
+        expect(javaScripBuilderBuilder.trimEnd()).toBe(exp);
     });
 });

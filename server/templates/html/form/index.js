@@ -12,8 +12,6 @@ module.exports.quetions = [
 
 function getRaw(field, data) {
     var tp = 'text';
-    var isRequired = field.isRequired ? ' required' : '';
-    let builder;
     switch (field.type) {
         case 'integer':
         case 'long':
@@ -29,20 +27,17 @@ function getRaw(field, data) {
             tp = 'datetime';
             break;
         case 'enum':
-            builder = Builder.getHtmlBuilder();
-            builder.writeLineOpenBrace("<select  id='{0}_'>", field.name);
-            builder.getFieldBuilder()
-                .writeLine("<option value='{0}'>{0}</option>")
-                .build(lodash.findWhere(data.enums, {name: field.enum}).values);
-            builder.closeAllBraces();
-            builder.write("</select>");
-            return builder.result;
+            field.enumValues = lodash.findWhere(data.enums, {name: field.enum}).values;
             break;
         case 'Association':
 
             break;
     }
-    return format("<input id='{0}_' type='{1}'{2}>", field.name, tp, isRequired);
+
+    field.rawType = tp;
+    field.isRequired = field.isRequired ? ' required' : '';
+
+    return tp;//format("<input id='{0}_' type='{1}'{2}>", field.name, tp, isRequired);
 }
 module.exports.render = function (data, callback) {
     try {
@@ -53,6 +48,7 @@ module.exports.render = function (data, callback) {
         data.entities.forEach((entity)=> {
             entity.fields.forEach((f)=> {
                 getRaw(f, data);
+
             });
         });
 
@@ -66,14 +62,20 @@ module.exports.render = function (data, callback) {
             builder.closeLastTagLine();
             builder.writeTagLine("body");
         }
-        builder.writeLineOpenBrace("<form action='#'>");
-        builder.getBuilder().setFilter((fl)=> fl.type != 'Association')
-            .writeLine("<label for='{name}_'></label>{rawType}")
-            .sheduleBuild();
+        builder.writeTagLine("form","action='#'");
+        let flBl = builder.getBuilder();
+        flBl.setFilter((fl)=> fl.type != 'Association')
+            .writeLine("<label for='{name}_'></label><input id='{name}_' type='{rawType}'{isRequired}>")
+            .setCase("type", "enum")
+            .writeLine("<label for='{name}_'></label>")
+            .writeTagLine("select", "id='{name}_'")
+            .getBuilder()
+            .writeTagWithBodyLine("option", "value='{0}'", "{0}")
+            .sheduleBuild("enumValues");
+        flBl.closeAllTagsLine();
+        flBl.sheduleBuild("fields");
+        //Кнопка субмит
         builder.writeLine("<input type='submit' value='submit'>");
-        builder.closeAllBraces();
-        builder.writeLine("</form>");
-
         builder.closeAllTagsLine();
         callback(null, builder.build(data.entities, true));
     }

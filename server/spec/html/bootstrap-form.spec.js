@@ -4,29 +4,30 @@
 "use strict";
 let tc = require('../../../test/textComparer');
 describe("Генератор формы Bootstrap", function () {
-    var module, json;
+    var module, json, helper;
     beforeEach(function () {
         module = require('../../templates/html/bootstrap-form');
         json = require('./../html/form.json');
-    });
-    it("Простая форма", function (done) {
-        let helper = new tc.textComparer({
+        helper = new tc.textComparer({
             module: module,
             json: json
         });
-
+    });
+    it("Простая форма", function (done) {
         helper.entityCompare("myEntity", __dirname + '/bootstrap-form1.html', (error)=> {
             expect(error).toBe('');
             done();
         })
     });
     it("Простая форма, вся страница", function (done) {
-        let helper = new tc.textComparer({
-            module: module,
-            json: json
-        });
         helper.setAnswer(0,true);
         helper.entityCompare("myEntity", __dirname + '/bootstrap-form-full1.html', (error)=> {
+            expect(error).toBe('');
+            done();
+        })
+    });
+    it("Форма с select", function (done) {
+        helper.entityCompare("myEntity4", __dirname + '/bootstrap-form2.html', (error)=> {
             expect(error).toBe('');
             done();
         })

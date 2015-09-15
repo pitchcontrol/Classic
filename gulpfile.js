@@ -27,12 +27,24 @@ gulp.task('jasmine', function () {
     //return gulp.src('server/spec/csharp/*.spec.js')
         .pipe(jasmine({includeStackTrace: true}));
 });
+gulp.task('jasmin-matches-test', function () {
+    return gulp.src('server/spec/Test.jasmine.spec.js')
+        .pipe(jasmine({includeStackTrace: true}));
+});
 gulp.task('bootstrap-form-test', function () {
     return gulp.src('server/spec/html/bootstrap-form.spec.js')
         .pipe(jasmine({includeStackTrace: true}));
 });
+gulp.task('form-test', function () {
+    return gulp.src('server/spec/html/form.spec.js')
+        .pipe(jasmine({includeStackTrace: true}));
+});
 gulp.task('boilerplateBuilder-test', function () {
     return gulp.src('server/spec/boilerplateBuilder.spec.js')
+        .pipe(jasmine({includeStackTrace: true}));
+});
+gulp.task('Класс-test', function () {
+    return gulp.src('server/spec/csharp/Класс.spec.js')
         .pipe(jasmine({includeStackTrace: true}));
 });
 

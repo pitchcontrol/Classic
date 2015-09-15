@@ -9,7 +9,10 @@ describe("Тест textComparer", function () {
         module = {
             render: function (json, call) {
                 this.json = json;
-                call(null, [{text: this.text || "Всякий разный код", name: "file.txt"}]);
+                call(null, [{text: this.text || "Всякий разный код", name: "file.txt"}, {
+                    text: "Всякий разный код",
+                    name: "file1.txt"
+                }]);
             }
         };
     });
@@ -17,6 +20,13 @@ describe("Тест textComparer", function () {
         let comparer = new tc.textComparer({module: module, json: {}});
         comparer.compareFile(null, __dirname + '/csharp/enum1.txt', (error)=> {
             expect(error).toBe("Данные имеют разное количество строк 8 и 1");
+            done();
+        })
+    });
+    it("Не найден файл", function (done) {
+        let comparer = new tc.textComparer({module: module, json: {}});
+        comparer.compareFile("file2.txt", __dirname + '/csharp/enum1.txt', (error)=> {
+            expect(error).toBe("Не найден файл: file2.txt, файлы: file.txt,file1.txt");
             done();
         })
     });
@@ -31,7 +41,7 @@ describe("Тест textComparer", function () {
         module.text += "Линия";
         let comparer = new tc.textComparer({module: module, json: {}});
         comparer.compareFile(null, __dirname + '/csharp/enum1.txt', (error)=> {
-            expect(error).toBe("Строка: 0 имеет различие. 'namespace My.namespace.super' и 'Линия'");
+            expect(error).toBe("Строка: 0 имеет различие. 'namespace My.namespace.super' и 'Линия', длинны отличаются 28 и 5");
             done();
         })
     });
@@ -54,20 +64,20 @@ describe("Тест textComparer", function () {
             module: module,
             json: tmp
         });
-        comparer.entityCompare("name1", __dirname + '/csharp/enum1.txt',  (error)=> {
+        comparer.entityCompare("name1", __dirname + '/csharp/enum1.txt', (error)=> {
             expect(module.json).not.toBe(tmp);
             expect(module.json.entities.length).toBe(1);
             done();
         })
     });
     it("Меняем вопрос", function () {
-        let tmp = {entities: [{name: "name1"}, {name: "name2"}, {name: "name3"}], answers:[false]};
+        let tmp = {entities: [{name: "name1"}, {name: "name2"}, {name: "name3"}], answers: [false]};
         let comparer = new tc.textComparer({
             module: module,
             json: tmp
         });
         expect(comparer.json.answers[0]).toBeFalsy();
-        comparer.setAnswer(0,true);
+        comparer.setAnswer(0, true);
         expect(comparer.json.answers[0]).toBeTruthy();
         expect(comparer.json.answers).not.toBe(tmp.answers);
     });

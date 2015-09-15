@@ -1,0 +1,6 @@
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var myEntity3 = new Schema({
+    name: { type: String },
+    myEntities: { type: [myEntity] }
+});

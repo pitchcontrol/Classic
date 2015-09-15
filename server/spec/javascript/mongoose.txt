@@ -1,0 +1,8 @@
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var myEntity = new Schema({
+    id: { type: Number, required: true },
+    name: { type: String, required: true },
+    Age: { type: Number },
+    isAdmin: { type: Boolean }
+});
