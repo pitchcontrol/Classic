@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <div class="row">
+        <div class="col-lg-2">
+            <img src="{{data.meta.icon}}" class="picture-middle">
+        </div>
+        <div class="col-lg-10">
+            <h3 class="modal-title">{{data.meta.title}}</h3>
+        </div>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="alert alert-danger" ng-show="data.error">{{data.error}}</div>
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-horizontal" role="form" name="universalForm">
+                <div ng-repeat="fl in data.meta.fields">
+                    <div class="col-lg-12" ng-switch on="fl.type">
+                        <div class="form-group" ng-switch-when="string">
+                            <label>{{fl.label}}</label>
+                            <input type="type" class="form-control" ng-model="data.model[fl.name]" placeholder="{{fl.placeholder}}" ng-required="fl.required">
+                        </div>
+                        <div class="checkbox" ng-switch-when="bool">
+                            <label>
+                                <input type="checkbox" ng-model="data.model[fl.name]">{{fl.label}}
+                            </label>
+                        </div>
+                        <div class="form-group" ng-switch-when="enum">
+                            <label>{{fl.label}}</label>
+                            <select class="form-control" ng-model="data.model[fl.name]" ng-required="fl.required"
+                                    ng-options="item as item.name for item in fl.choices"></select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="picture-btn" ng-click="ok()" ng-disabled="universalForm.$invalid"><img src="./image/mark15.svg"
+                                                                                          class="picture-light">
+    </button>
+    <button class="picture-btn" ng-click="cancel()"><img src="./image/negative1.svg" class="picture-light"></button>
+</div>

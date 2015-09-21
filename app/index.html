@@ -36,6 +36,7 @@
                 <li ng-show="model.isAunt"><a ng-click="deleteProject()">Удалить проект</a></li>
                 <li ng-show="model.isAunt"><a ng-click="saveProject()" ng-bind="model.saveTitle"></a>
                 </li>
+                <li ng-show="model.isAunt"><a ng-click="addGenerator()">Добавить генератор</a></li>
                 <li><a ng-click="clearProject()">Очистить</a>
                 </li>
                 <li><a ng-bind="model.loginTitle" ng-click="login()"></a></li>
@@ -70,6 +71,7 @@
 <script src="directives/entityDraggable.js"></script>
 <script src="directives/fieldDraggable.js"></script>
 <script src="directives/ngCanvas.js"></script>
+<script src="controllers/addTemplateModalCtrl.js"></script>
 <script src="controllers/addViewModalCtrl.js"></script>
 <script src="controllers/associationModalCtrl.js"></script>
 <script src="controllers/confirmModalCtrl.js"></script>
@@ -82,6 +84,7 @@
 <script src="controllers/navigationCtrl.js"></script>
 <script src="controllers/selectModalCtrl.js"></script>
 <script src="controllers/signUpModalCtrl.js"></script>
+<script src="controllers/universalModalCtrl.js"></script>
 <script src="controllers/wizardCtrl.js"></script>
 <script src="services/FileSaver.js"></script>
 <script src="services/authService.js"></script>
@@ -97,6 +100,7 @@
 <script src="filters/associationFilter.js"></script>
 <script src="filters/viewFilter.js"></script>
 <script src="factories/authInterceptor.js"></script>
+<script src="factories/generator.js"></script>
 <script src="factories/geometryBlock.js"></script>
 <script src="factories/namedCollection.js"></script>
 <script src="factories/namedItem.js"></script>

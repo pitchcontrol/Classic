@@ -1,5 +1,5 @@
 (function () {
-    "use strict"
+    "use strict";
     var enterNameModalCtrl = function ($scope, $modalInstance, diagramService) {
         $scope.model = {name: diagramService.projectName};
         $scope.ok = function () {

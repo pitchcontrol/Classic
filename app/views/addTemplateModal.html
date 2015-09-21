@@ -1,0 +1,55 @@
+<div class="modal-header">
+    <div class="row">
+        <div class="col-lg-2">
+            <img src="./image/hand48.svg" class="picture-middle">
+        </div>
+        <div class="col-lg-10">
+            <h3 class="modal-title">Добавить генератор</h3>
+        </div>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="alert alert-danger" ng-show="model.error">{{model.error}}</div>
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">Название генератора</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="name" placeholder="Название" ng-model="model.name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="language" class="col-sm-2 control-label">Язык</label>
+
+                    <div class="col-sm-10">
+                        <select type="text" class="form-control" id="language"  ng-model="model.language">
+                            <option>csharp</option>
+                            <option>javascript</option>
+                            <option>html</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="module" class="col-sm-2 control-label">Модуль</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="module" placeholder="Модуль" ng-model="model.module">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="col-sm-2 control-label">Описание генератора</label>
+
+                    <div class="col-sm-10">
+                        <textarea type="text" class="form-control" id="description" placeholder="Описание генератора" ng-model="model.description"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="picture-btn" ng-click="ok()" ng-disabled="!model.name || !model.module || !model.description"><img src="./image/mark15.svg" class="picture-light"></button>
+    <button class="picture-btn" ng-click="cancel()"><img src="./image/negative1.svg" class="picture-light"></button>
+</div>

@@ -4,8 +4,7 @@ describe('Тест wizardCtrl', function () {
         module('app');
         questions = readJSON('test/questionList.json');
     });
-    beforeEach(function () {
-        //Получаем контроллер
+    function Init(questions){
         inject(function ($controller, $rootScope) {
             scope = $rootScope.$new();
             modalService = jasmine.createSpyObj('modalService', ['close', 'dismiss']);
@@ -22,6 +21,10 @@ describe('Тест wizardCtrl', function () {
             });
         });
         scope.$digest();
+    };
+    beforeEach(function () {
+        //Получаем контроллер
+        Init(questions);
     });
     it("Загружаем диалог, должна встать на первый вопрос", function () {
         expect(scope.model).toEqual(questions[0]);
@@ -50,5 +53,10 @@ describe('Тест wizardCtrl', function () {
         scope.next();
         //Тут должно быть умолчание
         expect(scope.model.answer).toBe(questions[2].default);
+    });
+    it("Вопросов нет выход", function () {
+        Init([]);
+        scope.next();
+        expect(modalService.close).toHaveBeenCalled();
     });
 });

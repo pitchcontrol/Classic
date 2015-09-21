@@ -1,10 +1,14 @@
 (function () {
-    "use strict"
+    "use strict";
     //Мастер для опросов
     var wizardCtrl = function ($scope, $modalInstance, data, promise) {
         $scope.message = data.message;
         $scope.title = data.title;
         var questions = promise.data;
+        //Если вопросов нет сразу выход
+        if (questions.length === 0) {
+            $modalInstance.close(questions);
+        }
         $scope.model = questions[0];
 
         $scope.ok = function () {
@@ -32,6 +36,12 @@
         };
         $scope.hasPrev = function () {
             return index != 0;
+        };
+        $scope.hasNext = function () {
+            if (questions.length === 0)
+                return true;
+            else
+                return $scope.model.answer == undefined && model.type != 'bool'
         };
         $scope.prev = function () {
             if (index > 0) {

@@ -36,6 +36,10 @@
         this.deleteProject = function(id){
             return $http({url: '/project/delete/' + id, method: 'GET'});
         };
+        //Добавить генератор
+        this.addGenerator = function(obj){
+            return $http({url: '/template/add', method: 'POST', data: obj});
+        };
     };
     angular.module('app').service('templateService', ['$http', templateService]);
 })();

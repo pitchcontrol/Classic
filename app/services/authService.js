@@ -8,9 +8,12 @@
                 self.user = data;
                 $window.sessionStorage.token = data.token;
                 deferred.resolve();
-            }).error(function (error) {
+            }).error(function (error, status) {
                 delete self.user;
-                deferred.reject(error);
+                if (status != 200)
+                    deferred.reject("Ошибка сервера");
+                else
+                    deferred.reject(error);
             });
             return deferred.promise;
         };

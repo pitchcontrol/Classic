@@ -1,6 +1,6 @@
 (function () {
     "use strict";
-    var modalService = function ($http, $modal) {
+    var modalService = function ($http, $modal,generator) {
         //Подтвеждение
         this.confirm = function (title, message) {
             return $modal.open({
@@ -105,6 +105,21 @@
                 }
             }).result;
         };
+        this.addGenerator = function () {
+            var data = generator.create();
+            data.method = data.save;
+            return $modal.open({
+                //templateUrl: 'views/addTemplateModal.html',
+                //controller: 'addTemplateModalCtrl',
+                templateUrl: 'views/universalModal.html',
+                controller: 'universalModalCtrl',
+                resolve: {
+                    data: function () {
+                        return data
+                    }
+                }
+            }).result;
+        };
     };
-    angular.module('app').service('modalService', ['$http', '$modal', modalService]);
+    angular.module('app').service('modalService', ['$http', '$modal', 'generator',modalService]);
 })();

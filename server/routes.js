@@ -10,6 +10,8 @@ module.exports.setup = function (app) {
     app.get('/template/questions/:id', require('./routes/template').questions);
     //Выполнить
     app.post('/template/execute', require('./routes/template').execute);
+    //Добавить шаблон
+    app.post('/template/add', jwt({secret: config.salt}), require('./routes/template').add);
     //Получить шаблоны готовых сущности
     app.get('/entities/list', require('./routes/entities').entities);
     //Аунтефикация
@@ -27,7 +29,8 @@ module.exports.setup = function (app) {
     //Удалить проекты
     app.get('/project/delete/:id', jwt({secret: config.salt}), require('./routes/project').delete);
     app.get('*', function (req, res, next) {
-        winston.warn(req.url + ', Not found');
-        res.status(404).send('Not found');
+        let error = new Error('Not found');
+        error.status = 404;
+        next(error);
     });
 };

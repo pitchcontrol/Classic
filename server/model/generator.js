@@ -7,11 +7,11 @@ var sq = require('../services/db').sequelize;
 
 
 let generator = sq.define('generator', {
-    id: {type: Sequelize.INTEGER, primaryKey: true},
-    name: Sequelize.STRING,
+    id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: Sequelize.STRING, unique: "name_index"},
     description: Sequelize.STRING,
     module: Sequelize.STRING,
-    language: Sequelize.ENUM('csharp', 'java','javascript','html')
+    language: {type: Sequelize.ENUM('csharp', 'java', 'javascript', 'html'), unique: "name_index"}
 });
 let question = sq.define('questions', {
     id: {type: Sequelize.INTEGER, primaryKey: true},

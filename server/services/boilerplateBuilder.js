@@ -29,6 +29,7 @@ const closeBraceLine = 18;
  * Создает экземпляр FieldBuilder
  * @constructor
  * @param {Builder} builder экземпляр Builder
+ * @param parent
  */
 function FieldBuilder(builder, parent) {
     this.chain = [];
