@@ -1,11 +1,13 @@
 "use strict";
 let mockery = require('../node_modules/mockery');
 
-let bcrypt = require('../node_modules/bcrypt');
+let bcrypt = require('../node_modules/bcrypt-nodejs');
 
-
-bcrypt.hash('1', 8, function (err, hash) {
-    console.log(hash);
+bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash('1', salt, null, function (err, hash) {
+        console.log('ERROR', err);
+        console.log('HASH', hash);
+    });
 });
 console.log('End');
 
@@ -41,7 +43,19 @@ prom2.catch(function (obj) {
 });
 
 let prom3 = Promise.resolve('Resolve');
-let prom4 = Promise.all([prom1,prom3]);
+let prom4 = Promise.all([prom1, prom3]);
 prom4.then(function (obj) {
-    console.log('All',obj);
+    console.log('All', obj);
 });
+class MyClass {
+    constructor(options) {
+        this.a = options;
+    }
+
+    write() {
+        console.log(this.a);
+    }
+}
+let mc = new MyClass("hellow");
+mc.write();
+console.log(`string text ${mc.a + ' world'}`);

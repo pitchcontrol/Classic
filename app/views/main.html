@@ -36,9 +36,9 @@
             </svg>
         </div>
     </div>
-    <div class="col-lg-2">
+    <div class="col-lg-2 block-a">
         <!--<div class="panel panel-default">-->
-        <div>
+        <div class="col-lg-12 col-sm-6">
             <button ng-click="addEntity()" type="button" data-toggle="tooltip" data-placement="top" class="picture-btn"
                     title="Добавить сущность"><span class="glyphicon glyphicon-plus"></span></button>
             <button ng-click="addTemplateEssence()" type="button" data-toggle="tooltip" class="picture-btn"
@@ -54,38 +54,46 @@
                 </li>
             </ul>
         </div>
-        <ul class="rectangle-list">
-            <li class="panel-heading"><img class="picture-light" src="./image/links15.svg"> Связи</li>
-            <li ng-repeat="i in diagram.associations">{{i.toString()}}</li>
-        </ul>
-        <ul class="rectangle-list">
-            <li class="panel-heading"><img class="picture-light" src="./image/numbered8.svg"> Перечисления</li>
-            <li ng-repeat="i in diagram.enums.collection">{{i.name}}<em class="glyphicon glyphicon-edit"
-                                                                        ng-click="editEnum(i)" data-toggle="tooltip"
-                                                                        data-placement="top"
-                                                                        title="Редактировать"></em></li>
-        </ul>
-        <div>
+        <div class="col-lg-12 col-sm-6">
+            <ul class="rectangle-list">
+                <li class="panel-heading"><img class="picture-light" src="./image/links15.svg"> Связи</li>
+                <li ng-repeat="i in diagram.associations">{{i.toString()}}</li>
+            </ul>
+        </div>
+        <div class="col-lg-12 col-sm-6">
+            <ul class="rectangle-list">
+                <li class="panel-heading"><img class="picture-light" src="./image/numbered8.svg"> Перечисления</li>
+                <li ng-repeat="i in diagram.enums.collection">{{i.name}}<em class="glyphicon glyphicon-edit"
+                                                                            ng-click="editEnum(i)" data-toggle="tooltip"
+                                                                            data-placement="top"
+                                                                            title="Редактировать"></em></li>
+            </ul>
+        </div>
+        <div class="col-lg-12 col-sm-6">
             <button class="btn btn-success" style="width: 100%" ng-click="generate()"
                     ng-disabled="!diagram.entities.length>0">
                 <span class="glyphicon glyphicon-cog"></span>
                 Генерировать
             </button>
         </div>
-        <ul class="rectangle-list">
-            <li class="panel-heading">Последний генератор</li>
-            <li>{{lastTemplate.name}}</li>
-        </ul>
-        <div>
+        <div class="col-lg-12 col-sm-6">
+            <ul class="rectangle-list">
+                <li class="panel-heading">Последний генератор</li>
+                <li>{{lastTemplate.name}}</li>
+            </ul>
+        </div>
+        <div class="col-lg-12 col-sm-6">
             <button class="btn btn-success" style="width: 100%" ng-click="generateDefault()"
                     ng-disabled="!lastTemplate&&!lastAnswers">
                 <img class="picture-light" src="./image/settings73.svg">
                 Из ответов
             </button>
         </div>
-        <ul class="rectangle-list">
-            <li class="panel-heading">Последний ответы</li>
-            <li ng-repeat="ans in lastAnswers">{{ans.question+': '+ans.answer}}</li>
-        </ul>
+        <div class="col-lg-12 col-sm-6">
+            <ul class="rectangle-list">
+                <li class="panel-heading">Последний ответы</li>
+                <li ng-repeat="ans in lastAnswers">{{ans.question+': '+ans.answer}}</li>
+            </ul>
+        </div>
     </div>
 </div>

@@ -4,7 +4,7 @@
 "use strict";
 let winston = require('winston');
 let user = require('../model/user').User;
-let bcrypt = require('bcrypt');
+let bcrypt = require('bcrypt-nodejs');
 let expressJwt = require('../../node_modules/express-jwt');
 let jwt = require('jsonwebtoken');
 let config = require('../config.json');
@@ -54,7 +54,7 @@ module.exports.signup = function (req, res, next) {
 
         async.waterfall([
                 (callback) => bcrypt.genSalt(10, callback),
-                (salt, callback)=> bcrypt.hash(password, salt, callback)
+                (salt, callback)=> bcrypt.hash(password, salt, null, callback)
             ],
             function (err, hash) {
                 if (err) throw err;
