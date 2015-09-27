@@ -1,5 +1,5 @@
 (function () {
-    "use strict"
+    "use strict";
     var selectModalCtrl = function ($scope, $modalInstance, data, promise) {
         promise().then(function (responce) {
             $scope.items = responce.data;

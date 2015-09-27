@@ -20,7 +20,7 @@
         }
     };
     var app = angular.module('app');
-    app.factory('authInterceptor', ['$q', '$window', authInterceptor]).config(function ($httpProvider) {
+    app.factory('authInterceptor', ['$q', '$window', authInterceptor]).config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push('authInterceptor');
-    });
+    }]);
 })();

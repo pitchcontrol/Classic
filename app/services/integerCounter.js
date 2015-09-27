@@ -1,5 +1,5 @@
 (function () {
-    "use strict"
+    "use strict";
     var _count = 0;
     var integerCounter = function () {
         this.getId = function () {
