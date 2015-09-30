@@ -5,20 +5,15 @@
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title ng-bind="title">Кододел</title>
-        <!-- build:css css/vendor.min.css -->
+        <!-- release:css -->
         <!-- bower:css -->
         <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css"/>
         <!-- endbower -->
-        <!-- endbuild -->
-        <!-- build:css css/style.min.css -->
         <!-- inject:css -->
         <link rel="stylesheet" href="css/site.css">
         <!-- endinject -->
-        <!-- endbuild -->
     </head>
     <body>
-        <!-- inject:svg -->
-        <!-- endinject -->
         <nav class="navbar navbar-default " role="navigation" ng-controller="navigationCtrl">
             <div class="container">
                 <div class="navbar-header">
@@ -64,7 +59,7 @@
                 </div>
             </footer>
         </div>
-        <!-- build:js scripts/vendor.min.js -->
+        <!-- release:js -->
         <!-- bower:js -->
         <script src="../bower_components/jquery/dist/jquery.js"></script>
         <script src="../bower_components/angular/angular.js"></script>
@@ -74,8 +69,6 @@
         <script src="../bower_components/underscore/underscore.js"></script>
         <script src="../bower_components/angular-bootstrap-contextmenu/contextMenu.js"></script>
         <!-- endbower -->
-        <!-- endbuild -->
-        <!-- build:js scripts/main.min.js -->
         <!-- inject:js -->
         <script src="app.js"></script>
         <script src="directives/entityDraggable.js"></script>
@@ -114,8 +107,6 @@
         <script src="factories/geometryBlock.js"></script>
         <script src="factories/namedCollection.js"></script>
         <script src="factories/namedItem.js"></script>
-        <script src="../dist/templates.js"></script>
         <!-- endinject -->
-        <!-- endbuild -->
     </body>
 </html>

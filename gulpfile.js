@@ -6,11 +6,11 @@ var wiredep = require('wiredep').stream;
 var inject = require('gulp-inject');
 var gulp = require('gulp');
 var path = require('path');
-//var concat = require('gulp-concat');
+var concat = require('gulp-concat');
+var gulpFilter = require('gulp-filter');
 var rename = require('gulp-rename');
 var mainBowerFiles = require('main-bower-files');
 var gutil = require('gulp-util');
-var gulpif = require('gulp-if');
 var useref = require('gulp-useref');
 var minifyCss = require('gulp-minify-css');
 //Очистка папки
@@ -24,6 +24,7 @@ var runSequence = require('run-sequence');
 var flatten = require('gulp-flatten');
 var svgstore = require('gulp-svgstore');
 var svgmin = require('gulp-svgmin');
+var minifyHTML = require('gulp-minify-html');
 
 var src = ['./app/css/site.css',
     './app/app.js',
@@ -40,26 +41,6 @@ gulp.task('jasmine', function () {
         //return gulp.src('server/spec/csharp/*.spec.js')
         .pipe(jasmine({includeStackTrace: true}));
 });
-//gulp.task('jasmin-matches-test', function () {
-//    return gulp.src('server/spec/Test.jasmine.spec.js')
-//        .pipe(jasmine({includeStackTrace: true}));
-//});
-//gulp.task('bootstrap-form-test', function () {
-//    return gulp.src('server/spec/html/bootstrap-form.spec.js')
-//        .pipe(jasmine({includeStackTrace: true}));
-//});
-//gulp.task('form-test', function () {
-//    return gulp.src('server/spec/html/form.spec.js')
-//        .pipe(jasmine({includeStackTrace: true}));
-//});
-//gulp.task('boilerplateBuilder-test', function () {
-//    return gulp.src('server/spec/boilerplateBuilder.spec.js')
-//        .pipe(jasmine({includeStackTrace: true}));
-//});
-//gulp.task('Класс-test', function () {
-//    return gulp.src('server/spec/csharp/Класс.spec.js')
-//        .pipe(jasmine({includeStackTrace: true}));
-//});
 function log(error) {
     console.log([
         '',
@@ -71,15 +52,6 @@ function log(error) {
     ].join('\n'));
     this.end();
 }
-
-var templateCache = require('gulp-angular-templatecache');
-
-gulp.task('build:template', function () {
-    return gulp.src('./app/views/*.html')
-        .pipe(templateCache({root: "views", module: "app"}))
-        .pipe(gulp.dest('dist'))
-        .on('error', log);
-});
 
 
 //Собираем bower
@@ -121,10 +93,10 @@ gulp.task('develop', function () {
 //Внедряем скрипты шабоны
 gulp.task('build:inject', function () {
     src.push('./dist/templates.js');
-    var sources = gulp.src(src, {read: false});
+    var sources = gulp.src(src, {read: true});
     return gulp.src('./app/index.html')
-        .pipe(inject(sources, {relative: true}))
-        .pipe(gulp.dest('./app'))
+        .pipe(inject(sources, {relative: false, addPrefix: "..", addRootSlash: false}))
+        .pipe(gulp.dest('./dist'))
         .on('error', log);
 });
 
@@ -137,15 +109,15 @@ gulp.task('watch', function () {
 gulp.task('svgstore', function () {
     var svgs = gulp
         .src('./app/image/*.svg')
-        .pipe(svgstore({ inlineSvg: true }));
+        .pipe(svgstore({inlineSvg: true}));
 
-    function fileContents (filePath, file) {
+    function fileContents(filePath, file) {
         return file.contents.toString();
     }
 
     return gulp
         .src('./app/index.html')
-        .pipe(inject(svgs, { transform: fileContents }))
+        .pipe(inject(svgs, {transform: fileContents}))
         .pipe(gulp.dest('./dist'));
 });
 //Собирает все svg в один, минифиципует
@@ -184,24 +156,68 @@ gulp.task('builds:fonts', function () {
         .on('error', log);
 });
 
-gulp.task('build', function (callback) {
-    runSequence('build:clean', ['builds:fonts','build:template'], 'build:inject', 'build:simply',
-        callback);
-});
-gulp.task('build:simply', function () {
-    var assets = useref.assets();
 
-    return gulp.src('./app/index.html')
-        .pipe(assets)
-        .pipe(filelog())
-        .pipe(gulpif('*.js', uglify({outSourceMap: true})))
-        //processImport - игонорировать @import
-        .pipe(gulpif('*.css', minifyCss({processImport: false})))
-        .pipe(assets.restore())
-        //Вырезает блоки коментариев
-        .pipe(useref())
-        .pipe(gulp.dest('dist'))
+var templateCache = require('gulp-angular-templatecache');
+
+//Подключаем шаблоны ангуляра
+gulp.task('build:template', function () {
+    return gulp.src('./app/views/*.html')
+        .pipe(minifyHTML({quotes: true}))
+        .pipe(templateCache({root: "views", module: "app", filename: "templates.js"}))
+        .pipe(gulp.dest('dist/scripts'))
         .on('error', log);
 });
+//Копируем иконки
+gulp.task('build:copy image', ()=> {
+    return gulp.src('./app/image/*.svg').pipe(gulp.dest('dist/image'))
+});
 
-gulp.task('default', ['develop', 'watch', 'bower', 'bowerWatch']);
+gulp.task('build', function (callback) {
+    runSequence('build:clean', ['builds:fonts', 'build:main', 'build:copy image','build:vendor'], 'build:inject-direct',
+        callback);
+});
+
+gulp.task('build:main',['build:template'], ()=> {
+    var jsFilter = gulpFilter('**/*.js', {restore: true});  //отбираем только  javascript файлы
+    var cssFilter = gulpFilter('**/*.css');  //отбираем только css файлы
+    src.push('./dist/scripts/templates.js');
+    return gulp.src(src)
+        // собираем js файлы , склеиваем и отправляем в нужную папку
+        .pipe(jsFilter)
+        .pipe(concat('main.min.js'))
+        .pipe(uglify({outSourceMap: true}))
+        .pipe(gulp.dest('dist/scripts'))
+        .pipe(jsFilter.restore)
+        // собраем css файлы, склеиваем и отправляем их под синтаксисом css
+        .pipe(cssFilter)
+        .pipe(concat('main.min.css'))
+        //processImport - игонорировать @import
+        .pipe(minifyCss({processImport: false}))
+        .pipe(gulp.dest('dist/css'));
+});
+
+gulp.task('build:vendor', ()=> {
+    var jsFilter = gulpFilter('**/*.js', {restore: true});  //отбираем только  javascript файлы
+    var cssFilter = gulpFilter('**/*.css');  //отбираем только css файлы
+    return gulp.src(mainBowerFiles())
+        // собираем js файлы , склеиваем и отправляем в нужную папку
+        .pipe(jsFilter)
+        .pipe(concat('vendor.min.js'))
+        .pipe(uglify({outSourceMap: true}))
+        .pipe(gulp.dest('dist/scripts'))
+        .pipe(jsFilter.restore)
+        // собраем css файлы, склеиваем и отправляем их под синтаксисом css
+        .pipe(cssFilter)
+        .pipe(concat('vendor.min.css'))
+        //processImport - игонорировать @import
+        .pipe(minifyCss({processImport: false}))
+        .pipe(gulp.dest('dist/css'));
+});
+//Внедряем скрипты шабоны
+gulp.task('build:inject-direct', function () {
+    var sources = gulp.src(['./dist/scripts/vendor.min.js','./dist/scripts/main.min.js','./dist/css/*.min.css'], {read: true});
+    return gulp.src('./app/index.html')
+        .pipe(inject(sources, {relative: false, addPrefix: "..", addRootSlash: false,removeTags:true, name:'release'}))
+        .pipe(gulp.dest('./dist'))
+        .on('error', log);
+});
