@@ -2,8 +2,9 @@
  * Created by snekrasov on 08.06.2015.
  */
 "use strict";
+let authenticateError = require('../errors/authenticateError').authenticateError;
 describe("Тестирования authenticate", function () {
-    var mockery, request, mockCrypt;
+    var mockery, request, mockCrypt, mockWinston;
     beforeEach(function () {
         //promise = require('bluebird');
         mockery = require('mockery');
@@ -30,18 +31,31 @@ describe("Тестирования authenticate", function () {
                 else
                     cb(null, false);
             },
-            hash: (password, salt, cb)=> {
-                cb(null, 'Hash...');
-            },
-            genSalt: (rounds ,cb)=>{
-                cb(null, 'Salt...');
-            }
+            //hash: (password, salt, cb)=> {
+            //    cb(null, 'Hash...');
+            //},
+            //genSalt: (rounds, cb)=> {
+            //    cb(null, 'Salt...');
+            //}
         };
-        mockery.registerMock('bcrypt', mockCrypt);
+        mockWinston = {
+            info :()=>{},
+            log :()=>{},
+            error :()=>{}
+        };
+        mockery.registerMock('winston',mockWinston);
+        mockery.registerMock('bcrypt-nodejs', mockCrypt);
         mockery.enable({warnOnUnregistered: false, warnOnReplace: false});
         app.post('/login', require('../services/authenticate').login);
         app.post('/signup', require('../services/authenticate').signup);
-
+        app.use(function (err, req, res, next) {
+            if (err instanceof authenticateError) {
+                res.status(401).send(err.message);
+            } else if (err instanceof Error) {
+                res.status(500).send('Ошибка');
+            }
+           return;
+        });
 
         request = require('supertest')(app);
     });
@@ -63,7 +77,7 @@ describe("Тестирования authenticate", function () {
         mockCrypt.compare = (pass, hash, cb)=> {
             cb(null, false);
         };
-        mockery.registerMock('bcrypt', mockCrypt);
+        mockery.registerMock('bcrypt-nodejs', mockCrypt);
         mockery.enable();
         request.post('/login')
             .send({'login': 'vasy', 'password': '12345'})
@@ -90,7 +104,7 @@ describe("Тестирования authenticate", function () {
     it("Регистрация. Такой логин уже есть", function (done) {
         request.post('/signup')
             .send({'login': 'vasy', 'password': '12345'})
-            .expect(409)
+            .expect(401)
             .expect('Такой логин уже есть: vasy')
             .end((err)=>  err ? done.fail(err) : done());
     });

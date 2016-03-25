@@ -2,7 +2,7 @@
  * Created by snekrasov on 18.09.2015.
  */
 "use strict";
-let log = require("../services/log")(module);
+let log = require("../services/log").logger;
 
 module.exports.init = function (context) {
 

@@ -9,25 +9,24 @@ let expressJwt = require('../../node_modules/express-jwt');
 let jwt = require('jsonwebtoken');
 let config = require('../config.json');
 let async = require('async');
+let auth = require('../errors/authenticateError');
 
 module.exports.login = function (req, res, next) {
     var login = req.body.login || '';
     var password = req.body.password || '';
 
     if (login == '' || password == '') {
-        return res.status(401).send('Не указан логин или пароль');
+        return next(new auth.authenticateError('Не указан логин или пароль'));
     }
     user.findOne({where: {login: login}}).then((user) => {
         if (!user) {
-            winston.warn('Логин не найден: ' + login);
-            return res.status(401).send('Логин не найден: ' + login);
+            return next(new auth.authenticateError('Логин не найден: ' + login));
         }
 
         bcrypt.compare(password, user.hash, (err, r)=> {
             if (err) throw err;
             if (!r) {
-                winston.warn("Attempt failed to login with " + login);
-                return res.status(401).send("Не верный пароль");
+                return next(new auth.authenticateError('Не верный пароль'));
             }
             let token = jwt.sign({login: login, id: user.id}, config.salt, {expiresInMinutes: 60});
             winston.info('Пользователь вошел: ' + login);
@@ -44,12 +43,11 @@ module.exports.signup = function (req, res, next) {
     var password = req.body.password || '';
 
     if (login == '' || password == '') {
-        return res.status(401).send('Не указан логин или пароль');
+        return next(new auth.authenticateError('Не указан логин или пароль'));
     }
     user.findOne({where: {login: login}}).then((data) => {
         if (data) {
-            winston.warn('Такой логин уже есть: ' + login);
-            return res.status(409).send('Такой логин уже есть: ' + login);
+            return next(new auth.authenticateError('Такой логин уже есть: ' + login));
         }
 
         async.waterfall([
@@ -66,14 +64,8 @@ module.exports.signup = function (req, res, next) {
                     let token = jwt.sign({login: login, id: usr.id}, config.salt, {expiresInMinutes: 60});
                     winston.info('Пользователь зарегистрировался: ' + login);
                     return res.json({token: token, login: login});
-                }).catch(function (error) {
-                    winston.error(error);
-                    return res.status(500).send('Ошибка');
-                });
+                }).catch(next);
             }
         );
-    }).catch(function (error) {
-        winston.error(error);
-        return res.status(500).send('Ошибка');
-    });
+    }).catch(next);
 };

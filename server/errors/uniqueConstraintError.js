@@ -9,4 +9,4 @@ function UniqueConstraintError(message) {
 }
 util.inherits(UniqueConstraintError, Error);
 
-modul.exports.uniqueConstraintError = UniqueConstraintError;
+module.exports.uniqueConstraintError = UniqueConstraintError;

@@ -39,7 +39,7 @@ var src = ['./app/css/site.css',
 gulp.task('jasmine', function () {
     return gulp.src('server/spec/**/*.spec.js')
         //return gulp.src('server/spec/csharp/*.spec.js')
-        .pipe(jasmine({includeStackTrace: true}));
+        .pipe(jasmine({includeStackTrace: true, verbose: true}));
 });
 function log(error) {
     console.log([
@@ -173,11 +173,11 @@ gulp.task('build:copy image', ()=> {
 });
 
 gulp.task('build', function (callback) {
-    runSequence('build:clean', ['builds:fonts', 'build:main', 'build:copy image','build:vendor'], 'build:inject-direct',
+    runSequence('build:clean', ['builds:fonts', 'build:main', 'build:copy image', 'build:vendor'], 'build:inject-direct',
         callback);
 });
 
-gulp.task('build:main',['build:template'], ()=> {
+gulp.task('build:main', ['build:template'], ()=> {
     var jsFilter = gulpFilter('**/*.js', {restore: true});  //отбираем только  javascript файлы
     var cssFilter = gulpFilter('**/*.css');  //отбираем только css файлы
     src.push('./dist/scripts/templates.js');
@@ -215,9 +215,15 @@ gulp.task('build:vendor', ()=> {
 });
 //Внедряем скрипты шабоны
 gulp.task('build:inject-direct', function () {
-    var sources = gulp.src(['./dist/scripts/vendor.min.js','./dist/scripts/main.min.js','./dist/css/*.min.css'], {read: true});
+    var sources = gulp.src(['./dist/scripts/vendor.min.js', './dist/scripts/main.min.js', './dist/css/*.min.css'], {read: true});
     return gulp.src('./app/index.html')
-        .pipe(inject(sources, {relative: false, addPrefix: "..", addRootSlash: false,removeTags:true, name:'release'}))
+        .pipe(inject(sources, {
+            relative: false,
+            addPrefix: "..",
+            addRootSlash: false,
+            removeTags: true,
+            name: 'release'
+        }))
         .pipe(gulp.dest('./dist'))
         .on('error', log);
 });
