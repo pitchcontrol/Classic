@@ -12,6 +12,7 @@ var winston = require('winston');
 var util = require('util');
 var rest = require('../services/rest').init(generator);
 var notFound = require('../errors/notFoundError').notFoundError;
+let auth = require('../errors/authenticateError').authenticateError;
 
 module.exports.list = rest.list;
 
@@ -49,18 +50,18 @@ module.exports.questions = function (req, res, next) {
 };
 module.exports.execute = function (req, res, next) {
     if (!req.body) return res.sendStatus(400);
-    generator.findById(req.body.id).then(function (item) {
+    generator.findById(req.body.id).then((item) => {
         if (item == null) {
             //res.status(404).send(log.warn('Шаблон c id:{0} не найден', req.body.id));
             //return;
-            return next(new notFound(`Шаблон c id:${req.params.id} не найден`));
+            return next(new notFound(`Шаблон c id:${req.body.id} не найден`));
         }
         var md = require(item.module);
         md.render(req.body, (err, files)=> {
             if (err) {
                 //log.error("Ошибка выполнения шаблона: {0}", err);
                 //return res.status(500).send('Ошибка');
-                return next(err)
+                return next(err);
             }
             zip.pack(files, res);
         });

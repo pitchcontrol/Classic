@@ -2,6 +2,10 @@
  * Created by snekrasov on 18.06.2015.
  */
 "use strict";
+let authenticateError = require('../errors/authenticateError').authenticateError;
+let notFoundError = require('../errors/notFoundError').notFoundError;
+let errorProcessor = require('../errorProcessor');
+
 describe("Тестирования templates", function () {
     var mockery, request, gen, questions;
     beforeEach(function () {
@@ -23,11 +27,11 @@ describe("Тестирования templates", function () {
                     else
                         return Promise.resolve(null);
                 },
-                build: function(){
+                build: function () {
                     return {
-                        id:1,
-                        save:function(){
-                            return Promise.resolve({id:1});
+                        id: 1,
+                        save: function () {
+                            return Promise.resolve({id: 1});
                         }
                     }
                 }
@@ -38,14 +42,16 @@ describe("Тестирования templates", function () {
                 return Promise.resolve(null);
             }
         };
+        //mockery.registerMock('winston', mockWinston);
         mockery.registerMock('../model/generator', mock);
         mockery.enable({warnOnUnregistered: false, warnOnReplace: false});
 
         app.get('/template/list', require('../routes/template').list);
         app.get('/template/questions/:id', require('../routes/template').questions);
         app.post('/template/execute', require('../routes/template').execute);
-        app.post('/template/addnew', require('../routes/template').add);
+        //app.post('/template/addnew', require('../routes/template').add);
 
+        app.use(errorProcessor);
         request = require('supertest')(app);
     });
     //it("Список генераторов", function (done) {
@@ -70,8 +76,12 @@ describe("Тестирования templates", function () {
     //        })
     //        .end((err)=>  err ? done.fail(err) : done());
     //});
+    //it('fdf',function (done){
+    //    done();
+    //});
     it("Получить вопросы не правильный ид", function (done) {
         request.get('/template/questions/0')
+            .expect(404)
             .expect('Шаблон c id:0 не найден')
             .end((err)=>  err ? done.fail(err) : done());
     });

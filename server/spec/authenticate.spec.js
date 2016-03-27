@@ -3,6 +3,7 @@
  */
 "use strict";
 let authenticateError = require('../errors/authenticateError').authenticateError;
+let notFoundError = require('../errors/notFoundError').notFoundError;
 describe("Тестирования authenticate", function () {
     var mockery, request, mockCrypt, mockWinston;
     beforeEach(function () {
@@ -31,32 +32,36 @@ describe("Тестирования authenticate", function () {
                 else
                     cb(null, false);
             },
-            //hash: (password, salt, cb)=> {
-            //    cb(null, 'Hash...');
-            //},
-            //genSalt: (rounds, cb)=> {
-            //    cb(null, 'Salt...');
-            //}
+            hash: (password, salt, par, cb)=> {
+                cb(null, 'Hash...');
+            },
+            genSalt: (rounds, cb)=> {
+                cb(null, 'Salt...');
+            }
         };
         mockWinston = {
-            info :()=>{},
-            log :()=>{},
-            error :()=>{}
+            info: ()=> {
+            },
+            log: ()=> {
+            },
+            error: ()=> {
+            }
         };
-        mockery.registerMock('winston',mockWinston);
+        mockery.registerMock('winston', mockWinston);
         mockery.registerMock('bcrypt-nodejs', mockCrypt);
         mockery.enable({warnOnUnregistered: false, warnOnReplace: false});
         app.post('/login', require('../services/authenticate').login);
         app.post('/signup', require('../services/authenticate').signup);
         app.use(function (err, req, res, next) {
-            if (err instanceof authenticateError) {
+            if (err instanceof notFoundError) {
+                res.status(404).send(err.message);
+            } else if (err instanceof authenticateError) {
                 res.status(401).send(err.message);
             } else if (err instanceof Error) {
-                res.status(500).send('Ошибка');
+                res.status(500).send(err.message);
             }
-           return;
+            return;
         });
-
         request = require('supertest')(app);
     });
 

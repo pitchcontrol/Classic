@@ -10,6 +10,7 @@ let util = require('util');
  */
 function NotFoundError(message) {
     this.message = message;
+    this.status = 404;
 }
 util.inherits(NotFoundError, Error);
 

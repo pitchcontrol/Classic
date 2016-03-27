@@ -5,27 +5,18 @@ var winston = require('winston'),
 var Serialize = require('sequelize');
 var config = require('./config.json');
 var argv = require('optimist').argv;
-var authenticateError = require('./errors/authenticateError');
+var authenticateError = require('./errors/authenticateError').authenticateError;
+var notFound = require('./errors/notFoundError').notFoundError;
 var logger = require('./server').logger;
+var errorProcessor = require('./errorProcessor');
 
 // Файл с роутам
 var routes = require('./routes');
 // Связуем с Routes
 routes.setup(app);
-// Если же произошла иная ошибка то отдаем 500 Internal Server Error
-app.use(function (err, req, res, next) {
-    if (err instanceof Serialize.UniqueConstraintError) {
-        logger.log('error', err.message);
-        res.status(500).send("Параметры не уникальны");
-    } else if (err instanceof authenticateError.authenticateError) {
-        logger.log('warn', err.message);
-        res.status(401).send(err.message);
-    } else if (err instanceof Error) {
-        logger.log('error', err.message);
-        res.status(500).send('Ошибка');
-    }
-    next();
-});
+//Обработка ошибок
+app(errorProcessor);
+
 //Неизвестная ошибка
 app.use(function (err, req, res, next) {
     winston.log('error', 'Неизвестная ошибка');

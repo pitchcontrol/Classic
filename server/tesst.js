@@ -59,3 +59,10 @@ class MyClass {
 let mc = new MyClass("hellow");
 mc.write();
 console.log(`string text ${mc.a + ' world'}`);
+var error = require('../server/errors/notFoundError').notFoundError;
+var erraut = require('../server/errors/authenticateError').authenticateError;
+var e1 = new error('My error 1');
+var e2 = new error('My error 2');
+console.log('instanceof',e1 instanceof error);
+console.log('instanceof',e2 instanceof erraut);
+console.log('instanceof',e2 instanceof Error);
