@@ -66,3 +66,5 @@ var e2 = new error('My error 2');
 console.log('instanceof',e1 instanceof error);
 console.log('instanceof',e2 instanceof erraut);
 console.log('instanceof',e2 instanceof Error);
+var argv = require('optimist').argv;
+console.log('Argv',argv);

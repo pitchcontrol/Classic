@@ -2,7 +2,6 @@
  * Created by snekrasov on 05.06.2015.
  */
 "use strict";
-let winston = require('winston');
 let user = require('../model/user').User;
 let bcrypt = require('bcrypt-nodejs');
 let expressJwt = require('../../node_modules/express-jwt');
@@ -10,6 +9,7 @@ let jwt = require('jsonwebtoken');
 let config = require('../config.json');
 let async = require('async');
 let authenticationError = require('../errors/authenticateError').authenticateError;
+let logger = require('../services/log').logger;
 
 module.exports.login = function (req, res, next) {
     var login = req.body.login || '';
@@ -29,7 +29,7 @@ module.exports.login = function (req, res, next) {
                 return next(new authenticationError('Не верный пароль'));
             }
             let token = jwt.sign({login: login, id: user.id}, config.salt, {expiresInMinutes: 60});
-            winston.info('Пользователь вошел: ' + login);
+            logger.info('Пользователь вошел: ' + login);
             return res.json({token: token, login: login});
         });
 
@@ -60,7 +60,7 @@ module.exports.signup = function (req, res, next) {
                 });
                 usr.save().then(()=> {
                     let token = jwt.sign({login: login, id: usr.id}, config.salt, {expiresInMinutes: 60});
-                    winston.info('Пользователь зарегистрировался: ' + login);
+                    logger.info('Пользователь зарегистрировался: ' + login);
                     return res.json({token: token, login: login});
                 }).catch(next);
             }

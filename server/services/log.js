@@ -5,24 +5,25 @@
 let winston = require('winston');
 let path = require('path');
 let format = require('string-format');
-let logger = new (winston.Logger)({
-    transports: [
-        new (winston.transports.File)({
-            name: 'info-file',
-            filename: 'filelog-info.log',
-            level: 'info',
-            maxsize: 5120
-        }),
-        new (winston.transports.File)({
-            name: 'error-file',
-            filename: 'filelog-error.log',
-            level: 'error',
-            maxsize: 5120
-        })
-    ]
-});
+let argv = require('optimist').argv;
 
-module.exports.logger = logger;
+let transports = argv.release ? [
+    new winston.transports.File({
+        name: 'info-file',
+        filename: 'filelog-info.log',
+        level: 'info',
+        maxsize: 5120
+    }),
+    new winston.transports.File({
+        name: 'error-file',
+        filename: 'filelog-error.log',
+        level: 'error',
+        maxsize: 5120
+    })
+] : [new winston.transports.Console()];
+
+module.exports.logger =  new winston.Logger({transports});
+
 //module.exports = function (mod) {
 //    return makeLog(path.basename(mod.filename));
 //};

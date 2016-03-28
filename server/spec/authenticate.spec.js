@@ -4,6 +4,8 @@
 "use strict";
 let authenticateError = require('../errors/authenticateError').authenticateError;
 let notFoundError = require('../errors/notFoundError').notFoundError;
+let errorProcessor = require('../errorProcessor');
+
 describe("Тестирования authenticate", function () {
     var mockery, request, mockCrypt, mockWinston;
     beforeEach(function () {
@@ -52,16 +54,7 @@ describe("Тестирования authenticate", function () {
         mockery.enable({warnOnUnregistered: false, warnOnReplace: false});
         app.post('/login', require('../services/authenticate').login);
         app.post('/signup', require('../services/authenticate').signup);
-        app.use(function (err, req, res, next) {
-            if (err instanceof notFoundError) {
-                res.status(404).send(err.message);
-            } else if (err instanceof authenticateError) {
-                res.status(401).send(err.message);
-            } else if (err instanceof Error) {
-                res.status(500).send(err.message);
-            }
-            return;
-        });
+        app.use(errorProcessor);
         request = require('supertest')(app);
     });
 

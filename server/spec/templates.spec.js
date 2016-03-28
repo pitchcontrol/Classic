@@ -54,31 +54,6 @@ describe("Тестирования templates", function () {
         app.use(errorProcessor);
         request = require('supertest')(app);
     });
-    //it("Список генераторов", function (done) {
-    //    request.get('/template/list')
-    //        .expect('Content-Type', /json/)
-    //        .expect((res)=> {
-    //            expect(gen).toEqual(res.body);
-    //        })
-    //        .end((err)=>  err ? done.fail(err) : done());
-    //});
-    //it("Добавить новый, имя повторяется", function (done) {
-    //    request.post('/template/addnew')
-    //        .send({name: "name1"})
-    //        .expect('Шаблон c именем:name1 уже есть')
-    //        .end((err)=>  err ? done.fail(err) : done());
-    //});
-    //it("Сохранить все ок", function (done) {
-    //    request.post('/template/addnew')
-    //        .send({name: "name2"})
-    //        .expect((res)=> {
-    //            expect(res.body.id).toBe(1);
-    //        })
-    //        .end((err)=>  err ? done.fail(err) : done());
-    //});
-    //it('fdf',function (done){
-    //    done();
-    //});
     it("Получить вопросы не правильный ид", function (done) {
         request.get('/template/questions/0')
             .expect(404)
