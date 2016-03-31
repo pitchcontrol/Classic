@@ -1,9 +1,17 @@
 {
   "port": 8080,
   "database": {
-    "name": "gen",
-    "login": "postgres",
-    "password": "SQ2Macx84pfASX4OzmTj"
+    "debug": {
+      "name": "gen",
+      "login": "postgres",
+      "password": "SQ2Macx84pfASX4OzmTj"
+    },
+    "release": {
+      "name": "classic",
+      "login": "web",
+      "password": "SQ2Macx84pfASX4OzmTj"
+    }
   },
-  "salt": "ussr"
+  "salt": "ussr",
+  "logDirectory": "/var/log/classic.ru/"
 }

@@ -3,8 +3,13 @@
  */
 var config = require('../config.json');
 var Sequelize = require('sequelize');
+var argv = require('optimist').argv;
 
-var sequelize = new Sequelize(config.database.name, config.database.login, config.database.password, {
+var login = argv.release ? config.database.release.login : config.database.debug.login;
+var password = argv.release ? config.database.release.password : config.database.debug.password;
+var name = argv.release ? config.database.release.name : config.database.debug.name;
+
+var sequelize = new Sequelize(name, login, password, {
     host: 'localhost',
     dialect: 'postgres',
     pool: {

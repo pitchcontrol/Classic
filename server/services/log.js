@@ -6,17 +6,21 @@ let winston = require('winston');
 let path = require('path');
 let format = require('string-format');
 let argv = require('optimist').argv;
+let config = require('../config.json');
+
+let errorFileName = config.logDirectory + 'filelog-error.log';
+let infoFileName = config.logDirectory + 'filelog-info.log';
 
 let transports = argv.release ? [
     new winston.transports.File({
         name: 'info-file',
-        filename: 'filelog-info.log',
+        filename: infoFileName,
         level: 'info',
         maxsize: 5120
     }),
     new winston.transports.File({
         name: 'error-file',
-        filename: 'filelog-error.log',
+        filename: errorFileName,
         level: 'error',
         maxsize: 5120
     })
