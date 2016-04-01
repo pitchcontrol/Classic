@@ -24,8 +24,9 @@
     "angular-bootstrap-contextmenu": "~0.9.3"
   },
   "devDependencies": {
-    "karma-read-json": "~1.1.0",
-    "angular-mocks": "~1.4.1"
+    "angular-mocks": "~1.4.1",
+    "jasmine-core": "jasmine#~2.4.1",
+    "karma-read-json": "~1.1.0"
   },
   "resolutions": {
     "angular-route": "~1.4.1",

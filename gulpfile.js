@@ -13,6 +13,7 @@ var mainBowerFiles = require('main-bower-files');
 var gutil = require('gulp-util');
 var useref = require('gulp-useref');
 var minifyCss = require('gulp-minify-css');
+var fs =require('fs');
 //Очистка папки
 let rimraf = require('gulp-rimraf');
 //Минификация js
@@ -25,6 +26,8 @@ var flatten = require('gulp-flatten');
 var svgstore = require('gulp-svgstore');
 var svgmin = require('gulp-svgmin');
 var minifyHTML = require('gulp-minify-html');
+//Работа SFTP
+var GulpSSH = require('gulp-ssh');
 
 var src = ['./app/css/site.css',
     './app/app.js',
@@ -35,7 +38,7 @@ var src = ['./app/css/site.css',
     './app/filters/*.js',
     './app/factories/*.js'];
 
-//Все тесты
+//Все тесты backend
 gulp.task('jasmine', function () {
     return gulp.src('server/spec/**/*.spec.js')
         //return gulp.src('server/spec/csharp/*.spec.js')
@@ -175,6 +178,23 @@ gulp.task('build:copy image', ()=> {
 gulp.task('build', function (callback) {
     runSequence('build:clean', ['builds:fonts', 'build:main', 'build:copy image', 'build:vendor'], 'build:inject-direct',
         callback);
+});
+var config = {
+    host: '88.212.220.114',
+    port: 22,
+    username: 'nodeuser',
+    privateKey: fs.readFileSync('./id__rsa.key'),
+    passphrase:'rsa100'
+};
+
+var gulpSSH = new GulpSSH({
+    ignoreErrors: false,
+    sshConfig: config
+});
+gulp.task('copy:frontend', function () {
+    return gulp
+        .src(['./dist/**/*.*'])
+        .pipe(gulpSSH.dest('/var/www/classic.ru/html/dist'));
 });
 
 gulp.task('build:main', ['build:template'], ()=> {

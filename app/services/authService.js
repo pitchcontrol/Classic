@@ -10,7 +10,7 @@
                 deferred.resolve();
             }).error(function (error, status) {
                 delete self.user;
-                if (status != 200)
+                if (status !== 401)
                     deferred.reject("Ошибка сервера");
                 else
                     deferred.reject(error);

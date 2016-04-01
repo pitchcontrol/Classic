@@ -1,4 +1,5 @@
-(function () { "use strict"
+(function () {
+    "use strict";
     var loginModalCtrl = function ($scope, authService, $modalInstance) {
         $scope.model = {};
         $scope.ok = function () {

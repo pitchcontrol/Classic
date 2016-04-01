@@ -13,16 +13,38 @@ describe('Тест authService', function () {
         });
     });
     it("Передаем не верный логин пароль", function () {
-        httpBackend.whenPOST('/login').respond(401);
+        httpBackend.whenPOST('/login').respond(401, 'Неверный пароль');
         as.user = {name: "petya", token: "12334567"};
         var error = false;
-        as.login({login: 'petya', password: '12345'}).then(null, function () {
+        var errText ='';
+        as.login({login: 'petya', password: '12345'}).then(function(data){
+            error = false;
+        }, function (data) {
             error = true;
+            errText =data;
         });
         httpBackend.expectPOST('/login');
         httpBackend.flush();
         expect(as.user).toBeUndefined();
         expect(error).toBeTruthy();
+        expect(errText).toBe('Неверный пароль');
+    });
+    it("Передаем не верный логин пароль, падает сервер", function () {
+        httpBackend.whenPOST('/login').respond(500, 'Неверный пароль');
+        as.user = {name: "petya", token: "12334567"};
+        var error = false;
+        var errText ='';
+        as.login({login: 'petya', password: '12345'}).then(function(data){
+            error = false;
+        }, function (data) {
+            error = true;
+            errText =data;
+        });
+        httpBackend.expectPOST('/login');
+        httpBackend.flush();
+        expect(as.user).toBeUndefined();
+        expect(error).toBeTruthy();
+        expect(errText).toBe('Ошибка сервера');
     });
     it("Передаем верный логин пароль", function () {
         httpBackend.whenPOST('/login').respond({
