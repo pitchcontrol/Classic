@@ -41,7 +41,7 @@
             if (questions.length === 0)
                 return true;
             else
-                return $scope.model.answer == undefined && model.type != 'bool'
+                return $scope.model.answer != undefined || $scope.model.type == 'bool'
         };
         $scope.prev = function () {
             if (index > 0) {

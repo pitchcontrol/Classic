@@ -1,0 +1,16 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="modal-body">Язык програмирования
+    <ng-drop-down class="form-control" current-item="selectedLanguage" method="getLanguages"/>
+    <!--<select ng-model="selectedLanguage" class="form-control" ng-options="i as i.name for i in languages"></select>-->
+</div>
+
+<div class="modal-body">{{message}}
+    <select ng-model="selectedItem" class="form-control" ng-options="i as i.name for i in items|filter:selectedLanguage"></select>
+</div>
+<div class="modal-footer">
+    <button class="picture-btn" ng-click="ok()" ng-disabled="!selectedItem"><img src="./image/mark15.svg"
+                                                                                 class="picture-light"></button>
+    <button class="picture-btn" ng-click="cancel()"><img src="./image/negative1.svg" class="picture-light"></button>
+</div>

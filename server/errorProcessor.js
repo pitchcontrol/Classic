@@ -12,10 +12,10 @@ module.exports = function (err, req, res, next) {
         next();
     let status = err.status || 500;
 
-    if(status == 500){
-        logger.log('error', err.message);
+    if (status == 500) {
+        logger.log('error', err.message, {stack: err.stack});
         res.status(500).send('Ошибка');
-    }else{
+    } else {
         res.status(status).send(err.message);
     }
     //if (err instanceof Serialize.UniqueConstraintError) {

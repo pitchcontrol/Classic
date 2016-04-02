@@ -30,8 +30,24 @@
                     }
                 }
             }).result;
-        }
-        ;
+        };
+        this.selectGenerator = function (title, message, promise){
+            return $modal.open({
+                templateUrl: 'views/selectGeneratorModal.html',
+                controller: 'selectModalCtrl',
+                resolve: {
+                    data: function () {
+                        return {
+                            title: title,
+                            message: message
+                        };
+                    },
+                    promise: function () {
+                        return promise;
+                    }
+                }
+            }).result;
+        };
         this.select = function (title, message, promise) {
             return $modal.open({
                 templateUrl: 'views/selectModal.html',
@@ -48,8 +64,7 @@
                     }
                 }
             }).result;
-        }
-        ;
+        };
         this.wizard = function (title, message, promise) {
             return $modal.open({
                 templateUrl: 'views/wizardCtrl.html',

@@ -11,7 +11,7 @@
             //Так не работает viewBox становится viewbox.
             // element.attr('viewBox', '-' + diagramService.geometry.offsetX + ' -' + diagramService.geometry.offsetY + ' 1500 1500');
             var svg = document.getElementsByTagName("svg")[0];
-           // svg.setAttribute("viewBox", ' ' + diagramService.geometry.offsetX + ' ' + diagramService.geometry.offsetY + ' 1500 1500');
+            // svg.setAttribute("viewBox", ' ' + diagramService.geometry.offsetX + ' ' + diagramService.geometry.offsetY + ' 1500 1500');
             angular.element($window).bind('resize', function () {
                 diagramService.geometry.offsetX = element.offset().left;
                 diagramService.geometry.offsetY = element.offset().top + 20;
@@ -19,7 +19,7 @@
                     width: element.prop('offsetWidth'),
                     height: element.prop('offsetHeight')
                 };
-               // svg.setAttribute("viewBox", ' ' + diagramService.geometry.offsetX + ' ' + diagramService.geometry.offsetY + ' 1500 1500');
+                // svg.setAttribute("viewBox", ' ' + diagramService.geometry.offsetX + ' ' + diagramService.geometry.offsetY + ' 1500 1500');
             });
         }
 

@@ -191,11 +191,19 @@ var gulpSSH = new GulpSSH({
     ignoreErrors: false,
     sshConfig: config
 });
+//Выкладываем frontend
 gulp.task('copy:frontend', function () {
     return gulp
         .src(['./dist/**/*.*'])
         .pipe(gulpSSH.dest('/var/www/classic.ru/html/dist'));
 });
+//Выкладываем backend
+gulp.task('copy:backend', function () {
+    return gulp
+        .src(['./server/**/*.*', '!**/spec/**', '!config.json'])
+        .pipe(gulpSSH.dest('/var/www/classic.ru/html/server'));
+});
+
 
 gulp.task('build:main', ['build:template'], ()=> {
     var jsFilter = gulpFilter('**/*.js', {restore: true});  //отбираем только  javascript файлы

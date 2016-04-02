@@ -40,6 +40,9 @@
         this.addGenerator = function(obj){
             return $http({url: '/template/add', method: 'POST', data: obj});
         };
+        this.getLanguages = function() {
+            return $http.get('/Languages/list', {cache: true});
+        }
     };
     angular.module('app').service('templateService', ['$http', templateService]);
 })();

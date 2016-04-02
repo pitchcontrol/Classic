@@ -1,12 +1,12 @@
 /**
- * Created by Станислав on 9/2/2015.
+ * Created by РЎС‚Р°РЅРёСЃР»Р°РІ on 9/2/2015.
  */
 "use strict";
 /**
- * Перебор дочерней колекции
- * @param {Array} collection основная колелекция
- * @param {string} property название дочернего поля коллекции
- * @param {function} callback функция обратного вызова
+ * РџРµСЂРµР±РѕСЂ РґРѕС‡РµСЂРЅРµР№ РєРѕР»РµРєС†РёРё
+ * @param {Array} collection РѕСЃРЅРѕРІРЅР°СЏ РєРѕР»РµР»РµРєС†РёСЏ
+ * @param {string} property РЅР°Р·РІР°РЅРёРµ РґРѕС‡РµСЂРЅРµРіРѕ РїРѕР»СЏ РєРѕР»Р»РµРєС†РёРё
+ * @param {function} callback С„СѓРЅРєС†РёСЏ РѕР±СЂР°С‚РЅРѕРіРѕ РІС‹Р·РѕРІР°
  */
 module.exports.forEachMany = function (collection, property, callback) {
     collection.forEach((item)=> {
@@ -14,11 +14,11 @@ module.exports.forEachMany = function (collection, property, callback) {
     });
 };
 /**
- * Объеденить элементы массива
- * @param {Array} collection колелекция
- * @param {string} separator разделитель
- * @param {function} callback функция обратного вызова
- * @returns {string} объедененная строка
+ * РћР±СЉРµРґРµРЅРёС‚СЊ СЌР»РµРјРµРЅС‚С‹ РјР°СЃСЃРёРІР°
+ * @param {Array} collection РєРѕР»РµР»РµРєС†РёСЏ
+ * @param {string} separator СЂР°Р·РґРµР»РёС‚РµР»СЊ
+ * @param {function} callback С„СѓРЅРєС†РёСЏ РѕР±СЂР°С‚РЅРѕРіРѕ РІС‹Р·РѕРІР°
+ * @returns {string} РѕР±СЉРµРґРµРЅРµРЅРЅР°СЏ СЃС‚СЂРѕРєР°
  */
 module.exports.join = function (collection, separator, callback) {
     let result = '';

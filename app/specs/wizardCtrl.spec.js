@@ -59,4 +59,15 @@ describe('Тест wizardCtrl', function () {
         scope.next();
         expect(modalService.close).toHaveBeenCalled();
     });
+    it('Ответа нет - переход не возможен', function () {
+        expect(scope.hasNext()).toBeFalsy();
+    });
+    it('Ответ есть - переход возможен', function () {
+        scope.model.answer = 'My namespace';
+        expect(scope.hasNext()).toBeTruthy();
+    });
+    it('Вопрос булевский, ответа нет - переход возможен', function () {
+        scope.next();
+        expect(scope.hasNext()).toBeTruthy();
+    });
 });

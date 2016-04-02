@@ -6,6 +6,8 @@ var config = require('./config.json');
 module.exports.setup = function (app) {
     //Список шаблонов генератора
     app.get('/template/list', require('./routes/template').list);
+    //Получить список языков програмирования которые есть в шаблонах
+    app.get('/languages/list', require('./routes/language').list);
     //Получить вопросы для шаблона
     app.get('/template/questions/:id', require('./routes/template').questions);
     //Выполнить

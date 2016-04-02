@@ -70,8 +70,8 @@
         };
         //Генерировать
         $scope.generate = function () {
-            var modalInstance = modalService.select('Выбор', 'Выберите шаблон для генерации', templateService.getGenerateTemplateList);
-
+            //var modalInstance = modalService.select('Выбор', 'Выберите шаблон для генерации', templateService.getGenerateTemplateList);
+            var modalInstance = modalService.selectGenerator('Выбор', 'Выберите шаблон для генерации', templateService.getGenerateTemplateList);
             var id;
             //Переходим к вопросам
             modalInstance.then(function (template) {
