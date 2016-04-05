@@ -1,12 +1,14 @@
 /**
- * Created by snekrasov on 26.05.2015.
+ * Created by snekrasov on 05.04.2016.
  */
 "use strict";
-var ejs = require('ejs'),
-    fs = require('fs'),
-    async = require('async'),
-    Builder = require('../../../services/boilerplateBuilder'),
-    util = require('util');
+//Генерация Entity Framework контекста
+let Builder = require('../../../services/boilerplateBuilder');
+
+//Вопросы
+module.exports.quetions = [
+    {question: "Пространство имен", type: "string"}
+];
 //Получит тип NET
 function getType(field, answers) {
     var tp = 'string';
@@ -26,7 +28,7 @@ function getType(field, answers) {
         case 'Association':
             var name = answers[1] ? ('I' + field.associationObj.start.name) : field.associationObj.start.name;
             if (field.associationObj.multiplicity) {
-                tp = util.format('%s<%s>', answers[2], name);
+                tp = util.format('ICollection<%s>', name);
             } else {
                 tp = name;
             }
@@ -37,36 +39,25 @@ function getType(field, answers) {
     }
     return tp;
 }
-module.exports.quetions = [
-    {question: "Пространство имен", type: "string"},
-    {question: "Нужно ли выделять интерфейсы", type: "bool"},
-    {
-        question: "Как представлять колекций",
-        type: "enum",
-        choices: ["List", "ICollection", "IEnumerable"],
-        default: "ICollection"
-    }
-];
+
 module.exports.render = function (data, callback) {
     let namespace = data.answers[0];
-    let extractInterfaces = data.answers[1];
     let renderFiles = [];
 
+    //Проставляем всем сущностям полный тип и пространство имен
     data.entities.forEach((entity)=> {
         entity.namespace = namespace;
         entity.fields.forEach((f)=> {
             f.rawType = getType(f, data.answers);
         });
     });
-
     let csharpBuilder = Builder.getChsarpBuilder();
-    csharpBuilder.writeLineOpenBrace('namespace {namespace}');
-    //Если стоит выделить интерфейс - то нужно добавить наследлвание от него
-    if (data.answers[1])
-        csharpBuilder.writeLineOpenBrace('public class {name}: I{name}');
-    else {
-        csharpBuilder.writeLineOpenBrace('public class {name}');
-    }
+
+    //Строим базовый класс
+    csharpBuilder.writeLineOpenBrace('public class {name}');
+    //Нужно проверить отношения один ко многим. Если есть тогда нужно
+    //Создать в конструкторе инстансы колекций и сам конструктор
+
     csharpBuilder.getBuilder()
         .commentLine("/// <summary>")
         .commentLine("/// {description}")
@@ -74,23 +65,8 @@ module.exports.render = function (data, callback) {
         .writeLine("public {rawType} {name} {{ get; set; }}")
         .sheduleBuild("fields");
     csharpBuilder.closeAllBraces();
-    //var result = ejs.render(text, {item: cpItem, namespace: namespace});
     renderFiles = csharpBuilder.build(data.entities, true);
 
-    //renderFiles.push({name: entity.name + ".cs", text: builder.result});
-    //Если стоит условие выделять интерфейсы, добавляем интерфейсы
-    if (extractInterfaces) {
-        csharpBuilder = Builder.getChsarpBuilder();
-        csharpBuilder.setFileNameFormat("I{name}.cs")
-            .writeLineOpenBrace('namespace {namespace}')
-            .writeLineOpenBrace('public interface I{name}')
-            .getBuilder()
-            .writeLine("{rawType} {name} {{ get; set; }}")
-            .sheduleBuild("fields");
-        csharpBuilder.closeAllBraces();
-        csharpBuilder.build(data.entities, renderFiles);
-        //renderFiles.push({name: "I" + entity.name + ".cs", text: builder.result});
-    }
 
     //Если есть enum надо создать файлы
     if (data.enums && data.enums.length > 0) {
@@ -101,7 +77,7 @@ module.exports.render = function (data, callback) {
         csharpBuilder.writeLineOpenBrace('namespace {namespace}');
         csharpBuilder.writeLineOpenBrace('public enum {name}');
         let builder = csharpBuilder.getBuilder();
-        builder._builder.markEnd=',';
+        builder._builder.markEnd = ',';
         builder.writeLine("{0}");
         builder.sheduleBuild("values");
         csharpBuilder.closeAllBraces();
