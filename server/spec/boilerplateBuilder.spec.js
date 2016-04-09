@@ -255,4 +255,46 @@ describe("Тестирования Шаблоны сущностей", function 
         exp += "}";
         expect(javaScripBuilderBuilder.trimEnd()).toBe(exp);
     });
+    it("Проверяем условия вывода, не проходят", function () {
+        let fields = [{name: "name1", type: "string", isRequired: false}, {
+            name: "name2",
+            type: "integer",
+            description: "comment2"
+        }];
+        csharpBuilder.if('isRequired', true, "[Required]")
+            .writeLine("public {type} {name} {{get;set;}}")
+            .build(fields);
+        let exp = '';
+        exp += 'public string name1 {get;set;}\r\n';
+        exp += 'public integer name2 {get;set;}';
+        expect(csharpBuilder.trimEnd()).toBe(exp);
+    });
+    it("Проверяем условия вывода, проходят", function () {
+        let fields = [{name: "name1", type: "string", isRequired: true}, {
+            name: "name2",
+            type: "integer",
+            description: "comment2"
+        }];
+        csharpBuilder.if('isRequired', true, "[Required]")
+            .writeLine("public {type} {name} {{get;set;}}")
+            .build(fields);
+        let exp = '[Required]';
+        exp += 'public string name1 {get;set;}\r\n';
+        exp += 'public integer name2 {get;set;}';
+        expect(csharpBuilder.trimEnd()).toBe(exp);
+    });
+    it("Проверяем условия вывода, проходят, новая строка", function () {
+        let fields = [{name: "name1", type: "string", isRequired: true}, {
+            name: "name2",
+            type: "integer",
+            description: "comment2"
+        }];
+        csharpBuilder.ifLine('isRequired', true, "[Required]")
+            .writeLine("public {type} {name} {{get;set;}}")
+            .build(fields);
+        let exp = '[Required]\r\n';
+        exp += 'public string name1 {get;set;}\r\n';
+        exp += 'public integer name2 {get;set;}';
+        expect(csharpBuilder.trimEnd()).toBe(exp);
+    });
 });

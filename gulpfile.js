@@ -39,7 +39,7 @@ var src = ['./app/css/site.css',
     './app/factories/*.js'];
 
 //Все тесты backend
-gulp.task('jasmine', function () {
+gulp.task('jasmine-backend', function () {
     return gulp.src('server/spec/**/*.spec.js')
         //return gulp.src('server/spec/csharp/*.spec.js')
         .pipe(jasmine({includeStackTrace: true, verbose: true}));

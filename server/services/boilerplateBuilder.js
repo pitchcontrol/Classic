@@ -5,7 +5,7 @@
 let format = require('string-format');
 let lodash = require('lodash-node');
 
-const w = 0;
+const WRITE = 0;
 const wl = 1;
 const c = 2;
 const cl = 3;
@@ -24,7 +24,8 @@ const writeWithoutIndentL = 15;
 const writeLineOpenBrace = 16;
 const setBraces = 17;
 const closeBraceLine = 18;
-
+const IF = 19;
+const IF_LINE = 20;
 /**
  * Создает экземпляр FieldBuilder
  * @constructor
@@ -89,7 +90,7 @@ FieldBuilder.prototype.setIndent = function (indent) {
  * @return {FieldBuilder} Объект FieldBuilder.
  */
 FieldBuilder.prototype.write = function (format) {
-    this.getCurrentCase().push({type: w, format: format});
+    this.getCurrentCase().push({type: WRITE, format: format});
     return this;
 };
 /**
@@ -130,6 +131,28 @@ FieldBuilder.prototype.comment = function (format) {
  */
 FieldBuilder.prototype.commentLine = function (format) {
     this.getCurrentCase().push({type: cl, format: format});
+    return this;
+};
+/**
+ * Вставить форматированную строку если есть поле name == value
+ * @param {string} name имя поля в оббъекте
+ * @param {*} value значение поля name
+ * @param {string} format форматированная строка
+ * @return {FieldBuilder} Объект FieldBuilder.
+ */
+FieldBuilder.prototype.if = function (name, value, format) {
+    this.getCurrentCase().push({type: IF, name: name, value: value, format: format});
+    return this;
+};
+/**
+ * Вставить форматированную строку если есть поле name == value и перенос строки
+ * @param {string} name имя поля в оббъекте
+ * @param {*} value значение поля name
+ * @param {string} format форматированная строка
+ * @return {FieldBuilder} Объект FieldBuilder.
+ */
+FieldBuilder.prototype.ifLine = function (name, value, format) {
+    this.getCurrentCase().push({type: IF_LINE, name: name, value: value, format: format});
     return this;
 };
 /**
@@ -279,7 +302,7 @@ FieldBuilder.prototype.build = function (collection, render) {
                 case writeWithoutIndentL:
                     self._builder.result += format(itm.format, field) + last + '\r\n';
                     break;
-                case w:
+                case WRITE:
                     self._builder.result += indent + format(itm.format, field) + last;
                     break;
                 case wl:
@@ -288,6 +311,14 @@ FieldBuilder.prototype.build = function (collection, render) {
                 case c:
                     if (field.description)
                         this._builder.result += indent + format(itm.format, field);
+                    break;
+                case IF:
+                    if(field[itm.name] == itm.value)
+                        this._builder.result += indent + format(itm.format, field);
+                    break;
+                case IF_LINE:
+                    if(field[itm.name] == itm.value)
+                        this._builder.result += indent + format(itm.format, field)+ '\r\n';
                     break;
                 case openBrace:
                     self._builder.result += indent + self._localBuilder.openBrace;
@@ -312,7 +343,7 @@ FieldBuilder.prototype.build = function (collection, render) {
                     if (field.description)
                         self._builder.result += indent + format(itm.format, field) + '\r\n';
                     break;
-                //Открывается тэг нужно его отобразить и добавить в колецию эгов
+                //Открывается тэг нужно его отобразить и добавить в колецию тэгов
                 //добавить отступ
                 case tag:
                 case tagL:
