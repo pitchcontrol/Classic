@@ -1,11 +1,17 @@
 {
   "answers": [
-    "My.namespace.super"
+    "My.namespace.super",
+    "MyContext"
   ],
   "entities": [
     {
       "name": "myEntity",
       "fields": [
+        {
+          "name":"Id",
+          "isPrimaryKey":true,
+          "type": "integer"
+        },
         {
           "name": "name",
           "type": "string",

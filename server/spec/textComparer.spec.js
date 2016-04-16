@@ -41,7 +41,7 @@ describe("Тест textComparer", function () {
         module.text += "Линия";
         let comparer = new tc.textComparer({module: module, json: {}});
         comparer.compareFile(null, __dirname + '/csharp/enum1.txt', (error)=> {
-            expect(error).toBe("Строка: 0 имеет различие. 'namespace My.namespace.super' и 'Линия', длинны отличаются 28 и 5");
+            expect(error).toBe("Строка: 0 имеет различие. Ожидаемое: 'namespace My.namespace.super' и актуальное: 'Линия', длинны отличаются 28 и 5");
             done();
         })
     });
@@ -54,7 +54,7 @@ describe("Тест textComparer", function () {
         tmp += "Линия";
         let comparer = new tc.textComparer({module: module, json: {}});
         comparer.compareText(null, tmp, (error)=> {
-            expect(error).toBe("Строка: 1 имеет различие. 'ЛиНия' и 'Линия'");
+            expect(error).toBe("Строка: 1 имеет различие. Ожидаемое: 'ЛиНия' и актуальное: 'Линия'");
             done();
         })
     });

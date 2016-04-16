@@ -2,10 +2,13 @@ namespace My.namespace.super
 {
     public class myEntity
     {
+        [Key]
+        public int Id { get; set; }
         /// <summary>
         /// Имя
         /// </summary>
         public string name { get; set; }
+        [Required]
         public int Age { get; set; }
         public bool isAdmin { get; set; }
     }

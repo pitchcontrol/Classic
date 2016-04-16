@@ -1,0 +1,9 @@
+namespace My.namespace.super
+{
+    public class MyContext: DbContext
+    {
+        public DbSet<myEntity> myEntities { get; set; }
+        public DbSet<myEntity2> myEntity2s { get; set; }
+        public DbSet<myEntity3> myEntity3s { get; set; }
+    }
+}

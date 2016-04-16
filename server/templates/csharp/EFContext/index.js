@@ -4,10 +4,13 @@
 "use strict";
 //Генерация Entity Framework контекста
 let Builder = require('../../../services/boilerplateBuilder');
+let _ = require('lodash-node');
+let plur = require('plur');
 
 //Вопросы
 module.exports.quetions = [
-    {question: "Пространство имен", type: "string"}
+    {question: "Пространство имен", type: "string"},
+    {question: "Название контекста", type: "string"}
 ];
 //Получит тип NET
 function getType(field, answers) {
@@ -26,9 +29,9 @@ function getType(field, answers) {
             tp = field.enum;
             break;
         case 'Association':
-            var name = answers[1] ? ('I' + field.associationObj.start.name) : field.associationObj.start.name;
+            var name = field.associationObj.start.name;
             if (field.associationObj.multiplicity) {
-                tp = util.format('ICollection<%s>', name);
+                tp = `ICollection<${name}>`;
             } else {
                 tp = name;
             }
@@ -42,6 +45,7 @@ function getType(field, answers) {
 
 module.exports.render = function (data, callback) {
     let namespace = data.answers[0];
+    let context = data.answers[1];
     let renderFiles = [];
 
     //Проставляем всем сущностям полный тип и пространство имен
@@ -50,6 +54,25 @@ module.exports.render = function (data, callback) {
         entity.fields.forEach((f)=> {
             f.rawType = getType(f, data.answers);
         });
+        //Нужно добавить Ид если нет
+        entity.primaryKey = _.find(entity.fields, {'isPrimaryKey': true});
+        if (entity.primaryKey === undefined) {
+            entity.primaryKey = {name: 'Id', isPrimaryKey: true, type: 'integer', rawType: 'int'};
+            entity.fields.unshift(entity.primaryKey);
+        }
+    });
+    //Ид должны быть уже проставленны
+    data.entities.forEach((entity)=> {
+        //Для ассоциаций нужно добавлять внешний ид
+        let index = _.findIndex(entity.fields, {type: 'Association'});
+        if (index != -1) {
+            let startEntity = _.find(data.entities, {name: entity.fields[index].associationObj.start.name});
+            entity.fields.splice(index, 0, {
+                name: entity.fields[index].associationObj.start.name + 'Id',
+                type: entity.primaryKey.type,
+                rawType: entity.primaryKey.rawType
+            });
+        }
     });
     let csharpBuilder = Builder.getChsarpBuilder();
 
@@ -61,6 +84,8 @@ module.exports.render = function (data, callback) {
     //Создать в конструкторе инстансы колекций и сам конструктор
 
     csharpBuilder.getBuilder()
+        .ifLine('isPrimaryKey', true, '[Key]')
+        .ifLine('isRequired', true, '[Required]')
         .commentLine("/// <summary>")
         .commentLine("/// {description}")
         .commentLine("/// </summary>")
@@ -86,5 +111,21 @@ module.exports.render = function (data, callback) {
         csharpBuilder.build(data.enums, renderFiles);
         //renderFiles.push({name: e.name + ".cs", text: builder.result});
     }
+    //Формируем клас контекста
+    //Для сущностей нужно задать множественное число
+    //pluralize.addPluralRule(/[0-9]$/i, '$s');
+    data.entities.map((item)=>{
+       item.pluralName = plur(item.name);
+    });
+
+    csharpBuilder = Builder.getChsarpBuilder();
+    csharpBuilder.writeLineOpenBrace('namespace {namespace}');
+
+    csharpBuilder.writeLineOpenBrace('public class {name}: DbContext');
+    csharpBuilder.getBuilder()
+        .writeLine("public DbSet<{name}> {pluralName} {{ get; set; }}")
+        .sheduleBuild("entities");
+    csharpBuilder.closeAllBraces();
+    csharpBuilder.build([{name: context, entities: data.entities, namespace: namespace}], renderFiles);
     callback(null, renderFiles);
 };

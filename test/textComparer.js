@@ -21,9 +21,9 @@ function compare(expect, actual) {
     for (let i = 0; i < act.length; i++) {
         if (exp[i] !== act[i]) {
             if (exp[i].length == act[i].length)
-                return format("Строка: {0} имеет различие. '{1}' и '{2}'", i, exp[i], act[i]);
+                return format("Строка: {0} имеет различие. Ожидаемое: '{1}' и актуальное: '{2}'", i, exp[i], act[i]);
             else
-                return format("Строка: {0} имеет различие. '{1}' и '{2}', длинны отличаются {3} и {4}", i, exp[i], act[i], exp[i].length, act[i].length);
+                return format("Строка: {0} имеет различие. Ожидаемое: '{1}' и актуальное: '{2}', длинны отличаются {3} и {4}", i, exp[i], act[i], exp[i].length, act[i].length);
         }
     }
     return '';
