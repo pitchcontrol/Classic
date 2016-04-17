@@ -11,12 +11,13 @@
         }
 
         return {
-            restrict: 'E',template: '<select ng-model="currentItem" ng-class="{{class}}" ng-options="i as i.name for i in items"></select>',
+            restrict: 'E',
+            template: '<select ng-model="currentItem" ng-class="itemClass" ng-options="i as i.name for i in items"></select>',
             replace: true,
             link: link,
             scope: {
-                "class": '@',
-                currentItem:'@',
+                itemClass: '@',
+                currentItem:'=',
                 method: '@'
             }
         };
