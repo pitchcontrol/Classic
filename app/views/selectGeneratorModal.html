@@ -2,12 +2,12 @@
     <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body">Язык програмирования
-    <ng-drop-down class="form-control" current-item="selectedLanguage" method="getLanguages"/>
+    <ng-drop-down item-class="form-control" current-item="selectedLanguage" method="getLanguages"/>
     <!--<select ng-model="selectedLanguage" class="form-control" ng-options="i as i.name for i in languages"></select>-->
 </div>
 
 <div class="modal-body">{{message}}
-    <select ng-model="selectedItem" class="form-control" ng-options="i as i.name for i in items|filter:selectedLanguage"></select>
+    <select ng-model="selectedItem" class="form-control" ng-options="i as i.name for i in items|languageFilter:selectedLanguage"></select>
 </div>
 <div class="modal-footer">
     <button class="picture-btn" ng-click="ok()" ng-disabled="!selectedItem"><img src="./image/mark15.svg"

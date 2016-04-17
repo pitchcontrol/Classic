@@ -6,6 +6,7 @@ var ejs = require('ejs'),
     fs = require('fs'),
     async = require('async'),
     Builder = require('../../../services/boilerplateBuilder'),
+    enumBuilder = require('../Utils/EnumBuilder'),
     util = require('util');
 //Получит тип NET
 function getType(field, answers) {
@@ -93,20 +94,6 @@ module.exports.render = function (data, callback) {
     }
 
     //Если есть enum надо создать файлы
-    if (data.enums && data.enums.length > 0) {
-        data.enums.forEach((enu)=> {
-            enu.namespace = namespace;
-        });
-        csharpBuilder = Builder.getChsarpBuilder();
-        csharpBuilder.writeLineOpenBrace('namespace {namespace}');
-        csharpBuilder.writeLineOpenBrace('public enum {name}');
-        let builder = csharpBuilder.getBuilder();
-        builder._builder.markEnd=',';
-        builder.writeLine("{0}");
-        builder.sheduleBuild("values");
-        csharpBuilder.closeAllBraces();
-        csharpBuilder.build(data.enums, renderFiles);
-        //renderFiles.push({name: e.name + ".cs", text: builder.result});
-    }
+    enumBuilder.render(data, namespace, renderFiles);
     callback(null, renderFiles);
 };

@@ -6,6 +6,7 @@
 let Builder = require('../../../services/boilerplateBuilder');
 let _ = require('lodash-node');
 let plur = require('plur');
+let enumBuilder = require('../Utils/EnumBuilder');
 
 //Вопросы
 module.exports.quetions = [
@@ -96,24 +97,10 @@ module.exports.render = function (data, callback) {
 
 
     //Если есть enum надо создать файлы
-    if (data.enums && data.enums.length > 0) {
-        data.enums.forEach((enu)=> {
-            enu.namespace = namespace;
-        });
-        csharpBuilder = Builder.getChsarpBuilder();
-        csharpBuilder.writeLineOpenBrace('namespace {namespace}');
-        csharpBuilder.writeLineOpenBrace('public enum {name}');
-        let builder = csharpBuilder.getBuilder();
-        builder._builder.markEnd = ',';
-        builder.writeLine("{0}");
-        builder.sheduleBuild("values");
-        csharpBuilder.closeAllBraces();
-        csharpBuilder.build(data.enums, renderFiles);
-        //renderFiles.push({name: e.name + ".cs", text: builder.result});
-    }
+    enumBuilder.render(data, namespace, renderFiles);
+
     //Формируем клас контекста
     //Для сущностей нужно задать множественное число
-    //pluralize.addPluralRule(/[0-9]$/i, '$s');
     data.entities.map((item)=>{
        item.pluralName = plur(item.name);
     });

@@ -175,7 +175,7 @@ gulp.task('build:copy image', ()=> {
     return gulp.src('./app/image/*.svg').pipe(gulp.dest('dist/image'))
 });
 
-gulp.task('build', function (callback) {
+gulp.task('build:frontend', function (callback) {
     runSequence('build:clean', ['builds:fonts', 'build:main', 'build:copy image', 'build:vendor'], 'build:inject-direct',
         callback);
 });
