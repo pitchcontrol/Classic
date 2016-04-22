@@ -68,6 +68,8 @@
                 diagramService.addEntity(entity);
             });
         };
+        //Добавить перечисление
+        $scope.addEnum = modalService.addEnum;
         //Генерировать
         $scope.generate = function () {
             //var modalInstance = modalService.select('Выбор', 'Выберите шаблон для генерации', templateService.getGenerateTemplateList);
