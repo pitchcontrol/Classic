@@ -18,6 +18,14 @@ describe('Тест Field', function () {
         expect(field.isRequired).toBeTruthy();
         expect(field.entity.diagramService.associations).toBeDefined();
     });
+    it('Пустое поле имя, ошибка', function () {
+        entity.fields.push(new Field(entity));
+        var ent = new Field(entity);
+        ent.name = "";
+        entity.fields.push(ent);
+        expect(entity.error).toBe('Имя обязательно');
+        expect(ent.errorField).toBe('name');
+    });
     it("Дублируем одинаковые поля", function () {
         entity.fields.push(new Field(entity));
         var ent = new Field(entity);
@@ -30,6 +38,7 @@ describe('Тест Field', function () {
         ent.name = 'new';
         expect(entity.fields[1].name).toBe('field1');
         expect(entity.error).toBe('new, уже есть');
+        expect(ent.errorField).toBe('name');
     });
     it("Успешно меняем поля", function () {
         entity.fields.push(new Field(entity));
@@ -43,16 +52,19 @@ describe('Тест Field', function () {
         ent.name = 'field2';
         expect(entity.fields[1].name).toBe('field2');
         expect(entity.error).toBeFalsy();
+        expect(ent.errorField).toBeUndefined();
     });
     it("Меняем тип на ассоциацию - должны получить ошибку", function () {
         field.type = "Association";
         expect(entity.error).toBe('выбран тип ассоциация но связь не заданна.');
+        expect(field.errorField).toBe('association');
     });
     it("Выставляем ассоцию - не должно быть ошибку", function () {
         field.type = "Association";
         //Меняем тип на другой
         field.type = "string";
         expect(entity.error).toBeFalsy();
+        expect(field.errorField).toBeUndefined();
     });
     it("Выставляем связь", function () {
         field.type = "Association";
@@ -124,11 +136,13 @@ describe('Тест Field', function () {
     it("Тип enum должна быть ошибка", function () {
         field.type = 'enum';
         expect(entity.error).toBe('выбран тип enum но значение незаданно');
+        expect(field.errorField).toBe('enum');
     });
     it("Тип enum и задаем его, ок", function () {
         field.type = 'enum';
         expect(entity.error).toBe('выбран тип enum но значение незаданно');
         field.enum = {};
         expect(entity.error).toBeFalsy();
+        expect(field.errorField).toBeUndefined();
     });
 });

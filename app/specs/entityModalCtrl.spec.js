@@ -81,6 +81,57 @@ describe('Тест entityModalCtrl', function () {
         //Должно поменятся имя
         expect(diagramService.entities[0].name).toBe('my2');
     });
+    it("Редактируем сущность, проверяем создание копий", function () {
+        //beforeEach уже создал одну сущность
+        //Открываем на редактирование сущность
+        var entity = diagramService.addEntity();
+        entity.addField();
+        entity.addField();
+        CreateInstance(entity);
+        scope.ok();
+        expect(entity.fields.every(function (item) {
+            return item.savedObject !== undefined;
+        })).toBeTruthy();
+    });
+    it("Редактируем сущность, проверяем отмену изменений", function () {
+        //beforeEach уже создал одну сущность
+        //Открываем на редактирование сущность
+        var entity = diagramService.addEntity();
+        var field = entity.addField();
+        field.name = "my name";
+        field.type = "integer";
+        entity.addField();
+        CreateInstance(entity);
+        field.name = "my super name";
+        field.type = "string";
+        expect(field.name).toBe('my super name');
+        expect(field.type).toBe('string');
+        scope.cancel();
+        expect(field.name).toBe('my name');
+        expect(field.type).toBe('integer');
+    });
+    it("Создаем сущность, проверяем отмену изменений", function () {
+        CreateInstance();
+        scope.cancel();
+    });
+    it("Создаем сущность, добавляем поле после сохранения флаг добавлен снимается", function () {
+        var entity = diagramService.addEntity();
+        var field = entity.addField();
+        expect(field.added).toBeTruthy();
+
+        CreateInstance(entity);
+        scope.ok();
+        expect(field.added).toBeUndefined();
+    });
+    it("Редактируем сущность, добавляем поле, отменяем, поле удаляется", function () {
+        var entity = diagramService.addEntity();
+        var field = entity.addField();
+        expect(field.added).toBeTruthy();
+        expect(entity.fields.length).toBe(1);
+        CreateInstance(entity);
+        scope.cancel();
+        expect(entity.fields.length).toBe(0);
+    });
     it("Устанавливаем тип Association, не указываем связь", function () {
         var f = scope.model.addField();
         f.type = "Association";

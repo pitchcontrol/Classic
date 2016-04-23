@@ -50,11 +50,29 @@
             if ($scope.model.error) {
                 return;
             }
+            //У всех полей сбрасываем флаг добавлен
+            if ($scope.model.fields)
+                $scope.model.fields.forEach(function (item) {
+                    delete item.added;
+                });
             $modalInstance.close();
         };
 
         $scope.cancel = function () {
             $scope.model.error = null;
+            //Теперь нужно отменить изменения
+            if ($scope.model.fields)
+                $scope.model.fields.forEach(function (item) {
+                    item.reject();
+                });
+            //Удалить только что добавленные поля
+            $scope.model.fields.filter(function (item) {
+                return item.added == true;
+            }).forEach(function (item) {
+                $scope.model.currentField = item;
+                $scope.model.removeField();
+            });
+
             $modalInstance.dismiss('cancel');
         };
         ////Добавляем поле
@@ -73,6 +91,11 @@
         ////    $scope.model = item;
         ////}
         $scope.model = item;
+        //Если мы редактируем то нужно подготовить бэкап
+        if ($scope.model.fields)
+            $scope.model.fields.forEach(function (item) {
+                item.createCopy();
+            });
     };
     angular.module('app').controller('entityModalCtrl', ['$scope', '$modalInstance', '$modal', 'diagramService', 'item', entityModalCtrl]);
 })

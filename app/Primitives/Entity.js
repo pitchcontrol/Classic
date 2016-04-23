@@ -26,8 +26,8 @@ function Entity(diagramService) {
     });
     this.addField = function (field) {
         var fl = new Field(this);
-
-
+        //Добавляем флаг для возможности отката
+        fl.added = true;
         if (field) {
             fl.enum = field.enum;
             fl.name = field.name;

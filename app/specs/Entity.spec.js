@@ -28,7 +28,7 @@ describe('Тест Entity', function () {
         var field = entity.addField();
         expect(field instanceof Field).toBeTruthy();
         expect(field.entity).toBe(entity);
-
+        expect(field.added).toBeTruthy();
     });
     it("Создаем поле, на основе другого", function () {
         var f = {

@@ -11,7 +11,7 @@ describe('Тест mainCtrl', function () {
             ts = jasmine.createSpyObj('templateService', ['saveProject', 'getQuestionList', 'generate']);
             scope = $rootScope.$new();
             modal = jasmine.createSpyObj('modal', ['open']);
-            modalService = jasmine.createSpyObj('modalService', ['select', 'wizard', 'confirm']);
+            modalService = jasmine.createSpyObj('modalService', ['select', 'selectGenerator', 'wizard', 'confirm']);
             controller = $controller('mainCtrl', {
                 $scope: scope,
                 $modal: modal,
@@ -70,7 +70,7 @@ describe('Тест mainCtrl', function () {
     });
     it("Нажимаем генерировать, шаблон выбран. Но пользователь не ответил на вопросы", function () {
         var template = {name: 'fake'};
-        modalService.select.and.returnValue(q.when(template));
+        modalService.selectGenerator.and.returnValue(q.when(template));
         modalService.wizard.and.returnValue(q.reject());
         scope.generate();
         scope.$digest();

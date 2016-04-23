@@ -8,6 +8,8 @@ function Field(entity) {
     //Тип поля
     var _type = "string";
     var _enum;
+    //Поле нужно для подсветки
+    this.errorField = undefined;
     //Обязательность
     this.isRequired = true;
     //Ссылка ассоциация на другую сущность
@@ -17,17 +19,33 @@ function Field(entity) {
     var _reference = null;
     //Будет подсвечивать в случаи выбора
     this.selected = false;
+    //Колекция ошибок для поля
+    this.errors = {
+        name: {},
+        enum: {},
+        association: {}
+    };
     //Будем проверять тип, если заданна связь валидировать ее и создавть
     var setAssociation = function () {
-        entity.error = _type == "Association" && !this.association ? 'выбран тип ассоциация но связь не заданна.' : null;
+        if (_type == "Association" && !this.association) {
+            entity.error = 'выбран тип ассоциация но связь не заданна.';
+            this.errorField = 'association';
+        } else {
+            entity.error = null;
+            this.errorField = undefined;
+        }
+        //entity.error = _type == "Association" && !this.association ? 'выбран тип ассоциация но связь не заданна.' : null;
     };
     var checkEnum = function () {
         if (_type == 'enum') {
             if (!_enum) {
                 entity.error = 'выбран тип enum но значение незаданно';
+                this.errorField = 'enum';
             }
-            else
+            else {
                 entity.error = null;
+                this.errorField = undefined;
+            }
         }
     };
 
@@ -53,12 +71,22 @@ function Field(entity) {
             return _name;
         },
         set: function (value) {
-            if (_.findWhere(entity.fields, {name: value}) == undefined) {
-                _name = value;
-                entity.error = null;
+            if (!value) {
+                entity.error = 'Имя обязательно';
+                this.errorField = 'name';
             } else {
-                entity.error = value + ', уже есть';
+                if (_.findWhere(entity.fields, {name: value}) == undefined) {
+                    _name = value;
+                    entity.error = null;
+                    this.errorField = undefined;
+                } else {
+                    entity.error = value + ', уже есть';
+                    this.errorField = 'name';
+
+                }
             }
+
+
         }
     });
     Object.defineProperty(this, 'type', {
@@ -152,9 +180,30 @@ function Field(entity) {
                 start: {name: this.associationObj.start.name}
             };
         }
-        if (this.enum){
+        if (this.enum) {
             json.enum = this.enum.name;
-        };
+        }
+        ;
         return json;
     };
 }
+//Создать копию основных полей для возможности отмены
+Field.prototype.createCopy = function () {
+    this.savedObject = {};
+    this.savedObject.name = this.name;
+    this.savedObject.type = this.type;
+    this.savedObject.enum = this.enum;
+    this.savedObject.association = this.association;
+    this.savedObject.isRequired = this.isRequired;
+    this.savedObject.isPrimaryKey = this.isPrimaryKey;
+};
+Field.prototype.reject = function () {
+    if (!this.savedObject)
+        return;
+    this.name = this.savedObject.name;
+    this.type = this.savedObject.type;
+    this.enum = this.savedObject.enum;
+    this.association = this.savedObject.association;
+    this.isRequired = this.savedObject.isRequired;
+    this.isPrimaryKey = this.savedObject.isPrimaryKey;
+};
