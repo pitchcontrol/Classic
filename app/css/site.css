@@ -146,3 +146,7 @@ div.modal-header, div.modal-footer {
     font-family: 'Press Start 2P', cursive;
     color: #1a6958;
 }
+
+a {
+    cursor: pointer;
+}

@@ -27,6 +27,10 @@ describe('Тест Field', function () {
         entity.fields.push(ent);
         expect(entity.error).toBe('Имя обязательно');
         expect(ent.errors.name.required).toBeDefined();
+        //Вводим не пустое ощибки нет
+        ent.name = "Name";
+        expect(entity.error).toBeUndefined();
+        expect(ent.errors.name.required).toBeUndefined();
     });
     it("Дублируем одинаковые поля", function () {
         var ent = new Field(entity);

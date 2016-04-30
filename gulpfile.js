@@ -173,7 +173,7 @@ gulp.task('build:template', function () {
 });
 //Копируем иконки
 gulp.task('build:copy image', ()=> {
-    return gulp.src('./app/image/*.svg').pipe(gulp.dest('dist/image'))
+    return gulp.src(['./app/image/*.svg', './app/image/*.ico']).pipe(gulp.dest('dist/image'))
 });
 
 gulp.task('build:frontend', function (callback) {

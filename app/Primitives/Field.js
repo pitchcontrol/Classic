@@ -69,7 +69,9 @@ function Field(entity) {
         set: function (value) {
             if (!value) {
                 this.errors.name.required = 'Имя обязательно';
+                _name = value;
             } else {
+                delete this.errors.name.required;
                 if (_.findWhere(entity.fields, {name: value}) == undefined) {
                     _name = value;
                     delete this.errors.name.dublicateName;
