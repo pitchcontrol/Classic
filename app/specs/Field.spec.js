@@ -4,12 +4,14 @@ describe('Тест Field', function () {
         module('app');
     });
     beforeEach(function () {
-        entity = {
-            name: "myEntity1",
-            fields: [],
-            diagramService: {associations: []}
-        };
+        entity = new Entity({associations: []});
+        //    name: "myEntity1",
+        //    fields: [],
+        //    diagramService: {associations: []}
+        //};
+        entity.name = "myEntity1";
         field = new Field(entity);
+        entity.fields.push(field);
         entity2 = {name: 'myEntity2', outerAssociation: []};
     });
     it("Инициализация", function () {
@@ -24,10 +26,9 @@ describe('Тест Field', function () {
         ent.name = "";
         entity.fields.push(ent);
         expect(entity.error).toBe('Имя обязательно');
-        expect(ent.errorField).toBe('name');
+        expect(ent.errors.name.required).toBeDefined();
     });
     it("Дублируем одинаковые поля", function () {
-        entity.fields.push(new Field(entity));
         var ent = new Field(entity);
         ent.name = "field1";
         entity.fields.push(ent);
@@ -38,10 +39,9 @@ describe('Тест Field', function () {
         ent.name = 'new';
         expect(entity.fields[1].name).toBe('field1');
         expect(entity.error).toBe('new, уже есть');
-        expect(ent.errorField).toBe('name');
+        expect(ent.errors.name.dublicateName).toBeDefined();
     });
     it("Успешно меняем поля", function () {
-        entity.fields.push(new Field(entity));
         var ent = new Field(entity);
         ent.name = "field1";
         entity.fields.push(ent);
@@ -57,7 +57,7 @@ describe('Тест Field', function () {
     it("Меняем тип на ассоциацию - должны получить ошибку", function () {
         field.type = "Association";
         expect(entity.error).toBe('выбран тип ассоциация но связь не заданна.');
-        expect(field.errorField).toBe('association');
+        expect(field.errors.association.notSet).toBeDefined();
     });
     it("Выставляем ассоцию - не должно быть ошибку", function () {
         field.type = "Association";
@@ -136,13 +136,13 @@ describe('Тест Field', function () {
     it("Тип enum должна быть ошибка", function () {
         field.type = 'enum';
         expect(entity.error).toBe('выбран тип enum но значение незаданно');
-        expect(field.errorField).toBe('enum');
+        expect(field.errors.enum.notSet).toBeDefined();
     });
     it("Тип enum и задаем его, ок", function () {
         field.type = 'enum';
         expect(entity.error).toBe('выбран тип enum но значение незаданно');
         field.enum = {};
         expect(entity.error).toBeFalsy();
-        expect(field.errorField).toBeUndefined();
+        expect(field.errors.enum.notSet).toBeUndefined();
     });
 });

@@ -12,6 +12,10 @@ function Entity(diagramService) {
     this.fields = [];
     //Текущее выбранное поле
     this.currentField = null;
+    //Колекция ошибок для поля
+    this.errors = {
+        name: {}
+    };
     Object.defineProperty(this, 'name', {
         get: function () {
             return _name;
@@ -19,9 +23,33 @@ function Entity(diagramService) {
         set: function (value) {
             if (_.findWhere(diagramService.entities, {name: value}) == undefined) {
                 _name = value;
+                delete this.errors.name.dublicateName;
             } else {
-                this.error = value + ', уже есть';
+                this.errors.name.dublicateName = value + ', уже есть';
             }
+        }
+    });
+    //Бегает по полям и ишет ощибки
+    Object.defineProperty(this, 'error', {
+        get: function () {
+            var error = undefined;
+            _.forEach(this.errors, function (k, v) {
+                _.forEach(k, function (sv, sk) {
+                    if (sv)
+                        error = sv;
+                });
+            });
+            if (error !== undefined)
+                return error;
+            _.forEach(this.fields, function (value) {
+                _.forEach(value.errors, function (k, v) {
+                    _.forEach(k, function (sv, sk) {
+                        if (sv)
+                            error = sv;
+                    });
+                });
+            });
+            return error;
         }
     });
     this.addField = function (field) {
@@ -36,10 +64,10 @@ function Entity(diagramService) {
             //планирование
             if (fl.type == 'Association') {
                 var fEntity = diagramService.findEntity(field.associationObj.start.name);
-                this.diagramService.shedule.push({field: fl, entity: fEntity} )
+                this.diagramService.shedule.push({field: fl, entity: fEntity})
             }
             //Если тут enum то надо найти enum и выставить ссылку
-            if(fl.type == 'enum'){
+            if (fl.type == 'enum') {
                 fl.enum = diagramService.enums.findByName(fl.enum);
             }
             //Если мы грузим то id будет задан
@@ -57,7 +85,8 @@ function Entity(diagramService) {
         if (this.currentField) {
             if (this.currentField.association) {
                 diagramService.associations.remove(this.currentField.associationObj);
-            };
+            }
+            ;
             this.fields.remove(this.currentField);
             this.currentField = null;
         }

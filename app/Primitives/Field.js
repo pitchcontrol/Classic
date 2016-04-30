@@ -28,23 +28,19 @@ function Field(entity) {
     //Будем проверять тип, если заданна связь валидировать ее и создавть
     var setAssociation = function () {
         if (_type == "Association" && !this.association) {
-            entity.error = 'выбран тип ассоциация но связь не заданна.';
-            this.errorField = 'association';
+            this.errors.association.notSet = 'выбран тип ассоциация но связь не заданна.';
         } else {
-            entity.error = null;
-            this.errorField = undefined;
+            delete  this.errors.association.notSet;
         }
         //entity.error = _type == "Association" && !this.association ? 'выбран тип ассоциация но связь не заданна.' : null;
     };
     var checkEnum = function () {
         if (_type == 'enum') {
             if (!_enum) {
-                entity.error = 'выбран тип enum но значение незаданно';
-                this.errorField = 'enum';
+                this.errors.enum.notSet = 'выбран тип enum но значение незаданно';
             }
             else {
-                entity.error = null;
-                this.errorField = undefined;
+                delete this.errors.enum.notSet
             }
         }
     };
@@ -72,17 +68,13 @@ function Field(entity) {
         },
         set: function (value) {
             if (!value) {
-                entity.error = 'Имя обязательно';
-                this.errorField = 'name';
+                this.errors.name.required = 'Имя обязательно';
             } else {
                 if (_.findWhere(entity.fields, {name: value}) == undefined) {
                     _name = value;
-                    entity.error = null;
-                    this.errorField = undefined;
+                    delete this.errors.name.dublicateName;
                 } else {
-                    entity.error = value + ', уже есть';
-                    this.errorField = 'name';
-
+                    this.errors.name.dublicateName = value + ', уже есть';
                 }
             }
 

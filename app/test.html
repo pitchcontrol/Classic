@@ -3,220 +3,37 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.js">
+    </script>
 </head>
-<style>
-    #canvas {
-        position: relative;
-    }
-
-    #myDiv {
-        position: relative;
-        top: 0;
-        left: 0px;
-        width: 200px;
-        height: 200px;
-        background-color: #000088;
-    }
-
-    .menu {
-        list-style: none;
-        padding: 0;
-        border: 1px solid rgba(0, 0, 0, .2);
-    }
-
-    .menu li {
-        overflow: hidden;
-        padding: 6px 10px;
-        font-size: 20px;
-    }
-
-    .menu li:first-child {
-        font-weight: bold;
-        padding: 15px 0 10px 15px;
-        margin-bottom: 10px;
-        border-bottom: 1px solid rgba(0, 0, 0, .2);
-        font-size: 24px;
-        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, .2);
-    }
-
-    .menu li:first-child:before {
-        content: "";
-        margin-right: 10px;
-    }
-
-    .menu span {
-        float: left;
-        width: 75%;
-        color: #7C7D7F;
-    }
-
-    .menu em {
-        float: right;
-        color: #9c836e;
-        font-weight: bold;
-    }
-</style>
 <body>
 <h1 id="elem">Привет от скрипта!</h1>
 </body>
-<!--<svg width="1000" height="1000" viewbox="-100 -100 1000 1000">-->
-<!--<polyline points="0,0 50,0 305,254 250,100 300,150" fill="none" stroke-width="1" stroke="rgb(0,0,0)"/>-->
-<!--<polyline points="0,0 305,393 305,254 937,254 937,234" fill="none" stroke-width="1" stroke="rgb(0,0,0)" />&lt;!&ndash; end ngRepeat: i in diagram.associations &ndash;&gt;-->
-<!--</svg>-->
+
 <div id="canvas">
     <div id="myDiv"></div>
 </div>
-<ul class="menu">
-    <li>Салаты</li>
-    <li><span>"Греческий"</span><em>320</em></li>
-    <li><span>"Цезарь"</span><em>430</em></li>
-    <li><span>"Теплый салат с куриной печенью"</span><em>300</em></li>
-    <li><span>"Оливье"</span><em>350</em></li>
-    <li><span>"Морской"</span><em>450</em></li>
-</ul>
-<!--<script src="services/FileSaver.js"></script>-->
+
 <script>
-    "use strict";
-
-    //    var blob = new Blob(['fsdf']);
-    //    saveAs(blob, 'code.txt');
-    //     var map = new WeakMap();
-    //    map.set(1,0);
-    class Vehicle {
-        constructor(topSpeed) {
-            this.topSpeed = topSpeed;
-        }
-
-        printTopSpeed() {
-            console.log('Top speed:' + this.topSpeed + ' km/h');
-        }
-    }
-
-    class Bicycle extends Vehicle {
-        constructor(topSpeed, wheelSize, bicycleType, producedBy) {
-            super(topSpeed);
-            this.wheelSize = wheelSize;
-            this.bicycleType = bicycleType;
-            this.producedBy = producedBy;
-        }
-
-        static wheelCount() {
-            return 2;
-        }
-
-        get bikeInfo() {
-            return this.producedBy + ' ' + this.bicycleType + ' bike';
-        }
-
-        printBicycleType() {
-            console.log('Type:' + this.bicycleType + ' bike');
-        }
-    }
-
-    var myBike = new Bicycle(40, 622, 'road', 'Trek');
-
-    myBike.printTopSpeed();
-    myBike.printBicycleType();
-
-    console.log('Bicycles have ' + Bicycle.wheelCount() + ' wheels');
-
-    console.log(myBike.bikeInfo);
-
-    class Private {
-        constructor() {
-            this._private = 0;
-        }
-
-        get privateVariable() {
-            return this._private;
-        }
-
-        set privateVariable(value) {
-            return this._private = value;
-        }
-    }
-    var pri1 = new Private();
-    pri1.privateVariable = 0;
-    var pri2 = new Private();
-    pri2.privateVariable = 1;
-    var pri3 = new Private();
-    pri3.privateVariable = 2;
-    console.log(pri1._private);
-    console.log(pri1.privateVariable);
-    console.log(pri2.privateVariable);
-    console.log(pri3.privateVariable);
-
-    class Item {
-        constructor(collection) {
-            this.collection = collection;
-        }
-
-        get name() {
-            return this._name;
-        }
-
-        set name(value) {
-            if (!this.collection.some(function (i) {
-                        return i.name == value;
-                    })) {
-                this._private = value;
-                this.error = null;
-            }
-            else {
-                this.error = 'Уже есть: ' + value;
-            }
-        }
-    }
-    var item = new Item([{name: 'name1'}, {name: 'name2'}, {name: 'name2'}]);
-    item.name = 'name1';
-    console.log(item.error);
-    item.name = 'name2';
-    console.log(item.error);
-    item.name = 'name3';
-    console.log(item.error);
-    class idItem extends Item {
-
-        constructor(collection, id) {
-            super(collection);
-            this.id = id;
-        }
-    }
-    item = new idItem([{name: 'name1'}, {name: 'name2'}, {name: 'name2'}], 1);
-    item.name = 'name1';
-    console.log(item.error);
-    item.name = 'name2';
-    console.log(item.error);
-    item.name = 'name3';
-    console.log(item.error);
-
-    function F(a, b) {
-        this.a = a;
-        this.b = b;
-    }
-
-    function FE(a, b, c) {
-        F.apply(this, [a, b]);
-        this.c = c;
-    }
-    FE.prototype = Object.create(F.prototype);
-    //FE.prototype.constructor = FE;
-    var fe = new FE('a', 'b', 'c');
-
-    console.log(fe.a);
-    console.log(fe.b);
-    console.log(fe.c);
-
-    var myEvent = new CustomEvent("userLogin", {
-        detail: {
-            username: "davidwalsh"
-        }
+    var fields = [{
+        name: {notSet: 'Error'},
+        enum: {},
+        association: {}
+    }, {
+        name: {},
+        enum: {},
+        association: {}
+    }];
+    var error = undefined;
+    var field = _.forEach(fields, function (value) {
+        _.forEach(value, function (k, v) {
+            _.forEach(k, function (sv, sk) {
+                if (sv)
+                    error = sv;
+            });
+        });
+        console.log(error);
     });
-   var myElement = {};
-
-    myElement.addEventListener("userLogin", function(e) {
-        console.info("Event is: ", e);
-        console.info("Custom data is: ", e.detail);
-    });
-    myElement.dispatchEvent(myEvent);
+    //console.log(field);
 </script>
 </html>

@@ -57,9 +57,11 @@
                 });
             $modalInstance.close();
         };
-
+        $scope.isEmpty = function (obj) {
+            return _.isEmpty(obj);
+        };
         $scope.cancel = function () {
-            $scope.model.error = null;
+            //$scope.model.error = null;
             //Теперь нужно отменить изменения
             if ($scope.model.fields)
                 $scope.model.fields.forEach(function (item) {

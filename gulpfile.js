@@ -30,6 +30,7 @@ var minifyHTML = require('gulp-minify-html');
 var GulpSSH = require('gulp-ssh');
 
 var src = ['./app/css/site.css',
+    './app/css/theme.css',
     './app/app.js',
     './app/directives/*.js',
     './app/controllers/*.js',
@@ -243,7 +244,7 @@ gulp.task('build:vendor', ()=> {
 });
 //Внедряем скрипты шабоны
 gulp.task('build:inject-direct', function () {
-    var sources = gulp.src(['./dist/scripts/vendor.min.js', './dist/scripts/main.min.js', './dist/css/*.min.css'], {read: true});
+    var sources = gulp.src(['./dist/scripts/vendor.min.js', './dist/scripts/main.min.js', './dist/css/vendor.min.css', './dist/css/main.min.css'], {read: true});
     return gulp.src('./app/index.html')
         .pipe(inject(sources, {
             relative: false,
