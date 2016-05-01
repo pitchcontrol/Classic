@@ -37,6 +37,7 @@ var src = ['./app/css/site.css',
     './app/services/*.js',
     './app/Primitives/*.js',
     './app/filters/*.js',
+    './app/setup/*.js',
     './app/factories/*.js'];
 
 //Все тесты backend

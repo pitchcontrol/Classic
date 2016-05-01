@@ -13,10 +13,22 @@ var util = require('util');
 var rest = require('../services/rest').init(generator);
 var notFound = require('../errors/notFoundError').notFoundError;
 let auth = require('../errors/authenticateError').authenticateError;
+let fs = require('fs');
 
 module.exports.list = rest.list;
 
-module.exports.add = rest.add;
+module.exports.add = function (req, res, next) {
+    if (!req.user.isAdmin)
+        return next(new auth());
+    fs.exists(req.body.module + '/index.js', (exists) => {
+        if (!exists)
+            return next(new notFound('Модуль не найден'));
+        let template = generator.build(req.body);
+        template.save().then(function () {
+            return res.json({id: template.id});
+        }).catch(next);
+    });
+};
 
 //module.exports.addNew = function (req, res, next) {
 //    let obj = req.body;

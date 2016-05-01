@@ -5,6 +5,12 @@
     "use strict";
     angular.module('app', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.contextMenu'])
         .config(['$routeProvider', function ($routeProvider) {
+            $routeProvider.when('/generators', {
+                templateUrl: 'views/generators.html',
+                controller: 'generatorCtrl',
+                title: 'Генераторы',
+                isAdmin: true
+            });
             $routeProvider.when('/', {
                 templateUrl: 'views/main.html',
                 controller: 'mainCtrl',
@@ -13,10 +19,4 @@
                 redirectTo: '/'
             });
         }]);
-        //Пока руками укажу
-        //.run(['$location', '$rootScope', function ($location, $rootScope) {
-        //    $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
-        //        $rootScope.title = current.$$route.title;
-        //    });
-        //}]);
 })();

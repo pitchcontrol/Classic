@@ -1,15 +1,20 @@
 {
-  "port": 8080,
+  "port": {
+    "debug": 63342,
+    "release": 8080
+  },
   "database": {
     "debug": {
-      "name": "gen",
+      "name": "classic",
       "login": "postgres",
-      "password": "SQ2Macx84pfASX4OzmTj"
+      "password": "post400",
+      "host": "88.212.220.114"
     },
     "release": {
       "name": "classic",
       "login": "web",
-      "password": "SQ2Macx84pfASX4OzmTj"
+      "password": "SQ2Macx84pfASX4OzmTj",
+      "host": "localhost"
     }
   },
   "salt": "ussr",

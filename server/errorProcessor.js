@@ -11,7 +11,10 @@ module.exports = function (err, req, res, next) {
     if (!err)
         next();
     let status = err.status || 500;
-
+    if (err.name === 'SequelizeUniqueConstraintError') {
+        logger.log('error', err.message);
+        return res.status(500).send("Параметры не уникальны");
+    }
     if (status == 500) {
         logger.log('error', err.message, {stack: err.stack});
         res.status(500).send('Ошибка');

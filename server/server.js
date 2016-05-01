@@ -17,6 +17,7 @@ app.use(function (err, req, res, next) {
     logger.log('error', 'Неизвестная ошибка');
     res.status(500).send('Неизвестная ошибка');
 });
-app.listen(config.port || 8080);
+var port = argv.release ? config.port.release : config.port.debug;
+app.listen(port);
 //console.log(path.resolve(__dirname,'../app/'));
-logger.info('Старт сервера в режиме: ' + argv.release ? 'Бой' : 'Отладка');
+logger.info(`Старт сервера в режиме: ${argv.release ? 'Бой' : 'Отладка'}, порт: ${port}`);

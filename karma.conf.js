@@ -34,8 +34,8 @@ module.exports = function (config) {
 
 
         // list of files to exclude
-        exclude: ['./node_modules/**/*.spec.js'],
-
+        //Важно удалить 'app/setup/*.js' потому что там используются события rootScope, возникает проблема http://stackoverflow.com/questions/22721657/typeerror-cannot-read-property-defaultprevented-of-undefined
+        exclude: ['./node_modules/**/*.spec.js', 'app/setup/*.js'],
         reporters: ['progress'],
 
 

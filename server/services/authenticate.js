@@ -28,9 +28,13 @@ module.exports.login = function (req, res, next) {
             if (!r) {
                 return next(new authenticationError('Не верный пароль'));
             }
-            let token = jwt.sign({login: login, id: user.id}, config.salt, {expiresInMinutes: 60});
+            let token = jwt.sign({
+                login: login,
+                id: user.id,
+                isAdmin: user.isAdmin
+            }, config.salt, {expiresInMinutes: 60});
             logger.info('Пользователь вошел: ' + login);
-            return res.json({token: token, login: login});
+            return res.json({token: token, login: login, isAdmin: user.isAdmin});
         });
 
     }).catch(next);

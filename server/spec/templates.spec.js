@@ -5,6 +5,7 @@
 let authenticateError = require('../errors/authenticateError').authenticateError;
 let notFoundError = require('../errors/notFoundError').notFoundError;
 let errorProcessor = require('../errorProcessor');
+let Serialize = require('sequelize');
 
 describe("Тестирования templates", function () {
     var mockery, request, gen, questions;
@@ -27,13 +28,22 @@ describe("Тестирования templates", function () {
                     else
                         return Promise.resolve(null);
                 },
-                build: function () {
-                    return {
-                        id: 1,
-                        save: function () {
-                            return Promise.resolve({id: 1});
-                        }
-                    }
+                build: function (obj) {
+                    if (obj.build == 'success')
+                        return {
+                            id: 1,
+                            save: function () {
+                                return Promise.resolve({id: 1});
+                            }
+                        };
+                    else
+                        return {
+                            id: 1,
+                            save: () => {
+                                return Promise.reject(new Serialize.UniqueConstraintError());
+                                //throw new Serialize.UniqueConstraintError();
+                            }
+                        };
                 }
             },
             questionsForGenerator: (id) => {
@@ -44,9 +54,32 @@ describe("Тестирования templates", function () {
         };
         //mockery.registerMock('winston', mockWinston);
         mockery.registerMock('../model/generator', mock);
+
+        let fsMock = {
+            exists: function (path, cb) {
+                if (path == 'ok/index.js')
+                    return cb(true);
+                else
+                    return cb(false);
+            }
+
+        };
+        mockery.registerMock('fs', fsMock);
+
         mockery.enable({warnOnUnregistered: false, warnOnReplace: false});
+        //Имитация аунтификации
+        var auth = function () {
+            var middleware = function (req, res, next) {
+                req.user = {};
+                if (req.body.name == 'Admin')
+                    req.user.isAdmin = true;
+                next();
+            };
+            return middleware;
+        };
 
         app.get('/template/list', require('../routes/template').list);
+        app.post('/template/add', auth(), require('../routes/template').add);
         app.get('/template/questions/:id', require('../routes/template').questions);
         app.post('/template/execute', require('../routes/template').execute);
         //app.post('/template/addnew', require('../routes/template').add);
@@ -105,6 +138,33 @@ describe("Тестирования templates", function () {
                     done();
                 }
             });
+    });
+    it("Добавить шаблон, юзер не админ", function (done) {
+        request.post('/template/add')
+            .send({name: 'notAdmin'})
+            .expect(401)
+            .end((err)=>  err ? done.fail(err) : done());
+    });
+    it("Добавить шаблон, такой уже есть", function (done) {
+        request.post('/template/add')
+            .send({name: 'Admin', module: 'ok', build: 'error'})
+            .expect(500)
+            .expect('Параметры не уникальны')
+            .end((err)=>  err ? done.fail(err) : done());
+    });
+    it('Добавить шаблон, путь не верный', function (done) {
+        request.post('/template/add')
+            .send({name: 'Admin', module: 'error'})
+            .expect(404)
+            .expect('Модуль не найден')
+            .end((err)=>  err ? done.fail(err) : done());
+    });
+    it('Добавить шаблон, ок', function (done) {
+        request.post('/template/add')
+            .send({name: 'Admin', module: 'ok', build: 'success'})
+            .expect(200)
+            .expect('Content-Type', /json/)
+            .end((err)=>  err ? done.fail(err) : done());
     });
     afterEach(function () {
         mockery.disable();

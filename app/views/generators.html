@@ -1,0 +1,24 @@
+<div class="alert alert-danger" ng-show="model.error">{{model.error}}</div>
+<div class="alert alert-success" ng-show="model.success">{{model.success}}</div>
+<div class="row">
+    <button ng-click="" type="button" data-toggle="tooltip" data-placement="top" class="picture-btn pull-right"
+            title="Добавить генератор"><span class="glyphicon glyphicon-plus"></span></button>
+</div>
+<div class="row">
+    <table class="table table-condensed">
+        <tr>
+            <th>Ид</th>
+            <th>Язык</th>
+            <th>Модуль</th>
+            <th>Название</th>
+            <th>Описание</th>
+        </tr>
+        <tr ng-repeat="item in items">
+            <td>{{item.id}}</td>
+            <td>{{item.language}}</td>
+            <td>{{item.module}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.description}}</td>
+        </tr>
+    </table>
+</div>

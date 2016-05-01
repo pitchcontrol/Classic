@@ -24,6 +24,7 @@
             }).result.then(function () {
                     $scope.model.loginTitle = 'Выход(' + authService.user.login + ')';
                     $scope.model.isAunt = true;
+                $scope.model.isAdmin = authService.user.isAdmin;
                     //Сразу обновим проекты
                     getProjects();
                 });
@@ -91,12 +92,6 @@
         $scope.clearProject = function () {
             diagramService.clear();
             $scope.model.saveTitle = 'Сохранить';
-        };
-        //Добавить генератор
-        $scope.addGenerator = function(){
-          modalService.addGenerator().then(function(data){
-
-          });
         };
     };
     angular.module('app').controller('navigationCtrl', ['$scope', '$modal', 'authService', 'templateService', 'diagramService', 'modalService', navigationCtrl]);
