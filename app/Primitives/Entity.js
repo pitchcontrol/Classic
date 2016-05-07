@@ -60,6 +60,7 @@ function Entity(diagramService) {
             fl.enum = field.enum;
             fl.name = field.name;
             fl.type = field.type;
+            fl.description = field.description;
             //Если тут ассоциация то надо найти сущность и выставить
             //планирование
             if (fl.type == 'Association') {
@@ -99,7 +100,7 @@ function Entity(diagramService) {
     };
     //save - означает полную информацию, геометрия и пр
     this.getJSON = function (save) {
-        var json = {name: this.name};
+        var json = {name: this.name, description: this.description};
         json.fields = this.fields.map(function (item) {
             return item.getJSON();
         });

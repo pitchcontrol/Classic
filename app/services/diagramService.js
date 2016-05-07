@@ -42,6 +42,7 @@
                     name: entity.name
                 }) != undefined ? entity.name + item.id : entity.name;
                 item.geometry = entity.geometry;
+                item.description = entity.description;
                 entity.fields.forEach(function (i) {
                         var f = item.addField(i);
                     }
@@ -96,7 +97,9 @@
                 //Имя проекта
                 obj.id = this.projectId;
                 obj.projectName = this.projectName;
-                obj.views = this.views.collection.map(function (item) {
+                obj.views = this.views.collection.filter(function (item) {
+                    return item.id !== -1;
+                }).map(function (item) {
                         var obj = {
                             name: item.name
                         };

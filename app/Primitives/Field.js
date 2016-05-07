@@ -166,6 +166,7 @@ function Field(entity) {
         var json = {
             type: this.type,
             name: this.name,
+            description: this.description,
             isRequired: this.isRequired,
             isPrimaryKey: this.isPrimaryKey
         };
@@ -187,6 +188,7 @@ Field.prototype.createCopy = function () {
     this.savedObject.name = this.name;
     this.savedObject.type = this.type;
     this.savedObject.enum = this.enum;
+    this.savedObject.description = this.description;
     this.savedObject.association = this.association;
     this.savedObject.isRequired = this.isRequired;
     this.savedObject.isPrimaryKey = this.isPrimaryKey;
@@ -197,6 +199,7 @@ Field.prototype.reject = function () {
     this.name = this.savedObject.name;
     this.type = this.savedObject.type;
     this.enum = this.savedObject.enum;
+    this.description = this.savedObject.description;
     this.association = this.savedObject.association;
     this.isRequired = this.savedObject.isRequired;
     this.isPrimaryKey = this.savedObject.isPrimaryKey;

@@ -71,18 +71,18 @@ describe('Тест diagramService', function () {
         //Проверяем сохранение счетчика
         //expect(sj.currentCounter).toBe(ic.getCurrent());
         expect(sj.projectName).toBe("Super project");
-        //главная всегда есть
-        expect(sj.views.length).toBe(1);
+        //главную не сохраняем
+        expect(sj.views.length).toBe(0);
     });
     it("Получение полную версию JSON, проверяем сохранение View", function () {
         var entity = ds.addEntity();
         ds.projectName = "Super project";
         ds.views.addItem({name: "View1", entities: [entity]});
         var sj = ds.getJSON(true);
-        //главная всегда есть
-        expect(sj.views.length).toBe(2);
-        expect(sj.views[1].name).toBe('View1');
-        expect(sj.views[1].entities[0]).toBe(entity.name);
+        //главная сохранять не будем
+        expect(sj.views.length).toBe(1);
+        expect(sj.views[0].name).toBe('View1');
+        expect(sj.views[0].entities[0]).toBe(entity.name);
     });
     it("Получение полную версию JSON, проверяем сохранение Enum", function () {
         ds.projectName = "Super project";

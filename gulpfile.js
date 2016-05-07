@@ -202,7 +202,7 @@ gulp.task('copy:frontend', function () {
 //Выкладываем backend
 gulp.task('copy:backend', function () {
     return gulp
-        .src(['./server/**/*.*', '!**/spec/**', '!config.json'])
+        .src(['./server/**/*.*', '!**/spec/**', '!**/config.json'])
         .pipe(gulpSSH.dest('/var/www/classic.ru/html/server'));
 });
 

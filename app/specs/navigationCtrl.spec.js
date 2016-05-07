@@ -90,7 +90,7 @@ describe('Тест navigationCtrl', function () {
     it("Нажимаем сохранить - ошибка сервера", function () {
         modal.open.and.returnValue({result: q.when({})});
         scope.saveProject();
-        ts.saveProject.and.returnValue(q.reject({error: "Такой проект уже есть"}));
+        ts.saveProject.and.returnValue(q.reject({data: {error: "Такой проект уже есть"}}));
         scope.$digest();
         //Вызывается сохранение
         expect(ts.saveProject).toHaveBeenCalled();
@@ -104,7 +104,7 @@ describe('Тест navigationCtrl', function () {
         modal.open.and.returnValue({result: q.when({})});
         ds.projectName = 'First';
         scope.saveProject();
-        ts.saveProject.and.returnValue(q.when({id: 101}));
+        ts.saveProject.and.returnValue(q.when({data: {id: 101}}));
         scope.$digest();
         //Вызывается сохранение
         expect(ts.saveProject).toHaveBeenCalled();

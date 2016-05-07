@@ -53,10 +53,14 @@
                     result = templateService.saveProject(diagramService.getJSON(true));
                 }
                 result.then(function (res) {
-                    diagramService.projectId = res.id;
+                    if (res.data.error) {
+                        modalService.info('Внимание', res.data.error);
+                        return;
+                    }
+                    diagramService.projectId = res.data.id;
                     $scope.model.saveTitle = 'Сохранить(' + diagramService.projectName + ')';
                 }, function (res) {
-                    modalService.info('Внимание', res.error || 'Ошибка сохранения');
+                    modalService.info('Внимание', res.data.error || 'Ошибка сохранения');
                 });
             });
         };
