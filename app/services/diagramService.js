@@ -137,6 +137,7 @@
             //this.views.collection.push({id: -1, name: "Главная"});
             integerCounter.clear();
         };
+        //загрузить проект
         this.loadProject = function (obj) {
             this.clear();
             this.projectName = obj.name;
@@ -179,7 +180,9 @@
             $timeout(function () {
                     for (var i = 0; i < self.shedule.length; i++) {
                         var item = self.shedule.shift();
-                        item.field.association = item.entity;
+                        var fEntity = self.findEntity(item.entity);
+                        item.field.association = fEntity;
+                        item.field.associationObj.multiplicity = item.multiplicity;
                     }
                 }
                 , 100);

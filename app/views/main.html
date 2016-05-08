@@ -25,7 +25,7 @@
                 <ul class="rectangle-list">
                     <li>{{i.name}}</li>
                     <li ng-repeat="f in i.fields" field-draggable field="f">{{f.toString()}}<span
-                            ng-show="f.associationObj.many" class="multiplicity">*</span></li>
+                            ng-show="f.associationObj.multiplicity" class="multiplicity">*</span></li>
                 </ul>
             </div>
 

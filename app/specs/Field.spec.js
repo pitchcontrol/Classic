@@ -102,6 +102,13 @@ describe('Тест Field', function () {
         var json = field.getJSON();
         expect(json.enum).toBe('Enum1');
     });
+    it("Проверяем JSON со множественной связью", function () {
+        field.type = 'Association';
+        field.association = entity2;
+        field.associationObj.multiplicity = true;
+        var json = field.getJSON();
+        expect(json.associationObj.multiplicity).toBeTruthy();
+    });
     it("Меняем тип поля должна уничтожится связь", function () {
         field.type = "Association";
         field.association = entity2;

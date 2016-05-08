@@ -1,5 +1,8 @@
 namespace My.namespace.super
 {
+    /// <summary>
+    /// Сущность
+    /// </summary>
     public class myEntity
     {
         [Key]

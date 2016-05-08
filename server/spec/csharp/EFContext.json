@@ -6,6 +6,7 @@
   "entities": [
     {
       "name": "myEntity",
+      "description": "Сущность",
       "fields": [
         {
           "name":"Id",

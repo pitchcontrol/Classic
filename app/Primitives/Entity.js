@@ -64,8 +64,14 @@ function Entity(diagramService) {
             //Если тут ассоциация то надо найти сущность и выставить
             //планирование
             if (fl.type == 'Association') {
-                var fEntity = diagramService.findEntity(field.associationObj.start.name);
-                this.diagramService.shedule.push({field: fl, entity: fEntity})
+
+                //Тут может быть не вся колекция
+                //var fEntity = diagramService.findEntity(field.associationObj.start.name);
+                this.diagramService.shedule.push({
+                    field: fl,
+                    entity: field.associationObj.start.name,
+                    multiplicity: field.associationObj.multiplicity
+                })
             }
             //Если тут enum то надо найти enum и выставить ссылку
             if (fl.type == 'enum') {

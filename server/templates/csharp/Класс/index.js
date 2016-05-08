@@ -62,6 +62,9 @@ module.exports.render = function (data, callback) {
 
     let csharpBuilder = Builder.getChsarpBuilder();
     csharpBuilder.writeLineOpenBrace('namespace {namespace}');
+    csharpBuilder.commentLine("/// <summary>");
+    csharpBuilder.commentLine("/// {description}");
+    csharpBuilder.commentLine("/// </summary>");
     //Если стоит выделить интерфейс - то нужно добавить наследлвание от него
     if (data.answers[1])
         csharpBuilder.writeLineOpenBrace('public class {name}: I{name}');

@@ -79,7 +79,9 @@ module.exports.render = function (data, callback) {
 
     //Строим базовый класс
     csharpBuilder.writeLineOpenBrace('namespace {namespace}');
-
+    csharpBuilder.commentLine("/// <summary>");
+    csharpBuilder.commentLine("/// {description}");
+    csharpBuilder.commentLine("/// </summary>");
     csharpBuilder.writeLineOpenBrace('public class {name}');
     //Нужно проверить отношения один ко многим. Если есть тогда нужно
     //Создать в конструкторе инстансы колекций и сам конструктор

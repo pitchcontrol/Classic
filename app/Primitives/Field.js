@@ -144,9 +144,9 @@ function Field(entity) {
                 var ass = {
                     start: value,
                     end: this,
-                    many: false,
+                    multiplicity: false,
                     toString: function () {
-                        return this.end.entity.name + '_' + this.end.name + (this.many ? '(*)' : '') + '_' + this.start.name;
+                        return this.end.entity.name + '_' + this.end.name + (this.multiplicity ? '(*)' : '') + '_' + this.start.name;
                     },
                     relation: r
                 };
@@ -172,6 +172,7 @@ function Field(entity) {
         };
         if (this.associationObj) {
             json.associationObj = {
+                multiplicity: this.associationObj.multiplicity,
                 start: {name: this.associationObj.start.name}
             };
         }
