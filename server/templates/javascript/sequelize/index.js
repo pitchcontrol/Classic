@@ -10,7 +10,7 @@ var ejs = require('ejs'),
     lodash = require('lodash-node');
 
 //Получит тип Sequelize
-function getType(field, answers) {
+function getType(field, enums) {
     var tp = 'Sequelize.STRING';
     switch (field.type) {
         case 'integer':
@@ -26,6 +26,10 @@ function getType(field, answers) {
             tp = 'Sequelize.BOOLEAN';
             break;
         case 'Association':
+            break;
+        case 'enum':
+            var enm = lodash.findWhere(enums, {name: field.enum});
+            tp = "Sequelize.ENUM('" + enm.values.join("', '") + "')";
             break;
         default :
             tp = 'Sequelize.STRING';
@@ -76,7 +80,7 @@ module.exports.render = function (data, callback) {
         var text = results[0];
         var initText = results[1];
         var raw = function (field, index, array) {
-            var type = getType(field);
+            var type = getType(field, data.enums);
             var pk = field.isPrimaryKey ? ', primaryKey: true' : '';
             var allowNull = field.isRequired ? ', allowNull: false' : '';
             var res = '';

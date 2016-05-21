@@ -31,4 +31,7 @@ describe("Генератор модели sequelize", function () {
     it("Тест связи один ко многим", function (done) {
         compare(3, 'server/spec/javascript/sequelize3.txt', done);
     });
+    it("Тест связи enum", function (done) {
+        compare(4, 'server/spec/javascript/sequelize4.txt', done);
+    });
 });

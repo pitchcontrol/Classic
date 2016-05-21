@@ -1,0 +1,9 @@
+"use strict";
+var Sequelize  = require('sequelize');
+var sq = require('./init.js').sequelize;
+
+let myEntity4 = sq.define('myEntity4', {
+    name: Sequelize.ENUM('value1', 'value2')
+});
+
+module.exports.myEntity4 = myEntity4;

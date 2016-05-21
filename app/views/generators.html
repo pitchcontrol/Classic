@@ -1,7 +1,8 @@
 <div class="alert alert-danger" ng-show="model.error">{{model.error}}</div>
 <div class="alert alert-success" ng-show="model.success">{{model.success}}</div>
 <div class="row">
-    <button ng-click="" type="button" data-toggle="tooltip" data-placement="top" class="picture-btn pull-right"
+    <button ng-click="addGenerator()" type="button" data-toggle="tooltip" data-placement="top"
+            class="picture-btn pull-right"
             title="Добавить генератор"><span class="glyphicon glyphicon-plus"></span></button>
 </div>
 <div class="row">
@@ -21,4 +22,7 @@
             <td>{{item.description}}</td>
         </tr>
     </table>
+</div>
+<div class="row">
+    <a class="btn btn-primary pull-right" href="/dist/index.html#/">Отмена</a>
 </div>

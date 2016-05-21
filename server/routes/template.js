@@ -14,15 +14,17 @@ var rest = require('../services/rest').init(generator);
 var notFound = require('../errors/notFoundError').notFoundError;
 let auth = require('../errors/authenticateError').authenticateError;
 let fs = require('fs');
+let pt = require('path');
 
 module.exports.list = rest.list;
 
 module.exports.add = function (req, res, next) {
     if (!req.user.isAdmin)
         return next(new auth());
-    fs.exists(req.body.module + '/index.js', (exists) => {
+    let path = pt.resolve(__dirname, req.body.module + '/index.js');
+    fs.exists(path, (exists) => {
         if (!exists)
-            return next(new notFound('Модуль не найден'));
+            return next(new notFound('Модуль не найден: ' + path));
         let template = generator.build(req.body);
         template.save().then(function () {
             return res.json({id: template.id});
