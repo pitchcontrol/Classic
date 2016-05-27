@@ -1,8 +1,4 @@
 {
-  "answers": [
-    "My.namespace.super",
-    "MyContext"
-  ],
   "entities": [
     {
       "name": "myEntity",
@@ -63,6 +59,16 @@
               "name": "myEntity"
             }
           }
+        }
+      ]
+    },
+    {
+      "name": "myEntity4",
+      "fields": [
+        {
+          "name": "myEntities",
+          "type": "enum",
+          "enum": "Enum1"
         }
       ]
     }

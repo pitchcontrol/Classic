@@ -57,7 +57,7 @@ describe("Тестирования templates", function () {
 
         let fsMock = {
             exists: function (path, cb) {
-                if (path == 'ok/index.js')
+                if (path.match(/ok/))
                     return cb(true);
                 else
                     return cb(false);
@@ -156,7 +156,7 @@ describe("Тестирования templates", function () {
         request.post('/template/add')
             .send({name: 'Admin', module: 'error'})
             .expect(404)
-            .expect('Модуль не найден')
+            .expect(/Модуль не найден/)
             .end((err)=>  err ? done.fail(err) : done());
     });
     it('Добавить шаблон, ок', function (done) {
