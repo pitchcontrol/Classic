@@ -1,0 +1,9 @@
+(function () {
+"use strict";
+    var myEntityService = function('$odataresource') {
+        return $odataresource('/odata/myEntity', 'id', {
+            odata: { isArray: false }
+        });
+    }
+    angular.module('app').factory('myEntityService',['$odataresource',myEntityService])
+})

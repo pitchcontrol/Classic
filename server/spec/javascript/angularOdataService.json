@@ -1,0 +1,31 @@
+{
+  "answers": [
+    "app",
+    "/odata"
+  ],
+  "entities": [
+    {
+      "name": "myEntity",
+      "fields": [
+        {
+          "name": "id",
+          "type": "integer",
+          "isPrimaryKey": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "isRequired": true
+        },
+        {
+          "name": "Age",
+          "type": "integer"
+        },
+        {
+          "name": "isAdmin",
+          "type": "bool"
+        }
+      ]
+    }
+  ]
+}

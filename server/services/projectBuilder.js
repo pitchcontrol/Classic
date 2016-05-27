@@ -16,9 +16,9 @@ module.exports.build = function (project) {
                     field.enum = _.find(project.enums, {name: field.enum});
                     break;
             }
-            ;
             if (field.isPrimaryKey === true)
-                entity.isPrimaryKey = field;
+                entity.primaryKey = field;
         });
+        entity.answers = project.answers;
     });
 };

@@ -16,8 +16,9 @@ function compare(expect, actual) {
     if (!actual)
         return "Полученное значение пустое";
     let act = actual.split(/\r?\n/);
-    if (act.length !== exp.length)
+    if (act.length !== exp.length) {
         return format("Данные имеют разное количество строк {0} и {1}", exp.length, act.length);
+    }
     for (let i = 0; i < act.length; i++) {
         if (exp[i] !== act[i]) {
             if (exp[i].length == act[i].length)
