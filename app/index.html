@@ -37,7 +37,9 @@
                     </ul>
                 </li>
                 <li ng-show="model.isAunt"><a ng-click="deleteProject()">Удалить проект</a></li>
-                <li ng-show="model.isAunt"><a ng-click="saveProject()" ng-bind="model.saveTitle"></a>
+                <li ng-show="model.isAunt"><a ng-click="saveAsProject()" ng-bind="model.saveAsTitle"></a>
+                </li>
+                <li ng-show="model.isAunt&&model.projectId!==undefined"><a ng-click="saveProject()" ng-bind="model.saveTitle"></a>
                 </li>
                 <li ng-show="model.isAunt&&model.isAdmin"><a href="#/generators">Генераторы</a></li>
                 <li><a ng-click="clearProject()">Очистить</a>

@@ -35,7 +35,7 @@ describe('Тест entityModalCtrl', function () {
                 $scope: scope,
                 entities: entities,
                 item: item,
-                $modalInstance: modalInstance
+                $uibModalInstance: modalInstance
             });
         });
     };

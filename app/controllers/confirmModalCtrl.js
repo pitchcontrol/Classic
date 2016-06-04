@@ -1,15 +1,15 @@
 (function () {
     "use strict"
-    var confirmModalCtrl = function ($scope, $modalInstance, data) {
+    var confirmModalCtrl = function ($scope, $uibModalInstance, data) {
         $scope.message = data.message;
         $scope.title = data.title;
         $scope.ok = function () {
-            $modalInstance.close();
+            $uibModalInstance.close();
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
     };
-    angular.module('app').controller('confirmModalCtrl', ['$scope', '$modalInstance', 'data', confirmModalCtrl]);
+    angular.module('app').controller('confirmModalCtrl', ['$scope', '$uibModalInstance', 'data', confirmModalCtrl]);
 })();

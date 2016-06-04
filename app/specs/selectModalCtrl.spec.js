@@ -13,7 +13,7 @@ describe('Тест selectModalCtrl', function () {
             scope = $rootScope.$new();
             controller = $controller('selectModalCtrl', {
                 $scope: scope,
-                $modalInstance: modal,
+                $uibModalInstance: modal,
                 promise: modalService.getEntityTemplateList,
                 data: {}
             });

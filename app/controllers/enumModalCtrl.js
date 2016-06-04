@@ -1,9 +1,9 @@
 (function () {
     "use strict";
     //Работает с перечислениями
-    var enumModalCtrl = function ($scope, data, $modalInstance, diagramService) {
+    var enumModalCtrl = function ($scope, data, $uibModalInstance, diagramService) {
         $scope.model = data || {values: []};
-        $scope.$modalInstance = $modalInstance;
+        $scope.$uibModalInstance = $uibModalInstance;
         $scope.ok = function () {
             if (!data) {
                 if (!diagramService.enums.addItem($scope.model)) {
@@ -16,8 +16,8 @@
                     return;
                 }
             }
-            $modalInstance.close();
+            $uibModalInstance.close();
         };
     };
-    angular.module('app').controller('enumModalCtrl', ['$scope', 'data', '$modalInstance', 'diagramService', enumModalCtrl]);
+    angular.module('app').controller('enumModalCtrl', ['$scope', 'data', '$uibModalInstance', 'diagramService', enumModalCtrl]);
 })();

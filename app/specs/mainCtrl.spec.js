@@ -14,7 +14,7 @@ describe('Тест mainCtrl', function () {
             modalService = jasmine.createSpyObj('modalService', ['select', 'selectGenerator', 'wizard', 'confirm']);
             controller = $controller('mainCtrl', {
                 $scope: scope,
-                $modal: modal,
+                $uibModal: modal,
                 templateService: ts,
                 modalService: modalService
             });

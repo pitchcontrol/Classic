@@ -17,7 +17,7 @@ describe('Тест enumModalCtrl', function () {
             $scope: scope,
             diagramService: ds,
             data: data,
-            $modalInstance: modal
+            $uibModalInstance: modal
         });
     }
 

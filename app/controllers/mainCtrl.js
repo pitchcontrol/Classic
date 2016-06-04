@@ -1,6 +1,6 @@
 (function () {
     "use strict";
-    var mainCtrl = function ($scope, $modal, diagramService, templateService, modalService) {
+    var mainCtrl = function ($scope, $uibModal, diagramService, templateService, modalService) {
         //Сущности
         $scope.diagram = diagramService;
         $scope.currentView = diagramService.views.first();
@@ -9,7 +9,7 @@
         $scope.lastTemplate = null;
         $scope.addEntity = function () {
             var entity = diagramService.addEntity();
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'views/entityModal.html',
                 controller: 'entityModalCtrl',
                 resolve: {
@@ -23,7 +23,7 @@
             });
         };
         $scope.editEntity = function (entity) {
-            $modal.open({
+            $uibModal.open({
                 templateUrl: 'views/entityModal.html',
                 controller: 'entityModalCtrl',
                 resolve: {
@@ -34,7 +34,7 @@
             });
         };
         $scope.removeEntity = function (entity) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'views/confirmModal.html',
                 controller: 'confirmModalCtrl',
                 resolve: {
@@ -49,7 +49,7 @@
         };
         //Добавить сущность на основе шаблона
         $scope.addTemplateEssence = function () {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'views/selectModal.html',
                 controller: 'selectModalCtrl',
                 resolve: {
@@ -133,5 +133,5 @@
             return diagramService.views.collection.length > 1 && $scope.currentView != diagramService.views.collection[0];
         };
     };
-    angular.module('app').controller('mainCtrl', ['$scope', '$modal', 'diagramService', 'templateService', 'modalService', mainCtrl]);
+    angular.module('app').controller('mainCtrl', ['$scope', '$uibModal', 'diagramService', 'templateService', 'modalService', mainCtrl]);
 })();

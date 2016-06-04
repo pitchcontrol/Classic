@@ -1,9 +1,9 @@
 (function () {
     "use strict";
-    var modalService = function ($http, $modal,generator) {
+    var modalService = function ($http, $uibModal,generator) {
         //Подтвеждение
         this.confirm = function (title, message) {
-            return $modal.open({
+            return $uibModal.open({
                 templateUrl: 'views/confirmModal.html',
                 controller: 'confirmModalCtrl',
                 resolve: {
@@ -18,7 +18,7 @@
         }
         ;
         this.info = function (title, message) {
-            return $modal.open({
+            return $uibModal.open({
                 templateUrl: 'views/infoModal.html',
                 controller: 'infoModalCtrl',
                 resolve: {
@@ -32,7 +32,7 @@
             }).result;
         };
         this.selectGenerator = function (title, message, promise){
-            return $modal.open({
+            return $uibModal.open({
                 templateUrl: 'views/selectGeneratorModal.html',
                 controller: 'selectModalCtrl',
                 resolve: {
@@ -49,7 +49,7 @@
             }).result;
         };
         this.select = function (title, message, promise) {
-            return $modal.open({
+            return $uibModal.open({
                 templateUrl: 'views/selectModal.html',
                 controller: 'selectModalCtrl',
                 resolve: {
@@ -66,7 +66,7 @@
             }).result;
         };
         this.wizard = function (title, message, promise) {
-            return $modal.open({
+            return $uibModal.open({
                 templateUrl: 'views/wizardCtrl.html',
                 controller: 'wizardCtrl',
                 resolve: {
@@ -83,7 +83,7 @@
             }).result;
         };
         this.addViewModal = function () {
-            $modal.open({
+            $uibModal.open({
                 templateUrl: 'views/addViewModal.html',
                 controller: 'addViewModalCtrl',
                 resolve: {
@@ -93,7 +93,7 @@
         }
         ;
         this.editViewModal = function (view) {
-            $modal.open({
+            $uibModal.open({
                 templateUrl: 'views/addViewModal.html',
                 controller: 'addViewModalCtrl',
                 resolve: {
@@ -104,13 +104,13 @@
             });
         };
         this.signUp = function () {
-            return $modal.open({
+            return $uibModal.open({
                 templateUrl: 'views/signUpModal.html',
                 controller: 'signUpModalCtrl'
             }).result;
         };
         this.addEnum = function (model) {
-            return $modal.open({
+            return $uibModal.open({
                 templateUrl: 'views/enumModal.html',
                 controller: 'enumModalCtrl',
                 resolve: {
@@ -123,7 +123,7 @@
         this.addGenerator = function () {
             var data = generator.create();
             data.method = data.save;
-            return $modal.open({
+            return $uibModal.open({
                 //templateUrl: 'views/addTemplateModal.html',
                 //controller: 'addTemplateModalCtrl',
                 templateUrl: 'views/universalModal.html',
@@ -136,5 +136,5 @@
             }).result;
         };
     };
-    angular.module('app').service('modalService', ['$http', '$modal', 'generator',modalService]);
+    angular.module('app').service('modalService', ['$http', '$uibModal', 'generator',modalService]);
 })();

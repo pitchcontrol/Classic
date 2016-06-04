@@ -1,19 +1,19 @@
 (function () {
     "use strict";
-    var addTemplateModalCtrl = function ($scope, templateService, $modalInstance) {
+    var addTemplateModalCtrl = function ($scope, templateService, $uibModalInstance) {
         $scope.model = {};
         $scope.ok = function () {
             templateService.addGenerator($scope.model).then(function () {
                 delete $scope.model.error;
-                $modalInstance.close();
+                $uibModalInstance.close();
             }, function (error) {
                 $scope.model.error = error.data;
             });
         };
         $scope.cancel = function () {
             $scope.model.error = null;
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
     };
-    angular.module('app').controller('addTemplateModalCtrl', ['$scope', 'templateService', '$modalInstance', addTemplateModalCtrl]);
+    angular.module('app').controller('addTemplateModalCtrl', ['$scope', 'templateService', '$uibModalInstance', addTemplateModalCtrl]);
 })();

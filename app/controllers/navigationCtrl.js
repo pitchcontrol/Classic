@@ -1,11 +1,12 @@
 (function () {
     "use strict";
     //Определяет логику работы менюшки
-    var navigationCtrl = function ($scope, $modal, authService, templateService, diagramService, modalService) {
+    var navigationCtrl = function ($scope, $uibModal, authService, templateService, diagramService, modalService) {
         $scope.model =
         {
             loginTitle: 'Вход',
-            saveTitle: 'Сохранить'
+            saveTitle: 'Сохранить',
+            projectId: diagramService.projectId
         };
         $scope.login = function () {
             if (authService.user) {
@@ -17,7 +18,7 @@
                 return;
             }
             //Вход
-            $modal.open({
+            $uibModal.open({
                 templateUrl: 'views/loginModal.html',
                 controller: 'loginModalCtrl',
                 resolve: {}
@@ -37,9 +38,9 @@
             });
         };
         //Сохрнанить проект
-        $scope.saveProject = function () {
+        $scope.saveAsProject = function () {
             //Открываем дилог выбора имени
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'views/enterNameModal.html',
                 controller: 'enterNameModalCtrl'
             });
@@ -58,10 +59,30 @@
                         return;
                     }
                     diagramService.projectId = res.data.id;
-                    $scope.model.saveTitle = 'Сохранить(' + diagramService.projectName + ')';
+                    $scope.model.saveAsTitle = 'Сохранить как (' + diagramService.projectName + ')';
+                    $scope.model.saveTitle = 'Сохранить (' + diagramService.projectName + ')';
                 }, function (res) {
                     modalService.info('Внимание', res.data.error || 'Ошибка сохранения');
                 });
+            });
+        };
+        //Сохранить проект без запроса имени
+        $scope.saveProject = function () {
+            if(diagramService.projectId === undefined)
+            {
+                $scope.saveAsProject();
+                return;
+            }
+            var result = templateService.updateProject(diagramService.getJSON(true));
+            result.then(function (res) {
+                if (res.data.error) {
+                    modalService.info('Внимание', res.data.error);
+                    return;
+                }
+                $scope.model.saveAsTitle = 'Сохранить как (' + diagramService.projectName + ')';
+                $scope.model.saveTitle = 'Сохранить (' + diagramService.projectName + ')';
+            }, function (res) {
+                modalService.info('Внимание', res.data.error || 'Ошибка сохранения');
             });
         };
         //Получить все проекты для пользователя
@@ -74,7 +95,8 @@
         $scope.loadProject = function (id) {
             templateService.loadProject(id).then(function (prj) {
                     diagramService.loadProject(prj.data);
-                    $scope.model.saveTitle = 'Сохранить(' + diagramService.projectName + ')';
+                $scope.model.saveAsTitle = 'Сохранить как (' + diagramService.projectName + ')';
+                $scope.model.saveTitle = 'Сохранить (' + diagramService.projectName + ')';
                 }
             );
         };
@@ -98,5 +120,5 @@
             $scope.model.saveTitle = 'Сохранить';
         };
     };
-    angular.module('app').controller('navigationCtrl', ['$scope', '$modal', 'authService', 'templateService', 'diagramService', 'modalService', navigationCtrl]);
+    angular.module('app').controller('navigationCtrl', ['$scope', '$uibModal', 'authService', 'templateService', 'diagramService', 'modalService', navigationCtrl]);
 })();

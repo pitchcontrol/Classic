@@ -1,6 +1,6 @@
 (function () {
     "use strict";
-    var entityModalCtrl = function ($scope, $modalInstance, $modal, diagramService, item) {
+    var entityModalCtrl = function ($scope, $uibModalInstance, $uibModal, diagramService, item) {
         $scope.entities = diagramService.entities;
         $scope.enums = diagramService.enums;
         var copyModel;
@@ -55,7 +55,7 @@
                 $scope.model.fields.forEach(function (item) {
                     delete item.added;
                 });
-            $modalInstance.close();
+            $uibModalInstance.close();
         };
         $scope.isEmpty = function (obj) {
             return _.isEmpty(obj);
@@ -75,7 +75,7 @@
                 $scope.model.removeField();
             });
 
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
         ////Добавляем поле
         //$scope.addField = function () {
@@ -99,6 +99,6 @@
                 item.createCopy();
             });
     };
-    angular.module('app').controller('entityModalCtrl', ['$scope', '$modalInstance', '$modal', 'diagramService', 'item', entityModalCtrl]);
+    angular.module('app').controller('entityModalCtrl', ['$scope', '$uibModalInstance', '$uibModal', 'diagramService', 'item', entityModalCtrl]);
 })
 ();

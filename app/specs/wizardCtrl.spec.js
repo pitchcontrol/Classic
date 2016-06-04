@@ -12,7 +12,7 @@ describe('Тест wizardCtrl', function () {
             promise.getQuestionList.and.returnValue({data: questions});
             controller = $controller('wizardCtrl', {
                 $scope: scope,
-                $modalInstance: modalService,
+                $uibModalInstance: modalService,
                 promise: promise.getQuestionList(),
                 data: {
                     title: 'Выбор',

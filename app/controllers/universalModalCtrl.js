@@ -1,6 +1,6 @@
 (function () {
     "use strict";
-    var universalModalCtrl = function ($scope, data, $modalInstance) {
+    var universalModalCtrl = function ($scope, data, $uibModalInstance) {
         $scope.data = data;
         //$scope.validate = function (obj) {
         //    delete obj.error;
@@ -12,15 +12,15 @@
         $scope.ok = function () {
             delete $scope.data.error;
             data.method(data.model).then(function () {
-                $modalInstance.close($scope.model);
+                $uibModalInstance.close($scope.model);
             }, function (error) {
                 $scope.data.error = error.data || error;
             });
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
     };
-    angular.module('app').controller('universalModalCtrl', ['$scope', 'data', '$modalInstance', universalModalCtrl]);
+    angular.module('app').controller('universalModalCtrl', ['$scope', 'data', '$uibModalInstance', universalModalCtrl]);
 })();

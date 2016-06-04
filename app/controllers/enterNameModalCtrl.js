@@ -1,16 +1,16 @@
 (function () {
     "use strict";
-    var enterNameModalCtrl = function ($scope, $modalInstance, diagramService) {
+    var enterNameModalCtrl = function ($scope, $uibModalInstance, diagramService) {
         $scope.model = {name: diagramService.projectName};
         $scope.ok = function () {
             if ($scope.model) {
                 diagramService.projectName = $scope.model.name;
-                $modalInstance.close();
+                $uibModalInstance.close();
             }
         };
         $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
     };
-    angular.module('app').controller('enterNameModalCtrl', ['$scope', '$modalInstance', 'diagramService', enterNameModalCtrl]);
+    angular.module('app').controller('enterNameModalCtrl', ['$scope', '$uibModalInstance', 'diagramService', enterNameModalCtrl]);
 })();

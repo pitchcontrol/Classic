@@ -13,7 +13,7 @@ describe('Тест loginModalCtrl', function () {
             scope = $rootScope.$new();
             controller = $controller('loginModalCtrl', {
                 $scope: scope,
-                $modalInstance: modal,
+                $uibModalInstance: modal,
                 authService: authService
             });
         });

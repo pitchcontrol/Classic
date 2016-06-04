@@ -1,6 +1,6 @@
 (function () {
     "use strict";
-    var addViewModalCtrl = function ($scope, $modalInstance, diagramService, data) {
+    var addViewModalCtrl = function ($scope, $uibModalInstance, diagramService, data) {
         $scope.init = function (views) {
             $scope.model = views ? {name: views.name} : {name: ''};
             $scope.model.entities = diagramService.entities.map(function (item) {
@@ -57,12 +57,12 @@
                 data.name = $scope.model.name;
                 data.entities = _.pluck(entities, 'parent');
             }
-            $modalInstance.close();
+            $uibModalInstance.close();
         };
         $scope.cancel = function () {
             $scope.model.error = null;
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
     };
-    angular.module('app').controller('addViewModalCtrl', ['$scope', '$modalInstance', 'diagramService', 'data', addViewModalCtrl]);
+    angular.module('app').controller('addViewModalCtrl', ['$scope', '$uibModalInstance', 'diagramService', 'data', addViewModalCtrl]);
 })();

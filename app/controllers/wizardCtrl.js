@@ -1,22 +1,22 @@
 (function () {
     "use strict";
     //Мастер для опросов
-    var wizardCtrl = function ($scope, $modalInstance, data, promise) {
+    var wizardCtrl = function ($scope, $uibModalInstance, data, promise) {
         $scope.message = data.message;
         $scope.title = data.title;
         var questions = promise.data;
         //Если вопросов нет сразу выход
         if (questions.length === 0) {
-            $modalInstance.close(questions);
+            $uibModalInstance.close(questions);
         }
         $scope.model = questions[0];
 
         $scope.ok = function () {
-            $modalInstance.close($scope.selectedItem);
+            $uibModalInstance.close($scope.selectedItem);
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
 
         var index = 0;
@@ -26,7 +26,7 @@
         $scope.next = function () {
             index++;
             if (index > questions.length - 1) {
-                $modalInstance.close(questions);
+                $uibModalInstance.close(questions);
             } else {
                 $scope.model = questions[index];
                 if ($scope.model.default != undefined) {
@@ -50,5 +50,5 @@
             }
         };
     };
-    angular.module('app').controller('wizardCtrl', ['$scope', '$modalInstance', 'data', 'promise', wizardCtrl]);
+    angular.module('app').controller('wizardCtrl', ['$scope', '$uibModalInstance', 'data', 'promise', wizardCtrl]);
 })();

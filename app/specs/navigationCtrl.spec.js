@@ -10,13 +10,13 @@ describe('Тест navigationCtrl', function () {
             spyOn(ds, 'clear');
             scope = $rootScope.$new();
             q = $q;
-            ts = jasmine.createSpyObj('templateService', ['saveProject', 'getProjects', 'deleteProject']);
+            ts = jasmine.createSpyObj('templateService', ['saveProject', 'updateProject', 'getProjects', 'deleteProject']);
             modal = jasmine.createSpyObj('modal', ['open']);
             modalService = jasmine.createSpyObj('modalService', ['info', 'select', 'confirm', 'signUp']);
             authService = jasmine.createSpyObj('authService', ['logoff', 'signUp']);
             controller = $controller('navigationCtrl', {
                 $scope: scope,
-                $modal: modal,
+                $uibModal: modal,
                 authService: authService,
                 templateService: ts,
                 modalService: modalService
@@ -82,14 +82,14 @@ describe('Тест navigationCtrl', function () {
     });
     it("Нажимаем сохранить - отмена", function () {
         modal.open.and.returnValue({result: q.reject({})});
-        scope.saveProject();
+        scope.saveAsProject();
         scope.$digest();
         //Не вызывается сохранение
         expect(ts.saveProject).not.toHaveBeenCalled();
     });
     it("Нажимаем сохранить - ошибка сервера", function () {
         modal.open.and.returnValue({result: q.when({})});
-        scope.saveProject();
+        scope.saveAsProject();
         ts.saveProject.and.returnValue(q.reject({data: {error: "Такой проект уже есть"}}));
         scope.$digest();
         //Вызывается сохранение
@@ -103,14 +103,27 @@ describe('Тест navigationCtrl', function () {
     it("Нажимаем сохранить - все сохранилось", function () {
         modal.open.and.returnValue({result: q.when({})});
         ds.projectName = 'First';
-        scope.saveProject();
+        scope.saveAsProject();
         ts.saveProject.and.returnValue(q.when({data: {id: 101}}));
         scope.$digest();
         //Вызывается сохранение
         expect(ts.saveProject).toHaveBeenCalled();
         expect(modal.open.calls.count()).toBe(1);
         expect(ds.projectId).toBe(101);
-        expect(scope.model.saveTitle).toBe('Сохранить(First)');
+        expect(scope.model.saveTitle).toBe('Сохранить (First)');
+    });
+    it("Нажимаем сохранить, без ввода имени - все сохранилось", function () {
+        ds.projectName = 'First';
+        ds.projectId = 101;
+        ts.updateProject.and.returnValue(q.when({data: {id: 101}}));
+        scope.saveProject();
+        scope.$digest();
+        //Вызывается сохранение
+        expect(ts.updateProject).toHaveBeenCalled();
+        //Ввод имени не вызываетс
+        expect(modal.open.calls.count()).toBe(0);
+        expect(ds.projectId).toBe(101);
+        expect(scope.model.saveTitle).toBe('Сохранить (First)');
     });
     it("Удалить проект, отмена", function () {
         //Проект выбран

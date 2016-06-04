@@ -13,7 +13,7 @@ describe('Тест addViewModalCtrl', function () {
             controller = $controller('addViewModalCtrl', {
                 $scope: scope,
                 diagramService: ds,
-                $modalInstance: modalInstance,
+                $uibModalInstance: modalInstance,
                 data: view
             });
         });

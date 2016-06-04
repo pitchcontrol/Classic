@@ -1,12 +1,12 @@
 //Выводит информационное сообщение
 (function () {
     "use strict"
-    var infoModalCtrl = function ($scope, $modalInstance, data) {
+    var infoModalCtrl = function ($scope, $uibModalInstance, data) {
         $scope.message = data.message;
         $scope.title = data.title;
         $scope.ok = function () {
-            $modalInstance.close();
+            $uibModalInstance.close();
         };
     };
-    angular.module('app').controller('infoModalCtrl', ['$scope', '$modalInstance', 'data', infoModalCtrl]);
+    angular.module('app').controller('infoModalCtrl', ['$scope', '$uibModalInstance', 'data', infoModalCtrl]);
 })();

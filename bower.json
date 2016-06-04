@@ -16,12 +16,13 @@
   ],
   "dependencies": {
     "jQuery": "~2.1.4",
-    "angular-route": "~1.4.1",
+    "angular-route": "~1.5.6",
     "bootstrap": "~3.3.5",
-    "angular-bootstrap": "~0.13.0",
+    "angular-bootstrap": "~1.3.3",
     "underscore": "~1.8.3",
-    "angular": "~1.4.1",
-    "angular-bootstrap-contextmenu": "~0.9.3"
+    "angular": "~1.5.6",
+    "angular-bootstrap-contextmenu": "~0.9.3",
+    "angular-mocks": "~1.5.6"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.1",
@@ -29,8 +30,10 @@
     "karma-read-json": "~1.1.0"
   },
   "resolutions": {
-    "angular-route": "~1.4.1",
-    "angular-bootstrap": "~0.13.0"
+    "angular-route": "~1.5.6",
+    "angular-bootstrap": "~1.3.3",
+    "angular": "~1.5.6",
+    "angular-mocks": "~1.5.6"
   },
   "overrides": {
     "bootstrap": {
